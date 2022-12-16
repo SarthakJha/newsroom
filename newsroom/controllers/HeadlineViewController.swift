@@ -30,7 +30,6 @@ class HeadlineViewController: UIViewController {
         // setting up flow layout
         let flowLayout = UICollectionViewFlowLayout()
         flowLayout.scrollDirection = .vertical
-        flowLayout.itemSize = CGSize(width: 100, height: 60)
         flowLayout.minimumLineSpacing = 20
         
         headlineCollectionView = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
@@ -45,9 +44,15 @@ extension HeadlineViewController: UICollectionViewDelegate{
 }
 
 extension HeadlineViewController: UICollectionViewDelegateFlowLayout{
+    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: view.frame.width-20, height: 150)
     }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+        return UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+    }
+    
 }
 
 extension HeadlineViewController: UICollectionViewDataSource{
@@ -58,7 +63,7 @@ extension HeadlineViewController: UICollectionViewDataSource{
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = headlineCollectionView.dequeueReusableCell(withReuseIdentifier: "headline-cell", for: indexPath) as! HeadlineCollectionViewCell
-        cell.setupCellView()
+        
         return cell
     }
     
