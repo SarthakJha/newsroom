@@ -6,6 +6,8 @@ target 'newsroom' do
   use_frameworks!
 
   # Pods for newsroom
+pod 'SDWebImage'
+pod 'Disk', '~> 0.6.4'
 
   target 'newsroomTests' do
     inherit! :search_paths
