@@ -9,6 +9,6 @@ import Foundation
 
 
 enum NewsroomAPIService {
-    static let BaseURL:String = "https://www.newsapi.org"
+    static let BaseURL:String = "https://newsapi.org"
     static let APIManager = NetworkManager(baseURL: BaseURL, apiKey: Secrets.APIKey)
 }
