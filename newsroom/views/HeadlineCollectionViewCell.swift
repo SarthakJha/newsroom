@@ -6,21 +6,27 @@
 //
 
 import UIKit
+import SDWebImage
 
 class HeadlineCollectionViewCell: UICollectionViewCell {
+    
+    var cellImageURL: String?
+    var headlineLabelText: String?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.backgroundColor = .white
         self.layer.cornerRadius = 20
         self.layer.borderWidth = 1
+        self.addSubview(cellBackgroundImage)
         self.addSubview(headlineText)
+        cellBackgroundImage.frame = self.bounds
+        cellBackgroundImage.translatesAutoresizingMaskIntoConstraints = true
+        cellBackgroundImage.layer.cornerRadius = 20
+        cellBackgroundImage.clipsToBounds = true
         self.translatesAutoresizingMaskIntoConstraints = false
-        headlineText.text = "sarthak Jha"
-        headlineText.topAnchor.constraint(equalTo: self.topAnchor, constant: 0).isActive = true
-        headlineText.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 0).isActive = true
-        headlineText.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: 0).isActive = true
-
+        headlineText.text = headlineLabelText
+        headlineText.backgroundColor = UIColor(white: 1, alpha: 0.4)
     }
     
     required init?(coder: NSCoder) {
@@ -30,17 +36,15 @@ class HeadlineCollectionViewCell: UICollectionViewCell {
     var headlineText: UILabel = {
         var label = UILabel()
         label.textColor = .black
-        label.frame.size = CGSize(width: 90, height: 30)
+        label.frame.size = CGSize(width: 300, height: 30)
         label.layer.borderWidth = 1
-        label.text = ""
     
         return label
     }()
     
-//    var headlineImage: UIImage = {
-//
-//        var img = UIImage(data: Data())
-//        return img!
-//    }()
+    var cellBackgroundImage: UIImageView = {
+        let imageview = UIImageView()
+        return imageview
+    }()
     
 }
