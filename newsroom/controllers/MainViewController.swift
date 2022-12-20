@@ -25,7 +25,7 @@ class MainViewController: UITabBarController, UITabBarControllerDelegate {
         let searchBarItem = UITabBarItem(title: "search", image: UIImage(named: "icon.png"), tag: 0)
         searchVC.tabBarItem = searchBarItem
         
-        let categoryBarItem = UITabBarItem(title: "category", image: UIImage(named: "icon.png"), tag: 1)
+        let categoryBarItem = UITabBarItem(title: "map", image: UIImage(named: "icon.png"), tag: 1)
         categoryVC.tabBarItem = categoryBarItem
         
         let mapBarItem = UITabBarItem(title: "headlines", image: UIImage(named: "ss"), tag: 2)
