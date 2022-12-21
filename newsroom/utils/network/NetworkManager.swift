@@ -62,9 +62,10 @@ final class NetworkManager {
     
     func fetchSearchResults(searchText text: String ,Source completion: @escaping((ArticleResponse?,Error?) -> Void)){
         guard var url: URL = URL(string: baseURL!+apiVersion+topHeadlineRoute) else {return}
-        var queryItems: [URLQueryItem] = [URLQueryItem(name: "apiKey", value: Secrets.APIKey)]
-        url.append(queryItems: queryItems)
+        let queryItems: [URLQueryItem] = [URLQueryItem(name: "apiKey", value: Secrets.APIKey), URLQueryItem(name: "q", value: text)]
         
+        url.append(queryItems: queryItems)
+
         var searchResponse: ArticleResponse?
         let dataSession = URLSession.shared.dataTask(with: url) { data, response, error in
             if let error = error{
