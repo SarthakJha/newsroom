@@ -27,7 +27,8 @@ class SearchBarView: UIView {
 //        searchButton.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
         searchButton.leadingAnchor.constraint(equalTo: searchTextField.trailingAnchor).isActive = true
         searchTextField.trailingAnchor.constraint(equalTo: searchButton.leadingAnchor, constant: -10).isActive = true
-        self.backgroundColor = .green
+//        searchButton.addTarget(self, action: #selector(<#T##@objc method#>), for: .touchUpInside)
+        self.backgroundColor = .gray
     }
     
     required init?(coder: NSCoder) {
@@ -51,6 +52,7 @@ class SearchBarView: UIView {
         button.layer.cornerRadius = 15
         return button
     }()
+    
 }
 
 extension SearchBarView: UITextFieldDelegate{

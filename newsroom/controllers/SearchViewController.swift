@@ -25,18 +25,19 @@ class SearchViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        print("view did load")
-        searchTextField.delegate = self
-        searchResultCollectionView.delegate = self
-        searchResultCollectionView.dataSource = self
-        searchResultCollectionView.register(HeadlineCollectionViewCell.self, forCellWithReuseIdentifier: "search-cell")
-        view.backgroundColor = .white
         searchBar = SearchBarView()
-//        searchBar.frame.size = CGSize(width: 500, height: 20)
         guard let searchBar = searchBar else {return}
         view.addSubview(searchResultCollectionView)
         view.addSubview(searchBar)
 
+        print("view did load")
+        searchBar.searchTextField.delegate = self
+        searchResultCollectionView.delegate = self
+        searchResultCollectionView.dataSource = self
+        searchResultCollectionView.register(HeadlineCollectionViewCell.self, forCellWithReuseIdentifier: "search-cell")
+        view.backgroundColor = .white
+        searchBar.searchButton.addTarget(self, action: #selector(searchButtonPressed), for: .touchUpInside)
+      
         addConstraints()
     }
     
@@ -55,14 +56,6 @@ class SearchViewController: UIViewController {
         NSLayoutConstraint.activate(constraints)
     }
     
-    private lazy var searchTextField: UITextField = {
-       let textField = UITextField()
-        textField.placeholder = "search text"
-        textField.backgroundColor = .white
-        textField.translatesAutoresizingMaskIntoConstraints = false
-        return textField
-    }()
-    
     private lazy var searchResultCollectionView: UICollectionView = {
         var collectionViewFlow = UICollectionViewFlowLayout()
         collectionViewFlow.scrollDirection = .vertical
@@ -70,19 +63,37 @@ class SearchViewController: UIViewController {
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         return collectionView
     }()
+    
+    @objc func searchButtonPressed(){
+        guard let searchText = searchBar.searchTextField.text else {return}
+        NewsroomAPIService.APIManager.fetchSearchResults(searchText: searchText) { data, error in
+            if let error = error {
+                print(error)
+                return
+            }
+            guard let data = data else {return}
+            self.searchResults = data
+        }
+        searchBar.searchTextField.resignFirstResponder()
+    }
 }
 
-extension SearchViewController: UICollectionViewDelegate{
+extension SearchViewController: UICollectionViewDelegate, UICollectionViewDelegateFlowLayout{
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        return CGSize(width: view.frame.width-20, height: 200)
+    }
 }
 
 extension SearchViewController: UICollectionViewDataSource{
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 10
+        return searchResults?.articles.count ?? 0
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell
     {
         let cell = searchResultCollectionView.dequeueReusableCell(withReuseIdentifier: "search-cell", for: indexPath) as! HeadlineCollectionViewCell
+        cell.headlineText.text = searchResults?.articles[indexPath.row].title
+        cell.cellBackgroundImage.sd_setImage(with: URL(string: searchResults?.articles[indexPath.row].urlToImage ?? ""))
         return cell
     }
 }
@@ -96,7 +107,7 @@ extension SearchViewController: UITextFieldDelegate{
         print("ended editing")
     }
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        searchTextField.resignFirstResponder()
+        searchBar.searchTextField.resignFirstResponder()
         return true
     }
 }
