@@ -8,6 +8,10 @@ target 'newsroom' do
   # Pods for newsroom
 pod 'SDWebImage'
 pod 'Disk', '~> 0.6.4'
+pod 'GoogleMaps'
+pod 'BulletinBoard'
+pod 'GooglePlaces', '7.2.0'
+
 
   target 'newsroomTests' do
     inherit! :search_paths

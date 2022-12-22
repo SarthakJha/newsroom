@@ -24,7 +24,7 @@ final class NetworkManager {
     /**
      * default category= entertainment
      */
-    func fetchHeadlines(category cat: Category?, completion: @escaping((ArticleResponse?, Error?)-> Void)) {
+    func fetchHeadlines(category cat: Category?, countryCode: String?, completion: @escaping((ArticleResponse?, Error?)-> Void)) {
         
         guard var url: URL = URL(string: baseURL!+apiVersion+topHeadlineRoute) else {return}
         var topHeadlines: ArticleResponse?
@@ -34,6 +34,10 @@ final class NetworkManager {
             queryItems.append(URLQueryItem(name: "category", value: cat.rawValue))
         }else{
             queryItems.append(URLQueryItem(name: "category", value: "entertainment"))
+        }
+        
+        if let countryCode = countryCode{
+            queryItems.append(URLQueryItem(name: "country", value: countryCode))
         }
         
         url.append(queryItems: queryItems)
@@ -62,6 +66,7 @@ final class NetworkManager {
     
     func fetchSearchResults(searchText text: String ,Source completion: @escaping((ArticleResponse?,Error?) -> Void)){
         guard var url: URL = URL(string: baseURL!+apiVersion+topHeadlineRoute) else {return}
+        let queryItems: [URLQueryItem] = [URLQueryItem(name: "apiKey", value: Secrets.APIKey)]
         let queryItems: [URLQueryItem] = [URLQueryItem(name: "apiKey", value: Secrets.APIKey), URLQueryItem(name: "q", value: text)]
         
         url.append(queryItems: queryItems)

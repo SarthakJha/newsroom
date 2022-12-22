@@ -1,22 +1,38 @@
 PODS:
+  - BulletinBoard (5.0.0)
   - Disk (0.6.4)
+  - GoogleMaps (7.2.0):
+    - GoogleMaps/Maps (= 7.2.0)
+  - GoogleMaps/Base (7.2.0)
+  - GoogleMaps/Maps (7.2.0):
+    - GoogleMaps/Base
+  - GooglePlaces (7.2.0)
   - SDWebImage (5.14.2):
     - SDWebImage/Core (= 5.14.2)
   - SDWebImage/Core (5.14.2)
 
 DEPENDENCIES:
+  - BulletinBoard
   - Disk (~> 0.6.4)
+  - GoogleMaps
+  - GooglePlaces (= 7.2.0)
   - SDWebImage
 
 SPEC REPOS:
   trunk:
+    - BulletinBoard
     - Disk
+    - GoogleMaps
+    - GooglePlaces
     - SDWebImage
 
 SPEC CHECKSUMS:
+  BulletinBoard: dba77053c2a7b64953f63073f7534165af2edd21
   Disk: dcee5c2e98fb72f9a924cde8da8435b08244a80e
+  GoogleMaps: 65ce5426e2398bb81433c8076f2ab6419c2c5537
+  GooglePlaces: 590dea495d69431454ea92217033c3184995165d
   SDWebImage: b9a731e1d6307f44ca703b3976d18c24ca561e84
 
-PODFILE CHECKSUM: 02b39a39d390882d6fb22c394382e482f7304202
+PODFILE CHECKSUM: 6cbd157d8b773851af456d9619e66a4816eb8f43
 
 COCOAPODS: 1.11.3

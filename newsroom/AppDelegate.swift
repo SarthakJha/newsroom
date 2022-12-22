@@ -6,6 +6,8 @@
 //
 
 import UIKit
+import GoogleMaps
+import GooglePlaces
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -14,10 +16,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        
+        GMSServices.provideAPIKey(Secrets.MapsAPIKey)
+        GMSPlacesClient.provideAPIKey(Secrets.MapsAPIKey)
         return true
     }
 
     // MARK: UISceneSession Lifecycle
+    func applicationWillEnterForeground(_ application: UIApplication) {
+        print("did enter forreground")
+    }
 
     func application(_ application: UIApplication, configurationForConnecting connectingSceneSession: UISceneSession, options: UIScene.ConnectionOptions) -> UISceneConfiguration {
         // Called when a new scene session is being created.
