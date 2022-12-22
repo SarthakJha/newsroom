@@ -16,6 +16,7 @@ struct KyivLocation {
 
 class MapViewController: UIViewController {
     
+    var marker: GMSMarker!
     var mapresultViewController: MapResultViewController?
     
     var geoCoder: CLGeocoder!
@@ -44,7 +45,7 @@ class MapViewController: UIViewController {
         didSet{
             guard let currentCamera = currentCamera else {return}
             mapView.animate(to: currentCamera)
-            
+            marker.position = currentCamera.target
         }
     }
     
@@ -62,8 +63,10 @@ class MapViewController: UIViewController {
         view.addSubview(mapView)
         geoCoder = CLGeocoder()
         mapView.delegate = self
+        marker = GMSMarker()
         currentCamera = defaultCamera
-        
+        marker.position = currentCamera!.target
+        marker.map = mapView
     }
 }
 
@@ -73,6 +76,7 @@ extension MapViewController: GMSMapViewDelegate {
         geoCoder.reverseGeocodeLocation(CLLocation(latitude: currentCamera!.target.latitude.magnitude, longitude: currentCamera!.target.longitude.magnitude)) { [self] places, error in
             
             guard let country = places?[0].country else {return}
+            marker.title = country
             let countryCode = self.getISO3166CountryCode(countryName: country)
             NewsroomAPIService.APIManager.fetchHeadlines(category: nil, countryCode: countryCode) { response, error in
                 if let error = error{

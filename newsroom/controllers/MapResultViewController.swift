@@ -12,7 +12,8 @@ class MapResultViewController: UIViewController, UICollectionViewDelegate, UICol
     var articleResponse: ArticleResponse? {
         didSet{
             DispatchQueue.main.async {
-                self.newsCollectionView.reloadData()
+                guard let newsCollectionView = self.newsCollectionView else {return}
+                newsCollectionView.reloadData()
             }
         }
     }
