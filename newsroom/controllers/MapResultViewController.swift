@@ -34,7 +34,7 @@ class MapResultViewController: UIViewController, UICollectionViewDelegate, UICol
         super.viewDidLoad()
         let flowLayout = UICollectionViewFlowLayout()
         flowLayout.scrollDirection = .vertical
-        newsCollectionView = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
+        newsCollectionView = UICollectionView(frame: view.bounds, collectionViewLayout: flowLayout)
         view.addSubview(newsCollectionView)
         newsCollectionView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
         newsCollectionView.register(HeadlineCollectionViewCell.self, forCellWithReuseIdentifier: "map-cell")

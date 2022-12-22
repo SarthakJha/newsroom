@@ -66,8 +66,9 @@ final class NetworkManager {
     
     func fetchSearchResults(searchText text: String ,Source completion: @escaping((ArticleResponse?,Error?) -> Void)){
         guard var url: URL = URL(string: baseURL!+apiVersion+topHeadlineRoute) else {return}
-        let queryItems: [URLQueryItem] = [URLQueryItem(name: "apiKey", value: Secrets.APIKey)]
-        let queryItems: [URLQueryItem] = [URLQueryItem(name: "apiKey", value: Secrets.APIKey), URLQueryItem(name: "q", value: text)]
+        var queryItems: [URLQueryItem] = [URLQueryItem(name: "apiKey", value: Secrets.APIKey)]
+        queryItems.append(URLQueryItem(name: "apiKey", value: Secrets.APIKey))
+        queryItems.append(URLQueryItem(name: "q", value: text))
         
         url.append(queryItems: queryItems)
 
