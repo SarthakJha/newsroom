@@ -12,6 +12,10 @@ class HeadlineCollectionViewCell: UICollectionViewCell {
     
     var cellImageURL: String?
     var headlineLabelText: String?
+    override func prepareForReuse() {
+        headlineText.text = ""
+        cellBackgroundImage = UIImageView()
+    }
     
     override init(frame: CGRect) {
         super.init(frame: frame)

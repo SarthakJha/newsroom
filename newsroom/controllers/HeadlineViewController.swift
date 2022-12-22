@@ -32,7 +32,7 @@ class HeadlineViewController: UIViewController, WKNavigationDelegate {
         self.headlineCollectionView.register(HeadlineCollectionViewCell.self, forCellWithReuseIdentifier: "headline-cell")
         self.headlineCollectionView.alwaysBounceVertical = true
         self.headlineCollectionView.backgroundColor = .white
-        NewsroomAPIService.APIManager.fetchHeadlines(category: .entertainment) { res, err in
+        NewsroomAPIService.APIManager.fetchHeadlines(category: .entertainment, countryCode: nil) { res, err in
             if let err = err{
                 print(err)
             }else{
