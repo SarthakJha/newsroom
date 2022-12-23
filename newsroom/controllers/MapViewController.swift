@@ -27,9 +27,11 @@ class MapViewController: UIViewController {
                 self.mapresultViewController = MapResultViewController()
                 mapresultViewController!.articleResponse = newsItems
                 
-                    if let mapresultViewController = mapresultViewController{
-                        self.present(mapresultViewController, animated: true)
-                    }
+                if let sheet = mapresultViewController?.sheetPresentationController{
+                    sheet.detents = [.medium(),.large()]
+                }
+                guard let mapresultViewController = mapresultViewController else {return}
+                present(mapresultViewController, animated: true)
             }
         }
     }

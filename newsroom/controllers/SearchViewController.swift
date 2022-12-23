@@ -44,10 +44,10 @@ class SearchViewController: UIViewController {
     private func addConstraints(){
         var constraints = [NSLayoutConstraint]()
         
-        constraints.append(searchBar.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor))
+        constraints.append(searchBar.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: 20))
         constraints.append( searchResultCollectionView.topAnchor.constraint(equalTo:searchBar.bottomAnchor))
         constraints.append(searchResultCollectionView.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor))
-        constraints.append(searchBar.bottomAnchor.constraint(equalTo: searchResultCollectionView.topAnchor))
+        constraints.append(searchBar.bottomAnchor.constraint(equalTo: searchResultCollectionView.topAnchor,constant: -20))
         constraints.append(searchBar.leadingAnchor.constraint(equalTo: self.view.leadingAnchor))
         constraints.append(searchBar.trailingAnchor.constraint(equalTo: self.view.trailingAnchor))
         constraints.append(searchResultCollectionView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor))

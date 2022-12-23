@@ -9,6 +9,20 @@ import UIKit
 
 class MapResultViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource {
     
+    var dismissButton: UIButton = {
+        let button = UIButton(frame: CGRect(x: 0, y: 0, width: 20, height: 20))
+        button.backgroundColor = .black
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.layer.cornerRadius = 10
+        return button
+    }()
+    
+    @objc func dissmissSheet(){
+        self.dismiss(animated: true)
+    }
+    
+    var navBar: UINavigationBar!
+    
     var articleResponse: ArticleResponse? {
         didSet{
             DispatchQueue.main.async {
@@ -33,15 +47,27 @@ class MapResultViewController: UIViewController, UICollectionViewDelegate, UICol
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        navBar = UINavigationBar(frame: CGRect(x: 0, y: 0, width: self.view.frame.size.width, height: 44))
+
+        view.addSubview(navBar)
+
+        navBar.setItems([UINavigationItem(title: "results")], animated: true)
+        
         let flowLayout = UICollectionViewFlowLayout()
         flowLayout.scrollDirection = .vertical
         newsCollectionView = UICollectionView(frame: view.bounds, collectionViewLayout: flowLayout)
         view.addSubview(newsCollectionView)
-        newsCollectionView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+        view.addSubview(dismissButton)
+        dismissButton.addTarget(self, action: #selector(dissmissSheet), for: .touchUpInside)
+
+        newsCollectionView.topAnchor.constraint(equalTo: view.topAnchor, constant: 30).isActive = true
         newsCollectionView.register(HeadlineCollectionViewCell.self, forCellWithReuseIdentifier: "map-cell")
         newsCollectionView.delegate = self
+        
         newsCollectionView.dataSource = self
-    }
+        
+            }
+    
     
     func addConstraints(){
         var constraints: [NSLayoutConstraint] = []
@@ -51,7 +77,9 @@ class MapResultViewController: UIViewController, UICollectionViewDelegate, UICol
         constraints.append(newsCollectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor))
         constraints.append(newsCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor))
         constraints.append(newsCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor))
-
+        constraints.append(dismissButton.topAnchor.constraint(equalTo: view.topAnchor))
+        constraints.append(dismissButton.trailingAnchor.constraint(equalTo: view.trailingAnchor))
+        constraints.append(dismissButton.bottomAnchor.constraint(equalTo: newsCollectionView.topAnchor))
         NSLayoutConstraint.activate(constraints)
     }
     
@@ -60,5 +88,8 @@ class MapResultViewController: UIViewController, UICollectionViewDelegate, UICol
 extension MapResultViewController: UICollectionViewDelegateFlowLayout{
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: view.frame.width-20, height: 150)
+    }
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+        return UIEdgeInsets(top: 40, left: 0, bottom: 0, right: 0)
     }
 }

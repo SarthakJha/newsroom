@@ -18,26 +18,34 @@ class MainViewController: UITabBarController, UITabBarControllerDelegate {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        let searchVC = SearchViewController()
-        let categoryVC = MapViewController()
-        let mapVC = HeadlineViewController()
+        if let navigationController = navigationController {
+            print("lol")
+            navigationController.navigationBar.isOpaque = true
+//            navigationController.navigationBar.backgroundColor = .red
+//            navigationController.navigationBar.setItems([UINavigationItem(title: "sarthak")], animated: true)
+            navigationController.navigationBar.isHidden = true
+//            navigationController.title = "Title"
+        }
         
-        let searchBarItem = UITabBarItem(title: "search", image: UIImage(named: "icon.png"), tag: 0)
+        let searchVC = SearchViewController()
+        let mapVC = MapViewController()
+        let headlineVC = HeadlineViewController()
+        
+        let searchBarItem = UITabBarItem(title: "search", image: UIImage(named: ""), tag: 0)
         searchVC.tabBarItem = searchBarItem
         
-        let categoryBarItem = UITabBarItem(title: "map", image: UIImage(named: "icon.png"), tag: 1)
-        categoryVC.tabBarItem = categoryBarItem
+        let categoryBarItem = UITabBarItem(title: "map", image: UIImage(named: ""), tag: 1)
+        mapVC.tabBarItem = categoryBarItem
         
-        let mapBarItem = UITabBarItem(title: "headlines", image: UIImage(named: "ss"), tag: 2)
-        mapVC.tabBarItem = mapBarItem
-        self.viewControllers = [searchVC, categoryVC,mapVC]
-        self.tabBar.backgroundColor = .black
-        self.tabBar.isTranslucent = true
+    
+        
+        
+        let mapBarItem = UITabBarItem(title: "headlines", image: UIImage(named: "-folded") , tag: 2)
+        headlineVC.tabBarItem = mapBarItem
+        self.viewControllers = [searchVC, mapVC ,headlineVC]
+//        self.tabBar.isTranslucent = true
+        tabBar.backgroundColor = UIColor(white: 1, alpha: 0.2)
         
     }
-    func tabBarController(_ tabBarController: UITabBarController, didSelect viewController: UIViewController) {
-        print(viewController)
-    }
-
 }
 

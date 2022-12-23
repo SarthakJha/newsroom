@@ -6,9 +6,8 @@
 //
 
 import UIKit
-import WebKit
 
-class HeadlineViewController: UIViewController, WKNavigationDelegate {
+class HeadlineViewController: UIViewController {
     /**
      Allow user to filter the headline results based on category
      */
@@ -21,7 +20,6 @@ class HeadlineViewController: UIViewController, WKNavigationDelegate {
             }
         }
     }
-    var webView :WKWebView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,6 +30,7 @@ class HeadlineViewController: UIViewController, WKNavigationDelegate {
         self.headlineCollectionView.register(HeadlineCollectionViewCell.self, forCellWithReuseIdentifier: "headline-cell")
         self.headlineCollectionView.alwaysBounceVertical = true
         self.headlineCollectionView.backgroundColor = .white
+
         NewsroomAPIService.APIManager.fetchHeadlines(category: .entertainment, countryCode: nil) { res, err in
             if let err = err{
                 print(err)
@@ -39,10 +38,7 @@ class HeadlineViewController: UIViewController, WKNavigationDelegate {
                 self.topHeadlineData = res
             }
         }
-        
-        webView.navigationDelegate = self
     }
-    
     override func loadView() {
         // setting up flow layout
         let flowLayout = UICollectionViewFlowLayout()
@@ -50,15 +46,12 @@ class HeadlineViewController: UIViewController, WKNavigationDelegate {
         flowLayout.minimumLineSpacing = 20
         
         headlineCollectionView = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
-        webView = WKWebView()
         self.view = headlineCollectionView
     }
 }
 
 extension HeadlineViewController: UICollectionViewDelegate{
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        webView.load(URLRequest(url: URL(string: topHeadlineData?.articles[indexPath.row].url ?? "")!))        
-    }
+ 
 }
 
 extension HeadlineViewController: UICollectionViewDelegateFlowLayout{
@@ -83,7 +76,7 @@ extension HeadlineViewController: UICollectionViewDataSource{
         let cell = headlineCollectionView.dequeueReusableCell(withReuseIdentifier: "headline-cell", for: indexPath) as! HeadlineCollectionViewCell
         cell.headlineText.text = topHeadlineData?.articles[indexPath.row].title
         cell.cellBackgroundImage.sd_setImage(with: URL(string: topHeadlineData?.articles[indexPath.row].urlToImage ?? ""))
-
+        cell.sourceLabel.text = topHeadlineData?.articles[indexPath.row].source.name ?? ""
 //        cell.cellBackgroundImage.sd = topHeadlineData?.articles[indexPath.row].urlToImage
         return cell
     }
