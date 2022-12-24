@@ -57,7 +57,7 @@ extension HeadlineViewController: UICollectionViewDelegate{
 extension HeadlineViewController: UICollectionViewDelegateFlowLayout{
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: view.frame.width-20, height: 150)
+        return CGSize(width: view.frame.width-20, height: 300)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
@@ -75,6 +75,11 @@ extension HeadlineViewController: UICollectionViewDataSource{
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = headlineCollectionView.dequeueReusableCell(withReuseIdentifier: "headline-cell", for: indexPath) as! HeadlineCollectionViewCell
         cell.headlineText.text = topHeadlineData?.articles[indexPath.row].title
+        if let imageUrl = topHeadlineData?.articles[indexPath.row].urlToImage{
+            cell.cellBackgroundImage.sd_setImage(with: URL(string: imageUrl))
+        }else{
+            cell.cellBackgroundImage.image = UIImage(named: "news-default")
+        }
         cell.cellBackgroundImage.sd_setImage(with: URL(string: topHeadlineData?.articles[indexPath.row].urlToImage ?? ""))
         cell.sourceLabel.text = topHeadlineData?.articles[indexPath.row].source.name ?? ""
 //        cell.cellBackgroundImage.sd = topHeadlineData?.articles[indexPath.row].urlToImage

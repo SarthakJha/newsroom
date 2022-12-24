@@ -12,23 +12,30 @@ class HeadlineCollectionViewCell: UICollectionViewCell {
     
     var cellImageURL: String?
     var headlineLabelText: String?
+    
+    
 
     var headlineText: UILabel = {
         var label = UILabel()
         label.textColor = .black
-        label.frame.size = CGSize(width: 200, height: 40)
+        label.frame.size = CGSize(width: 200, height: 100)
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = UIFont(name: "Times New Roman", size: 20)
-        label.textColor = .black
+        label.font = UIFont(name: "Times New Roman", size: 22)
+        label.textColor = .white
         label.text = ""
-        label.numberOfLines = 2
-        label.backgroundColor = UIColor(white: 1, alpha: 0.7)
+        label.numberOfLines = 4
+//        label.backgroundColor = UIColor(white: 1, alpha: 0.7)
 
         return label
     }()
     
     var cellBackgroundImage: UIImageView = {
         let imageview = UIImageView()
+        imageview.translatesAutoresizingMaskIntoConstraints = false
+//        imageview.layer.cornerRadius =
+        imageview.sizeToFit()
+        imageview.layer.cornerRadius = 25
+        imageview.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
         return imageview
     }()
     
@@ -44,26 +51,31 @@ class HeadlineCollectionViewCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        self.layer.cornerRadius = 20
-        self.layer.borderWidth = 1
+
+        self.backgroundColor = .black
+        self.layer.cornerRadius = 40
         self.addSubview(cellBackgroundImage)
         self.addSubview(headlineText)
         self.addSubview(sourceLabel)
         constraintsCell()
         self.translatesAutoresizingMaskIntoConstraints = true
-        cellBackgroundImage.frame = self.bounds
-        cellBackgroundImage.translatesAutoresizingMaskIntoConstraints = true
-        cellBackgroundImage.layer.cornerRadius = 20
+//        cellBackgroundImage.frame = self.bounds
         cellBackgroundImage.clipsToBounds = true
     }
     
     func constraintsCell(){
         let constraints: [NSLayoutConstraint] = [
-            headlineText.bottomAnchor.constraint(equalTo: self.bottomAnchor),
+            headlineText.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -15),
             headlineText.leadingAnchor.constraint(equalTo: self.leadingAnchor,constant: 20),
             headlineText.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
-            sourceLabel.topAnchor.constraint(equalTo: topAnchor,constant: 10),
-            sourceLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10)
+            headlineText.topAnchor.constraint(equalTo: cellBackgroundImage.bottomAnchor, constant: 10),
+            sourceLabel.topAnchor.constraint(equalTo: cellBackgroundImage.topAnchor,constant: 5),
+            sourceLabel.trailingAnchor.constraint(equalTo: cellBackgroundImage.trailingAnchor, constant: -8),
+            cellBackgroundImage.topAnchor.constraint(equalTo: self.topAnchor),
+//            cellBackgroundImage.bottomAnchor.constraint(equalTo: self.headlineText.topAnchor, constant: -15),
+            cellBackgroundImage.leadingAnchor.constraint(equalTo: self.leadingAnchor),
+            cellBackgroundImage.trailingAnchor.constraint(equalTo: trailingAnchor),
+            
         ]
         NSLayoutConstraint.activate(constraints)
     }
