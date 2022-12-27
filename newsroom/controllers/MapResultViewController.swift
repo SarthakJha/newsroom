@@ -9,7 +9,7 @@ import UIKit
 import CoreLocation
 
 class MapResultViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource {
-    
+    var delegate:MapViewControllerDelegate!
     var dismissButton: UIButton = {
         let button = UIButton()
         button.backgroundColor = .black
@@ -17,6 +17,10 @@ class MapResultViewController: UIViewController, UICollectionViewDelegate, UICol
         button.layer.cornerRadius = 10
         return button
     }()
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        delegate.didTapOnSearchResults(self, indexPath: indexPath)
+    }
     
     @objc func dissmissSheet(){
         self.dismiss(animated: true)
@@ -49,7 +53,6 @@ class MapResultViewController: UIViewController, UICollectionViewDelegate, UICol
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        
         navBar = UINavigationBar(frame: CGRect(x: 0, y: 0, width: self.view.frame.size.width, height: 44))
         self.view.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(navBar)
@@ -70,8 +73,7 @@ class MapResultViewController: UIViewController, UICollectionViewDelegate, UICol
         newsCollectionView.dataSource = self
         addConstraints()
 
-        
-            }
+    }
     
     
     func addConstraints(){

@@ -19,7 +19,7 @@ class MainViewController: UITabBarController, UITabBarControllerDelegate {
         super.viewWillAppear(animated)
         
         if let navigationController = navigationController {
-            navigationController.navigationBar.isOpaque = true
+//            navigationController.navigationBar.isOpaque = true
             navigationController.navigationBar.isHidden = true
         }
         
@@ -27,7 +27,7 @@ class MainViewController: UITabBarController, UITabBarControllerDelegate {
         let mapVC = MapViewController()
         let headlineVC = HeadlineViewController()
         
-        let searchBarItem = UITabBarItem(title: "search", image: UIImage(named: "s"), tag: 0)
+        let searchBarItem = UITabBarItem(title: "search", image: UIImage(named: "search"), tag: 0)
         searchVC.tabBarItem = searchBarItem
         
         let categoryBarItem = UITabBarItem(title: "map", image: UIImage(named: "s"), tag: 1)

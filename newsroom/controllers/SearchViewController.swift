@@ -14,7 +14,7 @@ class SearchViewController: UIViewController {
      */
     
     var searchBar:SearchBarView!
-    
+    var newsWebViewController: NewsWebViewController!
     var searchResults: ArticleResponse? {
         didSet{
             DispatchQueue.main.async { [self] in
@@ -25,6 +25,7 @@ class SearchViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        newsWebViewController = NewsWebViewController()
         searchBar = SearchBarView()
         guard let searchBar = searchBar else {return}
         view.addSubview(searchResultCollectionView)
@@ -81,6 +82,15 @@ class SearchViewController: UIViewController {
 extension SearchViewController: UICollectionViewDelegate, UICollectionViewDelegateFlowLayout{
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: view.frame.width-20, height: 300)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        if let url = URL(string: (searchResults?.articles[indexPath.row].url!)!){
+            newsWebViewController.url = url
+            if let navigationController = navigationController{
+                navigationController.pushViewController(self.newsWebViewController, animated: true)
+            }
+        }
     }
 }
 

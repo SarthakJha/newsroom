@@ -9,9 +9,13 @@ import UIKit
 import GoogleMaps
 import GooglePlaces
 
+protocol MapViewControllerDelegate {
+    func didTapOnSearchResults(_ viewContrller: UIViewController, indexPath: IndexPath)
+}
 
 class MapViewController: UIViewController {
     
+    var newsWebViewController: NewsWebViewController!
     var marker: GMSMarker!
     var mapresultViewController: MapResultViewController!
     
@@ -19,8 +23,7 @@ class MapViewController: UIViewController {
         didSet{
 
             DispatchQueue.main.async { [self] in
-                self.mapresultViewController = MapResultViewController()
-                mapresultViewController!.articleResponse = newsItems
+                mapresultViewController.articleResponse = newsItems
                 
                 if let sheet = mapresultViewController?.sheetPresentationController{
                     sheet.detents = [.medium(),.large()]
@@ -67,6 +70,9 @@ class MapViewController: UIViewController {
      }()
     override func viewDidLoad() {
         super.viewDidLoad()
+        newsWebViewController = NewsWebViewController()
+        mapresultViewController = MapResultViewController()
+        mapresultViewController.delegate = self
         view.backgroundColor = .blue
         view.addSubview(mapView)
         mapView.delegate = self
@@ -98,5 +104,15 @@ extension MapViewController: GMSMapViewDelegate {
             }
         }
        
+    }
+}
+
+extension MapViewController: MapViewControllerDelegate{
+    func didTapOnSearchResults(_ viewContrller: UIViewController, indexPath: IndexPath) {
+        mapresultViewController.dissmissSheet()
+        if let navigationController = navigationController{
+            newsWebViewController.url = URL(string: (newsItems?.articles[indexPath.row].url)!)
+            navigationController.pushViewController(newsWebViewController, animated: true)
+        }
     }
 }

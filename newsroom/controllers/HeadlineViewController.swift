@@ -13,6 +13,7 @@ class HeadlineViewController: UIViewController {
      */
     
     var headlineCollectionView: UICollectionView!
+    var newsWebViewController: NewsWebViewController!
     var topHeadlineData: ArticleResponse? {
         didSet{
             DispatchQueue.main.async {
@@ -25,6 +26,7 @@ class HeadlineViewController: UIViewController {
         super.viewDidLoad()
         
         // Do any additional setup after loading the
+        newsWebViewController = NewsWebViewController()
         self.headlineCollectionView.delegate = self
         self.headlineCollectionView.dataSource = self
         self.headlineCollectionView.register(HeadlineCollectionViewCell.self, forCellWithReuseIdentifier: "headline-cell")
@@ -65,6 +67,16 @@ extension HeadlineViewController: UICollectionViewDelegate{
         }
    
         
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        if let url = URL(string: (topHeadlineData?.articles[indexPath.row].url!)!){
+            newsWebViewController.url = url
+            if let navigationController = navigationController{
+                navigationController.pushViewController(self.newsWebViewController, animated: true)
+            }
+//            UIApplication.shared.open(url)
+        }
     }
 }
 

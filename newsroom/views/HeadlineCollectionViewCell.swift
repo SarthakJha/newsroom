@@ -29,6 +29,23 @@ class HeadlineCollectionViewCell: UICollectionViewCell {
         return label
     }()
     
+    var fullNewsIcon: UIImageView = {
+        let imageView = UIImageView(image: UIImage(named: "next-icon"))
+        imageView.frame = CGRect(x: 0, y: 0, width: 5, height: 5)
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.clipsToBounds = true
+        imageView.contentMode = .scaleAspectFill
+//        imageView.image.
+        return imageView
+    }()
+    
+    var fullNewsButton: UIButton = {
+        var button = UIButton()
+        button.frame = CGRect(x: 0, y: 0, width: 5, height: 5)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
+    
     var cellBackgroundImage: UIImageView = {
         let imageview = UIImageView()
         imageview.translatesAutoresizingMaskIntoConstraints = false
@@ -57,15 +74,20 @@ class HeadlineCollectionViewCell: UICollectionViewCell {
         self.addSubview(cellBackgroundImage)
         self.addSubview(headlineText)
         self.addSubview(sourceLabel)
+        self.addSubview(fullNewsButton)
+        fullNewsButton.setImage(UIImage(named: "next-icon"), for: .normal)
+        
+        
         constraintsCell()
         self.translatesAutoresizingMaskIntoConstraints = true
 //        cellBackgroundImage.frame = self.bounds
         cellBackgroundImage.clipsToBounds = true
     }
     
+    
     func constraintsCell(){
         let constraints: [NSLayoutConstraint] = [
-            headlineText.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -15),
+            headlineText.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -40),
             headlineText.leadingAnchor.constraint(equalTo: self.leadingAnchor,constant: 20),
             headlineText.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
             headlineText.topAnchor.constraint(equalTo: cellBackgroundImage.bottomAnchor, constant: 10),
@@ -75,6 +97,9 @@ class HeadlineCollectionViewCell: UICollectionViewCell {
 //            cellBackgroundImage.bottomAnchor.constraint(equalTo: self.headlineText.topAnchor, constant: -15),
             cellBackgroundImage.leadingAnchor.constraint(equalTo: self.leadingAnchor),
             cellBackgroundImage.trailingAnchor.constraint(equalTo: trailingAnchor),
+            fullNewsButton.bottomAnchor.constraint(equalTo: bottomAnchor,constant: -5),
+            fullNewsButton.trailingAnchor.constraint(equalTo: trailingAnchor,constant: -10),
+            fullNewsButton.topAnchor.constraint(equalTo: headlineText.bottomAnchor,constant: 3)
             
         ]
         NSLayoutConstraint.activate(constraints)
