@@ -29,6 +29,7 @@
 		6279851B294C3D81007EDA41 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6279851A294C3D81007EDA41 /* NetworkManager.swift */; };
 		6279851F294C3F83007EDA41 /* secrets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6279851E294C3F83007EDA41 /* secrets.swift */; };
 		62798521294C4A08007EDA41 /* HeadlineCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62798520294C4A08007EDA41 /* HeadlineCollectionViewCell.swift */; };
+		62FF7D4B29598B82000D2E16 /* CollectionHeaderCollectionReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62FF7D4A29598B82000D2E16 /* CollectionHeaderCollectionReusableView.swift */; };
 		A991BAC40EE82B5FADCC11B4 /* Pods_newsroom_newsroomUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 542D595486F5DAC8F5E59DBC /* Pods_newsroom_newsroomUITests.framework */; };
 /* End PBXBuildFile section */
 
@@ -78,6 +79,7 @@
 		6279851A294C3D81007EDA41 /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
 		6279851E294C3F83007EDA41 /* secrets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = secrets.swift; sourceTree = "<group>"; };
 		62798520294C4A08007EDA41 /* HeadlineCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeadlineCollectionViewCell.swift; sourceTree = "<group>"; };
+		62FF7D4A29598B82000D2E16 /* CollectionHeaderCollectionReusableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionHeaderCollectionReusableView.swift; sourceTree = "<group>"; };
 		8ED0BE6A401B7887F08D65AB /* Pods-newsroom-newsroomUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-newsroom-newsroomUITests.debug.xcconfig"; path = "Target Support Files/Pods-newsroom-newsroomUITests/Pods-newsroom-newsroomUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		A137720F7728B801EE1B6678 /* Pods-newsroomTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-newsroomTests.debug.xcconfig"; path = "Target Support Files/Pods-newsroomTests/Pods-newsroomTests.debug.xcconfig"; sourceTree = "<group>"; };
 		B8447FBCD8E38BCADB013972 /* Pods-newsroom.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-newsroom.release.xcconfig"; path = "Target Support Files/Pods-newsroom/Pods-newsroom.release.xcconfig"; sourceTree = "<group>"; };
@@ -196,6 +198,7 @@
 			children = (
 				62798520294C4A08007EDA41 /* HeadlineCollectionViewCell.swift */,
 				6253859B2951AFB1008DA6BB /* SearchBarView.swift */,
+				62FF7D4A29598B82000D2E16 /* CollectionHeaderCollectionReusableView.swift */,
 			);
 			path = views;
 			sourceTree = "<group>";
@@ -520,6 +523,7 @@
 				620A334829504498009F6BFF /* category.swift in Sources */,
 				62798512294C34DB007EDA41 /* MapViewController.swift in Sources */,
 				62798519294C3D35007EDA41 /* NewsroomAPIService.swift in Sources */,
+				62FF7D4B29598B82000D2E16 /* CollectionHeaderCollectionReusableView.swift in Sources */,
 				620A334A2950463A009F6BFF /* article.swift in Sources */,
 				627984E1294C27A1007EDA41 /* MainViewController.swift in Sources */,
 				6279851B294C3D81007EDA41 /* NetworkManager.swift in Sources */,
@@ -701,6 +705,8 @@
 				DEVELOPMENT_TEAM = 25LDX82Q39;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = newsroom/Info.plist;
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = "";
@@ -732,6 +738,8 @@
 				DEVELOPMENT_TEAM = 25LDX82Q39;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = newsroom/Info.plist;
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = "";

@@ -9,17 +9,12 @@ import UIKit
 import GoogleMaps
 import GooglePlaces
 
-struct KyivLocation {
-  static let latitude: CLLocationDegrees = 28.679079
-  static let longitude: CLLocationDegrees = 77.069710
-}
 
 class MapViewController: UIViewController {
     
     var marker: GMSMarker!
-    var mapresultViewController: MapResultViewController?
+    var mapresultViewController: MapResultViewController!
     
-    var geoCoder: CLGeocoder!
     var newsItems: ArticleResponse? {
         didSet{
 
@@ -36,11 +31,20 @@ class MapViewController: UIViewController {
         }
     }
     
-    private func getISO3166CountryCode(countryName country: String)->String{
-        if let code = CountryCode.data[country] {
-            return code.lowercased()
+    static func getISO3166CountryCode(coordinates: CLLocationCoordinate2D, completion: @escaping((String, String)->())){
+    
+        let geoCoder = CLGeocoder()
+        geoCoder.reverseGeocodeLocation(CLLocation(latitude: coordinates.latitude.magnitude, longitude: coordinates.longitude.magnitude)) { places, error in
+            if let error = error{
+                print("decoding error: ", error)
+                return
+            }
+            print("this is coordinates:", coordinates)
+            guard let country = places?[0].country else {return}
+            if let code = CountryCode.data[country] {
+                completion(code, country)
+            }
         }
-        return ""
     }
     
     var currentCamera: GMSCameraPosition? {
@@ -55,15 +59,16 @@ class MapViewController: UIViewController {
         return GMSMapView(frame: view.frame)
     }()
     private lazy var defaultCamera: GMSCameraPosition = {
-           return GMSCameraPosition(latitude: KyivLocation.latitude,
-                                    longitude: KyivLocation.longitude,
+        let lat = UserDefaults.standard.double(forKey: "location-latitude")
+        let long = UserDefaults.standard.double(forKey: "location-longitude")
+           return GMSCameraPosition(latitude: CLLocationDegrees(lat),
+                                    longitude: CLLocationDegrees(long),
                                      zoom: 3)
      }()
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .blue
         view.addSubview(mapView)
-        geoCoder = CLGeocoder()
         mapView.delegate = self
         marker = GMSMarker()
         currentCamera = defaultCamera
@@ -75,11 +80,13 @@ class MapViewController: UIViewController {
 extension MapViewController: GMSMapViewDelegate {
     func mapView(_ mapView: GMSMapView, didTapAt coordinate: CLLocationCoordinate2D) {
         currentCamera = GMSCameraPosition(latitude: coordinate.latitude, longitude: coordinate.longitude, zoom: 4)
-        geoCoder.reverseGeocodeLocation(CLLocation(latitude: currentCamera!.target.latitude.magnitude, longitude: currentCamera!.target.longitude.magnitude)) { [self] places, error in
-            
-            guard let country = places?[0].country else {return}
-            marker.title = country
-            let countryCode = self.getISO3166CountryCode(countryName: country)
+        MapViewController.getISO3166CountryCode(coordinates: coordinate) { countryCode, country in
+            if (countryCode == ""){
+                print("erorr: ")
+                return
+            }
+            debugPrint("cointry", countryCode)
+            self.marker.title = country
             NewsroomAPIService.APIManager.fetchHeadlines(category: nil, countryCode: countryCode) { response, error in
                 if let error = error{
                     print(error)
@@ -89,7 +96,7 @@ extension MapViewController: GMSMapViewDelegate {
                     self.newsItems = response
                 }
             }
-            
         }
+       
     }
 }

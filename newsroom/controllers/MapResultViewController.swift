@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import CoreLocation
 
 class MapResultViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource {
     
@@ -47,6 +48,8 @@ class MapResultViewController: UIViewController, UICollectionViewDelegate, UICol
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        
         navBar = UINavigationBar(frame: CGRect(x: 0, y: 0, width: self.view.frame.size.width, height: 44))
         self.view.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(navBar)

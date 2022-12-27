@@ -28,10 +28,11 @@ class HeadlineViewController: UIViewController {
         self.headlineCollectionView.delegate = self
         self.headlineCollectionView.dataSource = self
         self.headlineCollectionView.register(HeadlineCollectionViewCell.self, forCellWithReuseIdentifier: "headline-cell")
+        self.headlineCollectionView.register(CollectionHeaderCollectionReusableView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "header")
         self.headlineCollectionView.alwaysBounceVertical = true
         self.headlineCollectionView.backgroundColor = .white
-
-        NewsroomAPIService.APIManager.fetchHeadlines(category: .entertainment, countryCode: nil) { res, err in
+        let countryCode = UserDefaults.standard.string(forKey: "country-code")
+        NewsroomAPIService.APIManager.fetchHeadlines(category: .entertainment, countryCode: countryCode ?? "in") { res, err in
             if let err = err{
                 print(err)
             }else{
@@ -42,6 +43,7 @@ class HeadlineViewController: UIViewController {
     override func loadView() {
         // setting up flow layout
         let flowLayout = UICollectionViewFlowLayout()
+
         flowLayout.scrollDirection = .vertical
         flowLayout.minimumLineSpacing = 20
         
@@ -51,7 +53,19 @@ class HeadlineViewController: UIViewController {
 }
 
 extension HeadlineViewController: UICollectionViewDelegate{
- 
+    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+        
+        switch kind {
+        case UICollectionView.elementKindSectionHeader:
+            let header = headlineCollectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "header", for: indexPath) as! CollectionHeaderCollectionReusableView
+            header.headerlabel.text = "Top Headlines"
+            return header
+        default:
+            assert(false,"invalid")
+        }
+   
+        
+    }
 }
 
 extension HeadlineViewController: UICollectionViewDelegateFlowLayout{
@@ -60,9 +74,9 @@ extension HeadlineViewController: UICollectionViewDelegateFlowLayout{
         return CGSize(width: view.frame.width-20, height: 300)
     }
     
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        return UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-    }
+//    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+//        return UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+//    }
     
 }
 
