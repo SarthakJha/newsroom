@@ -12,28 +12,49 @@ class HeadlineViewController: UIViewController {
      Allow user to filter the headline results based on category
      */
     
+    var activityIndicator: UIActivityIndicatorView = UIActivityIndicatorView(style: .large)
     var headlineCollectionView: UICollectionView!
     var newsWebViewController: NewsWebViewController!
     var topHeadlineData: ArticleResponse? {
         didSet{
             DispatchQueue.main.async {
+                
                 self.headlineCollectionView.reloadData()
+                self.activityIndicator.stopAnimating()
             }
         }
     }
     
+    @objc func s(){
+        print("lololololl")
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        // Do any additional setup after loading the
+        self.title = "Headlines"
         newsWebViewController = NewsWebViewController()
+        view.addSubview(activityIndicator)
+        let flowLayout = UICollectionViewFlowLayout()
+        
+        var btnItem = UIBarButtonItem(image: UIImage(systemName: "person"), style: .plain, target: self, action: #selector(s))
+        self.navigationItem.rightBarButtonItem = btnItem
+        self.navigationItem.rightBarButtonItem?.isHidden = false
+        flowLayout.scrollDirection = .vertical
+        flowLayout.minimumLineSpacing = 20
+        headlineCollectionView = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
+        view.addSubview(headlineCollectionView)
+        headlineCollectionView.translatesAutoresizingMaskIntoConstraints = false
+        activityIndicator.center = view.center
+        activityIndicator.backgroundColor = .red
         self.headlineCollectionView.delegate = self
         self.headlineCollectionView.dataSource = self
         self.headlineCollectionView.register(HeadlineCollectionViewCell.self, forCellWithReuseIdentifier: "headline-cell")
         self.headlineCollectionView.register(CollectionHeaderCollectionReusableView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "header")
         self.headlineCollectionView.alwaysBounceVertical = true
         self.headlineCollectionView.backgroundColor = .white
+        addConstraints()
+
         let countryCode = UserDefaults.standard.string(forKey: "country-code")
+        activityIndicator.startAnimating()
         NewsroomAPIService.APIManager.fetchHeadlines(category: .entertainment, countryCode: countryCode ?? "in") { res, err in
             if let err = err{
                 print(err)
@@ -42,15 +63,16 @@ class HeadlineViewController: UIViewController {
             }
         }
     }
-    override func loadView() {
-        // setting up flow layout
-        let flowLayout = UICollectionViewFlowLayout()
-
-        flowLayout.scrollDirection = .vertical
-        flowLayout.minimumLineSpacing = 20
-        
-        headlineCollectionView = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
-        self.view = headlineCollectionView
+    
+    func addConstraints(){
+        let constraints: [NSLayoutConstraint] = [
+            headlineCollectionView.topAnchor.constraint(equalTo: view.topAnchor),
+            headlineCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            headlineCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            headlineCollectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            
+        ]
+        NSLayoutConstraint.activate(constraints)
     }
 }
 

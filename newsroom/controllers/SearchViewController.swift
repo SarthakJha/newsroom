@@ -163,9 +163,15 @@ extension SearchViewController: UITableViewDelegate,UITableViewDataSource{
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if let selectedCategoryIndexPath = selectedCategoryIndexPath{
             categoriesTableView.cellForRow(at: selectedCategoryIndexPath)?.backgroundColor = .white
+            print("ehre")
+            categoriesTableView.cellForRow(at: selectedCategoryIndexPath)?.textLabel?.textColor = .black
+            
         }
+        categoriesTableView.cellForRow(at: indexPath)?.backgroundColor = .black
+        categoriesTableView.cellForRow(at: indexPath)?.textLabel?.textColor = .white
+        categoriesTableView.cellForRow(at: indexPath)?.selectionStyle = .none
         selectedCategoryIndexPath = indexPath
-        categoriesTableView.cellForRow(at: indexPath)?.backgroundColor = .red
+
     }
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         return "Select category"

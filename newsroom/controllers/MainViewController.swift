@@ -19,15 +19,14 @@ class MainViewController: UITabBarController, UITabBarControllerDelegate {
         super.viewWillAppear(animated)
         
         if let navigationController = navigationController {
-//            navigationController.navigationBar.isOpaque = true
-            navigationController.navigationBar.isHidden = true
+            navigationController.navigationBar.isHidden = false
+            navigationController.navigationBar.backgroundColor = .red
         }
-        
         let searchVC = SearchViewController()
         let mapVC = MapViewController()
         let headlineVC = HeadlineViewController()
         
-        let searchBarItem = UITabBarItem(title: "search", image: UIImage(named: "search"), tag: 0)
+        let searchBarItem = UITabBarItem(title: "search", image: UIImage(systemName: "persochart.bar.doc.horizontal.fill"), tag: 0)
         searchVC.tabBarItem = searchBarItem
         
         let categoryBarItem = UITabBarItem(title: "map", image: UIImage(named: "s"), tag: 1)
@@ -36,10 +35,10 @@ class MainViewController: UITabBarController, UITabBarControllerDelegate {
     
         
         
-        let mapBarItem = UITabBarItem(title: "headlines", image: UIImage(named: "-folded") , tag: 2)
+        let mapBarItem = UITabBarItem(title: "headlines", image: UIImage(systemName: "persochart.bar.doc.horizontal.fill") , tag: 2)
         headlineVC.tabBarItem = mapBarItem
         self.viewControllers = [searchVC, mapVC ,headlineVC]
-        tabBar.backgroundColor = UIColor(white: 1, alpha: 0.2)
+        tabBar.backgroundColor = UIColor(white: 1, alpha: 0.7)
         
     }
 }

@@ -15,6 +15,7 @@ protocol MapViewControllerDelegate {
 
 class MapViewController: UIViewController {
     
+    var activityIndicator: UIActivityIndicatorView = UIActivityIndicatorView(style: .large)
     var newsWebViewController: NewsWebViewController!
     var marker: GMSMarker!
     var mapresultViewController: MapResultViewController!
@@ -29,6 +30,7 @@ class MapViewController: UIViewController {
                     sheet.detents = [.medium(),.large()]
                 }
                 guard let mapresultViewController = mapresultViewController else {return}
+                activityIndicator.stopAnimating()
                 present(mapresultViewController, animated: true)
             }
         }
@@ -70,6 +72,8 @@ class MapViewController: UIViewController {
      }()
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.addSubview(activityIndicator)
+        activityIndicator.backgroundColor = .red
         newsWebViewController = NewsWebViewController()
         mapresultViewController = MapResultViewController()
         mapresultViewController.delegate = self
@@ -93,6 +97,7 @@ extension MapViewController: GMSMapViewDelegate {
             }
             debugPrint("cointry", countryCode)
             self.marker.title = country
+            self.activityIndicator.startAnimating()
             NewsroomAPIService.APIManager.fetchHeadlines(category: nil, countryCode: countryCode) { response, error in
                 if let error = error{
                     print(error)
