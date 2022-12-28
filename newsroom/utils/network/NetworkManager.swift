@@ -64,7 +64,7 @@ final class NetworkManager {
     
     // MARK :- put sources also
     
-    func fetchSearchResults(searchText text: String ,Source completion: @escaping((ArticleResponse?,Error?) -> Void)){
+    func fetchSearchResults(category: String?, searchText text: String ,Source completion: @escaping((ArticleResponse?,Error?) -> Void)){
         
         if text == "" {
             return
@@ -73,6 +73,9 @@ final class NetworkManager {
         var queryItems: [URLQueryItem] = [URLQueryItem(name: "apiKey", value: Secrets.APIKey)]
         queryItems.append(URLQueryItem(name: "apiKey", value: Secrets.APIKey))
         queryItems.append(URLQueryItem(name: "q", value: text))
+        if let category = category{
+            queryItems.append(URLQueryItem(name: "category", value: category))
+        }
         
         url.append(queryItems: queryItems)
 
