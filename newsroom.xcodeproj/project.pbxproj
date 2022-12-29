@@ -32,6 +32,8 @@
 		62FF7D4B29598B82000D2E16 /* CollectionHeaderCollectionReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62FF7D4A29598B82000D2E16 /* CollectionHeaderCollectionReusableView.swift */; };
 		62FF7D4D295B04D6000D2E16 /* NewsWebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62FF7D4C295B04D6000D2E16 /* NewsWebViewController.swift */; };
 		62FF7D53295C0784000D2E16 /* categoryData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62FF7D52295C0784000D2E16 /* categoryData.swift */; };
+		62FF7D55295D5C1D000D2E16 /* notfoundresults.json in Resources */ = {isa = PBXBuildFile; fileRef = 62FF7D54295D5C1D000D2E16 /* notfoundresults.json */; };
+		62FF7D58295D6020000D2E16 /* Toast in Frameworks */ = {isa = PBXBuildFile; productRef = 62FF7D57295D6020000D2E16 /* Toast */; };
 		A991BAC40EE82B5FADCC11B4 /* Pods_newsroom_newsroomUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 542D595486F5DAC8F5E59DBC /* Pods_newsroom_newsroomUITests.framework */; };
 /* End PBXBuildFile section */
 
@@ -84,6 +86,7 @@
 		62FF7D4A29598B82000D2E16 /* CollectionHeaderCollectionReusableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionHeaderCollectionReusableView.swift; sourceTree = "<group>"; };
 		62FF7D4C295B04D6000D2E16 /* NewsWebViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsWebViewController.swift; sourceTree = "<group>"; };
 		62FF7D52295C0784000D2E16 /* categoryData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = categoryData.swift; sourceTree = "<group>"; };
+		62FF7D54295D5C1D000D2E16 /* notfoundresults.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = notfoundresults.json; sourceTree = "<group>"; };
 		8ED0BE6A401B7887F08D65AB /* Pods-newsroom-newsroomUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-newsroom-newsroomUITests.debug.xcconfig"; path = "Target Support Files/Pods-newsroom-newsroomUITests/Pods-newsroom-newsroomUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		A137720F7728B801EE1B6678 /* Pods-newsroomTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-newsroomTests.debug.xcconfig"; path = "Target Support Files/Pods-newsroomTests/Pods-newsroomTests.debug.xcconfig"; sourceTree = "<group>"; };
 		B8447FBCD8E38BCADB013972 /* Pods-newsroom.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-newsroom.release.xcconfig"; path = "Target Support Files/Pods-newsroom/Pods-newsroom.release.xcconfig"; sourceTree = "<group>"; };
@@ -96,6 +99,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				62FF7D58295D6020000D2E16 /* Toast in Frameworks */,
 				0797A9E26CAE853ADB1ADD04 /* Pods_newsroom.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -166,6 +170,7 @@
 		627984DB294C27A1007EDA41 /* newsroom */ = {
 			isa = PBXGroup;
 			children = (
+				62FF7D54295D5C1D000D2E16 /* notfoundresults.json */,
 				620A334629504486009F6BFF /* models */,
 				62798516294C3D12007EDA41 /* utils */,
 				6279850E294C321B007EDA41 /* controllers */,
@@ -268,6 +273,9 @@
 			dependencies = (
 			);
 			name = newsroom;
+			packageProductDependencies = (
+				62FF7D57295D6020000D2E16 /* Toast */,
+			);
 			productName = newsroom;
 			productReference = 627984D9294C27A1007EDA41 /* newsroom.app */;
 			productType = "com.apple.product-type.application";
@@ -344,6 +352,9 @@
 				Base,
 			);
 			mainGroup = 627984D0294C27A1007EDA41;
+			packageReferences = (
+				62FF7D56295D6020000D2E16 /* XCRemoteSwiftPackageReference "Toast" */,
+			);
 			productRefGroup = 627984DA294C27A1007EDA41 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -361,6 +372,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				627984E9294C27A2007EDA41 /* LaunchScreen.storyboard in Resources */,
+				62FF7D55295D5C1D000D2E16 /* notfoundresults.json in Resources */,
 				627984E6294C27A2007EDA41 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -888,6 +900,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		62FF7D56295D6020000D2E16 /* XCRemoteSwiftPackageReference "Toast" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/hengyu/Toast.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		62FF7D57295D6020000D2E16 /* Toast */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 62FF7D56295D6020000D2E16 /* XCRemoteSwiftPackageReference "Toast" */;
+			productName = Toast;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 627984D1294C27A1007EDA41 /* Project object */;
 }

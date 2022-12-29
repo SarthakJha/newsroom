@@ -7,6 +7,7 @@ target 'newsroom' do
 
   # Pods for newsroom
 pod 'SDWebImage'
+pod 'lottie-ios'
 pod 'Disk', '~> 0.6.4'
 pod 'GoogleMaps'
 pod 'BulletinBoard'

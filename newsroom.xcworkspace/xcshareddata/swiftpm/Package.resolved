@@ -1,0 +1,14 @@
+{
+  "pins" : [
+    {
+      "identity" : "toast",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/hengyu/Toast.git",
+      "state" : {
+        "revision" : "962ea1063c564012655fb86be91221e93f2d862d",
+        "version" : "1.0.0"
+      }
+    }
+  ],
+  "version" : 2
+}

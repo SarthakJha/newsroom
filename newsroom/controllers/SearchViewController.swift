@@ -6,6 +6,8 @@
 //
 
 import UIKit
+import Lottie
+import Toast
 
 class SearchViewController: UIViewController {
 
@@ -16,6 +18,8 @@ class SearchViewController: UIViewController {
     var searchBar:SearchBarView!
     var newsWebViewController: NewsWebViewController!
     var categoriesTableView: UITableView!
+    
+    private var animationView: LottieAnimationView!
     var selectedCategoryIndexPath: IndexPath? {
         didSet{
             searchBar.searchButton.isEnabled = true
@@ -24,14 +28,38 @@ class SearchViewController: UIViewController {
     var searchResults: ArticleResponse? {
         didSet{
             DispatchQueue.main.async { [self] in
-                searchResultCollectionView.reloadData()
-                searchResultCollectionView.isHidden = false
+                if((searchResults?.totalResults)! > 0){
+                    searchResultCollectionView.reloadData()
+                    searchResultCollectionView.isHidden = false
+                    animationView.isHidden = true
+                }else{
+                    let configuration = ToastConfiguration(
+                        autoHide: true,
+                        enablePanToClose: true,
+                        displayTime: 5,
+                        animationTime: 0.2
+                    )
+                    let toast = Toast.default(image: nil, title: "No results found!", subtitle: "no news articles could be founf with your search text",configuration: configuration)
+                    toast.enableTapToClose()
+                    searchResultCollectionView.isHidden = true
+                    animationView.isHidden = false
+                    animationView.play()
+                    toast.show(haptic: .warning)
+                }
             }
+           
         }
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        animationView = .init(name: "notfoundresults")
+        animationView.translatesAutoresizingMaskIntoConstraints = false
+        animationView.frame = CGRect(x: 0, y: 0, width: 70, height: 70)
+        animationView.contentMode = .scaleAspectFit
+        animationView.loopMode = .loop
+        animationView.animationSpeed = 1
+        view.addSubview(animationView)
         newsWebViewController = NewsWebViewController()
         searchBar = SearchBarView()
         categoriesTableView = UITableView()
@@ -41,7 +69,7 @@ class SearchViewController: UIViewController {
         view.addSubview(searchBar)
         view.addSubview(categoriesTableView)
         searchBar.searchButton.isEnabled = false
-
+        animationView.isHidden = true
         print("view did load")
         categoriesTableView.delegate = self
         categoriesTableView.dataSource = self
@@ -72,7 +100,8 @@ class SearchViewController: UIViewController {
         constraints.append(categoriesTableView.bottomAnchor.constraint(equalTo: view.bottomAnchor))
         constraints.append(categoriesTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor,constant: -20))
         constraints.append(categoriesTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor,constant: 20))
-        
+        constraints.append(animationView.centerXAnchor.constraint(equalTo: searchResultCollectionView.centerXAnchor))
+        constraints.append(animationView.centerYAnchor.constraint(equalTo: searchResultCollectionView.centerYAnchor))
         NSLayoutConstraint.activate(constraints)
     }
     
@@ -145,6 +174,7 @@ extension SearchViewController: UITextFieldDelegate{
         if (textField.text == ""){
             searchResultCollectionView.isHidden = true
             categoriesTableView.isHidden = false
+            animationView.isHidden = true
         }
     }
 }
@@ -163,7 +193,6 @@ extension SearchViewController: UITableViewDelegate,UITableViewDataSource{
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if let selectedCategoryIndexPath = selectedCategoryIndexPath{
             categoriesTableView.cellForRow(at: selectedCategoryIndexPath)?.backgroundColor = .white
-            print("ehre")
             categoriesTableView.cellForRow(at: selectedCategoryIndexPath)?.textLabel?.textColor = .black
             
         }

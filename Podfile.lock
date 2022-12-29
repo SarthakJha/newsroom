@@ -7,6 +7,7 @@ PODS:
   - GoogleMaps/Maps (7.2.0):
     - GoogleMaps/Base
   - GooglePlaces (7.2.0)
+  - lottie-ios (4.0.1)
   - SDWebImage (5.14.2):
     - SDWebImage/Core (= 5.14.2)
   - SDWebImage/Core (5.14.2)
@@ -16,6 +17,7 @@ DEPENDENCIES:
   - Disk (~> 0.6.4)
   - GoogleMaps
   - GooglePlaces (= 7.2.0)
+  - lottie-ios
   - SDWebImage
 
 SPEC REPOS:
@@ -24,6 +26,7 @@ SPEC REPOS:
     - Disk
     - GoogleMaps
     - GooglePlaces
+    - lottie-ios
     - SDWebImage
 
 SPEC CHECKSUMS:
@@ -31,8 +34,9 @@ SPEC CHECKSUMS:
   Disk: dcee5c2e98fb72f9a924cde8da8435b08244a80e
   GoogleMaps: 65ce5426e2398bb81433c8076f2ab6419c2c5537
   GooglePlaces: 590dea495d69431454ea92217033c3184995165d
+  lottie-ios: 54d22edf55b839f0929cabbfe609c9aa548b1145
   SDWebImage: b9a731e1d6307f44ca703b3976d18c24ca561e84
 
-PODFILE CHECKSUM: 6cbd157d8b773851af456d9619e66a4816eb8f43
+PODFILE CHECKSUM: a1e22c3e0dd520b63b93ee2cf026cc730c7e8810
 
 COCOAPODS: 1.11.3

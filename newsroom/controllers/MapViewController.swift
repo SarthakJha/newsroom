@@ -8,6 +8,7 @@
 import UIKit
 import GoogleMaps
 import GooglePlaces
+import Toast
 
 protocol MapViewControllerDelegate {
     func didTapOnSearchResults(_ viewContrller: UIViewController, indexPath: IndexPath)
@@ -42,12 +43,15 @@ class MapViewController: UIViewController {
         geoCoder.reverseGeocodeLocation(CLLocation(latitude: coordinates.latitude.magnitude, longitude: coordinates.longitude.magnitude)) { places, error in
             if let error = error{
                 print("decoding error: ", error)
+                completion("","")
                 return
             }
             print("this is coordinates:", coordinates)
             guard let country = places?[0].country else {return}
             if let code = CountryCode.data[country] {
                 completion(code, country)
+            }else{
+                completion("","")
             }
         }
     }
@@ -90,21 +94,38 @@ class MapViewController: UIViewController {
 extension MapViewController: GMSMapViewDelegate {
     func mapView(_ mapView: GMSMapView, didTapAt coordinate: CLLocationCoordinate2D) {
         currentCamera = GMSCameraPosition(latitude: coordinate.latitude, longitude: coordinate.longitude, zoom: 4)
+        let configuration = ToastConfiguration(
+            autoHide: true,
+            enablePanToClose: true,
+            displayTime: 3,
+            animationTime: 0.2
+        )
         MapViewController.getISO3166CountryCode(coordinates: coordinate) { countryCode, country in
             if (countryCode == ""){
-                print("erorr: ")
+                let toast = Toast.default(image: nil, title: "Unknown Location!", subtitle: "Location couldn't be identified",configuration: configuration)
+                toast.enableTapToClose()
+                toast.show(haptic: .error)
                 return
             }
-            debugPrint("cointry", countryCode)
             self.marker.title = country
             self.activityIndicator.startAnimating()
             NewsroomAPIService.APIManager.fetchHeadlines(category: nil, countryCode: countryCode) { response, error in
                 if let error = error{
                     print(error)
+                    let toast = Toast.default(image: nil, title: "Internal Error!", subtitle: "Something went wrong!",configuration: configuration)
+                    toast.enableTapToClose()
+                    toast.show(haptic: .error)
                     return
                 }
                 if response?.status == .ok && (response?.totalResults)! > 0{
                     self.newsItems = response
+                }else{
+                    DispatchQueue.main.async {
+                        
+                        let toast = Toast.default(image: nil, title: "No results found!", subtitle: "no news articles could be found for \(country)",configuration: configuration)
+                        toast.enableTapToClose()
+                        toast.show(haptic: .error)
+                    }
                 }
             }
         }
