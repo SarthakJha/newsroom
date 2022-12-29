@@ -17,25 +17,25 @@ class MainViewController: UITabBarController, UITabBarControllerDelegate {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
         if let navigationController = navigationController {
             navigationController.navigationBar.isHidden = false
-            navigationController.navigationBar.backgroundColor = .red
         }
         let searchVC = SearchViewController()
         let mapVC = MapViewController()
         let headlineVC = HeadlineViewController()
         
-        let searchBarItem = UITabBarItem(title: "search", image: UIImage(systemName: "persochart.bar.doc.horizontal.fill"), tag: 0)
+//        tabBar.backgroundColor = .black
+        
+        let searchBarItem = UITabBarItem(title: "search", image: UIImage(systemName: "magnifyingglass"), tag: 0)
         searchVC.tabBarItem = searchBarItem
         
-        let categoryBarItem = UITabBarItem(title: "map", image: UIImage(named: "s"), tag: 1)
+        let categoryBarItem = UITabBarItem(title: "map", image: UIImage(systemName: "map"), tag: 1)
         mapVC.tabBarItem = categoryBarItem
         
     
         
         
-        let mapBarItem = UITabBarItem(title: "headlines", image: UIImage(systemName: "persochart.bar.doc.horizontal.fill") , tag: 2)
+        let mapBarItem = UITabBarItem(title: "headlines", image: UIImage(systemName: "bolt") , tag: 2)
         headlineVC.tabBarItem = mapBarItem
         self.viewControllers = [searchVC, mapVC ,headlineVC]
         tabBar.backgroundColor = UIColor(white: 1, alpha: 0.7)
