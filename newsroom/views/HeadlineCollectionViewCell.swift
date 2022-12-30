@@ -18,14 +18,11 @@ class HeadlineCollectionViewCell: UICollectionViewCell {
     var headlineText: UILabel = {
         var label = UILabel()
         label.textColor = .black
-        label.frame.size = CGSize(width: 200, height: 100)
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = UIFont(name: "Times New Roman", size: 22)
         label.textColor = .white
         label.text = ""
         label.numberOfLines = 4
-//        label.backgroundColor = UIColor(white: 1, alpha: 0.7)
-
         return label
     }()
     
@@ -35,7 +32,6 @@ class HeadlineCollectionViewCell: UICollectionViewCell {
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.clipsToBounds = true
         imageView.contentMode = .scaleAspectFill
-//        imageView.image.
         return imageView
     }()
     
@@ -49,7 +45,6 @@ class HeadlineCollectionViewCell: UICollectionViewCell {
     var cellBackgroundImage: UIImageView = {
         let imageview = UIImageView()
         imageview.translatesAutoresizingMaskIntoConstraints = false
-//        imageview.layer.cornerRadius =
         imageview.sizeToFit()
         imageview.layer.cornerRadius = 25
         imageview.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
@@ -60,9 +55,9 @@ class HeadlineCollectionViewCell: UICollectionViewCell {
        var label = UILabel()
         label.numberOfLines = 1
         label.textColor = .systemGray
-        label.frame.size = CGSize(width: 50, height: 20)
+        label.font = UIFont(name: "Avenir", size: 16)
         label.translatesAutoresizingMaskIntoConstraints = false
-//        label.backgroundColor = UIColor(white: 1, alpha: 0.5)
+
         return label
     }()
     override init(frame: CGRect) {
@@ -74,13 +69,8 @@ class HeadlineCollectionViewCell: UICollectionViewCell {
         self.addSubview(cellBackgroundImage)
         self.addSubview(headlineText)
         self.addSubview(sourceLabel)
-//        self.addSubview(fullNewsButton)
-//        fullNewsButton.setImage(UIImage(named: "next-icon"), for: .normal)
-        
-        
         constraintsCell()
         self.translatesAutoresizingMaskIntoConstraints = true
-//        cellBackgroundImage.frame = self.bounds
         cellBackgroundImage.clipsToBounds = true
     }
     
@@ -95,13 +85,8 @@ class HeadlineCollectionViewCell: UICollectionViewCell {
             sourceLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
             sourceLabel.bottomAnchor.constraint(equalTo: headlineText.topAnchor),
             cellBackgroundImage.topAnchor.constraint(equalTo: self.topAnchor),
-//            cellBackgroundImage.bottomAnchor.constraint(equalTo: self.headlineText.topAnchor, constant: -15),
             cellBackgroundImage.leadingAnchor.constraint(equalTo: self.leadingAnchor),
             cellBackgroundImage.trailingAnchor.constraint(equalTo: trailingAnchor),
-//            fullNewsButton.bottomAnchor.constraint(equalTo: bottomAnchor,constant: -5),
-//            fullNewsButton.trailingAnchor.constraint(equalTo: trailingAnchor,constant: -10),
-//            fullNewsButton.topAnchor.constraint(equalTo: headlineText.bottomAnchor,constant: 3)
-            
         ]
         NSLayoutConstraint.activate(constraints)
     }
