@@ -14,8 +14,17 @@ class MapResultViewController: UIViewController, UICollectionViewDelegate, UICol
         let button = UIButton()
         button.backgroundColor = .black
         button.translatesAutoresizingMaskIntoConstraints = true
-        button.layer.cornerRadius = 10
+        button.layer.cornerRadius = 2
         return button
+    }()
+    
+    var dragable: UIView = {
+        let dragableView = UIView()
+        dragableView.translatesAutoresizingMaskIntoConstraints = true
+        dragableView.backgroundColor = .systemGray
+        dragableView.alpha = 0.6
+        dragableView.layer.cornerRadius = 5
+        return dragableView
     }()
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
@@ -65,6 +74,9 @@ class MapResultViewController: UIViewController, UICollectionViewDelegate, UICol
         newsCollectionView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(newsCollectionView)
         view.addSubview(dismissButton)
+        view.addSubview(dragable)
+        dragable.frame = CGRect(x: view.frame.width/2-75, y: 0, width: 150, height: 10)
+
         dismissButton.addTarget(self, action: #selector(dissmissSheet), for: .touchUpInside)
 
         newsCollectionView.register(HeadlineCollectionViewCell.self, forCellWithReuseIdentifier: "map-cell")
@@ -79,16 +91,19 @@ class MapResultViewController: UIViewController, UICollectionViewDelegate, UICol
     func addConstraints(){
         var constraints: [NSLayoutConstraint] = []
         constraints.append(view.heightAnchor.constraint(equalToConstant: 100))
+        constraints.append(dragable.topAnchor.constraint(equalTo: view.topAnchor))
+        constraints.append(dragable.centerXAnchor.constraint(equalTo: view.centerXAnchor))
+        constraints.append(dragable.bottomAnchor.constraint(equalTo: newsCollectionView.topAnchor))
 
-        constraints.append(newsCollectionView.topAnchor.constraint(equalTo: dismissButton.topAnchor))
+        constraints.append(newsCollectionView.topAnchor.constraint(equalTo: dragable.bottomAnchor))
         constraints.append(newsCollectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor))
         constraints.append(newsCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor))
         constraints.append(newsCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor))
-        constraints.append(dismissButton.topAnchor.constraint(equalTo: view.topAnchor))
-        constraints.append(dismissButton.trailingAnchor.constraint(equalTo: view.trailingAnchor))
-        constraints.append(dismissButton.bottomAnchor.constraint(equalTo: newsCollectionView.topAnchor))
-        constraints.append(dismissButton.heightAnchor.constraint(equalToConstant: 20))
-        constraints.append(dismissButton.widthAnchor.constraint(equalToConstant: 20))
+//        constraints.append(dismissButton.topAnchor.constraint(equalTo: view.topAnchor))
+//        constraints.append(dismissButton.trailingAnchor.constraint(equalTo: view.trailingAnchor))
+//        constraints.append(dismissButton.bottomAnchor.constraint(equalTo: newsCollectionView.topAnchor))
+//        constraints.append(dismissButton.heightAnchor.constraint(equalToConstant: 20))
+//        constraints.append(dismissButton.widthAnchor.constraint(equalToConstant: 20))
 
         NSLayoutConstraint.activate(constraints)
     }

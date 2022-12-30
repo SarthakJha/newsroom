@@ -74,8 +74,8 @@ class HeadlineCollectionViewCell: UICollectionViewCell {
         self.addSubview(cellBackgroundImage)
         self.addSubview(headlineText)
         self.addSubview(sourceLabel)
-        self.addSubview(fullNewsButton)
-        fullNewsButton.setImage(UIImage(named: "next-icon"), for: .normal)
+//        self.addSubview(fullNewsButton)
+//        fullNewsButton.setImage(UIImage(named: "next-icon"), for: .normal)
         
         
         constraintsCell()
@@ -98,9 +98,9 @@ class HeadlineCollectionViewCell: UICollectionViewCell {
 //            cellBackgroundImage.bottomAnchor.constraint(equalTo: self.headlineText.topAnchor, constant: -15),
             cellBackgroundImage.leadingAnchor.constraint(equalTo: self.leadingAnchor),
             cellBackgroundImage.trailingAnchor.constraint(equalTo: trailingAnchor),
-            fullNewsButton.bottomAnchor.constraint(equalTo: bottomAnchor,constant: -5),
-            fullNewsButton.trailingAnchor.constraint(equalTo: trailingAnchor,constant: -10),
-            fullNewsButton.topAnchor.constraint(equalTo: headlineText.bottomAnchor,constant: 3)
+//            fullNewsButton.bottomAnchor.constraint(equalTo: bottomAnchor,constant: -5),
+//            fullNewsButton.trailingAnchor.constraint(equalTo: trailingAnchor,constant: -10),
+//            fullNewsButton.topAnchor.constraint(equalTo: headlineText.bottomAnchor,constant: 3)
             
         ]
         NSLayoutConstraint.activate(constraints)
