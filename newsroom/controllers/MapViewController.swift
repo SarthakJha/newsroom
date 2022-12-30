@@ -114,7 +114,9 @@ extension MapViewController: GMSMapViewDelegate {
                     print(error)
                     let toast = Toast.default(image: nil, title: "Internal Error!", subtitle: "Something went wrong!",configuration: configuration)
                     toast.enableTapToClose()
-                    toast.show(haptic: .error)
+                    DispatchQueue.main.async {
+                        toast.show(haptic: .error)
+                    }
                     return
                 }
                 if response?.status == .ok && (response?.totalResults)! > 0{
@@ -122,7 +124,7 @@ extension MapViewController: GMSMapViewDelegate {
                 }else{
                     DispatchQueue.main.async {
                         
-                        let toast = Toast.default(image: nil, title: "No results found!", subtitle: "no news articles could be found for \(country)",configuration: configuration)
+                        let toast = Toast.default(image: nil, title: "No results found!", subtitle: "No news articles could be found for \(country)",configuration: configuration)
                         toast.enableTapToClose()
                         toast.show(haptic: .error)
                     }
@@ -136,9 +138,11 @@ extension MapViewController: GMSMapViewDelegate {
 extension MapViewController: MapViewControllerDelegate{
     func didTapOnSearchResults(_ viewContrller: UIViewController, indexPath: IndexPath) {
         mapresultViewController.dissmissSheet()
-        if let navigationController = navigationController{
-            newsWebViewController.url = URL(string: (newsItems?.articles[indexPath.row].url)!)
-            navigationController.pushViewController(newsWebViewController, animated: true)
+        DispatchQueue.main.async { [self] in
+            if let navigationController = navigationController{
+                newsWebViewController.url = URL(string: (newsItems?.articles[indexPath.row].url)!)
+                navigationController.pushViewController(newsWebViewController, animated: true)
+            }
         }
     }
 }

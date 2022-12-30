@@ -59,10 +59,10 @@ class HeadlineCollectionViewCell: UICollectionViewCell {
     var sourceLabel: UILabel = {
        var label = UILabel()
         label.numberOfLines = 1
-        label.textColor = .black
+        label.textColor = .systemGray
         label.frame.size = CGSize(width: 50, height: 20)
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.backgroundColor = UIColor(white: 1, alpha: 0.5)
+//        label.backgroundColor = UIColor(white: 1, alpha: 0.5)
         return label
     }()
     override init(frame: CGRect) {
@@ -87,12 +87,13 @@ class HeadlineCollectionViewCell: UICollectionViewCell {
     
     func constraintsCell(){
         let constraints: [NSLayoutConstraint] = [
-            headlineText.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -40),
+            headlineText.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -20),
             headlineText.leadingAnchor.constraint(equalTo: self.leadingAnchor,constant: 20),
             headlineText.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
-            headlineText.topAnchor.constraint(equalTo: cellBackgroundImage.bottomAnchor, constant: 10),
-            sourceLabel.topAnchor.constraint(equalTo: cellBackgroundImage.topAnchor,constant: 5),
-            sourceLabel.trailingAnchor.constraint(equalTo: cellBackgroundImage.trailingAnchor, constant: -8),
+            headlineText.topAnchor.constraint(equalTo: sourceLabel.bottomAnchor, constant: 10),
+            sourceLabel.topAnchor.constraint(equalTo: cellBackgroundImage.bottomAnchor,constant: 5),
+            sourceLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
+            sourceLabel.bottomAnchor.constraint(equalTo: headlineText.topAnchor),
             cellBackgroundImage.topAnchor.constraint(equalTo: self.topAnchor),
 //            cellBackgroundImage.bottomAnchor.constraint(equalTo: self.headlineText.topAnchor, constant: -15),
             cellBackgroundImage.leadingAnchor.constraint(equalTo: self.leadingAnchor),

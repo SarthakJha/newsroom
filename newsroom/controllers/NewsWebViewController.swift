@@ -24,7 +24,10 @@ class NewsWebViewController: UIViewController, WKNavigationDelegate {
         view.addSubview(webView)
         webView.translatesAutoresizingMaskIntoConstraints = false
 
-        self.webView.load(URLRequest(url: self.url))
+        DispatchQueue.main.async { [self] in
+            self.title = url.absoluteString
+            self.webView.load(URLRequest(url: self.url))
+        }
         webView.allowsBackForwardNavigationGestures = true
         webView.navigationDelegate = self
         navBar = UINavigationBar()
@@ -40,7 +43,9 @@ class NewsWebViewController: UIViewController, WKNavigationDelegate {
     @objc func dismiss(){
         webView.goBack()
     }
-    
+    deinit{
+        webView = nil
+    }
     
     func addConstraints(){
         let constrains: [NSLayoutConstraint] = [

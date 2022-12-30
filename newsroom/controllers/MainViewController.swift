@@ -38,7 +38,7 @@ class MainViewController: UITabBarController, UITabBarControllerDelegate {
         let mapBarItem = UITabBarItem(title: "headlines", image: UIImage(systemName: "bolt") , tag: 2)
         headlineVC.tabBarItem = mapBarItem
         self.viewControllers = [searchVC, mapVC ,headlineVC]
-        tabBar.backgroundColor = UIColor(white: 1, alpha: 0.7)
+        tabBar.backgroundColor = UIColor(white: 1, alpha: 1)
         
     }
 }

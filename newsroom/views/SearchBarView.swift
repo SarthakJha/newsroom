@@ -15,6 +15,14 @@ class SearchBarView: UIView {
         addSubview(searchTextField)
         addSubview(searchButton)
         self.translatesAutoresizingMaskIntoConstraints = false
+        searchButton.setTitle("search", for: .normal)
+        searchButton.setTitleColor(.white, for: .normal)
+        searchTextField.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 20, height: 10))
+        searchTextField.leftViewMode = .always
+        constraintsInit()
+    }
+    
+    private func constraintsInit(){
         self.heightAnchor.constraint(equalToConstant: 50).isActive = true
         searchTextField.leadingAnchor.constraint(equalTo: leadingAnchor,constant: 10).isActive = true
         searchTextField.topAnchor.constraint(equalTo: topAnchor, constant: 5).isActive = true
@@ -28,10 +36,6 @@ class SearchBarView: UIView {
         searchButton.leadingAnchor.constraint(equalTo: searchTextField.trailingAnchor).isActive = true
         searchButton.bottomAnchor.constraint(equalTo: self.bottomAnchor,constant: -5).isActive = true
         searchTextField.trailingAnchor.constraint(equalTo: searchButton.leadingAnchor, constant: -10).isActive = true
-        searchButton.setTitle("search", for: .normal)
-        searchButton.setTitleColor(.white, for: .normal)
-        searchTextField.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 20, height: 10))
-        searchTextField.leftViewMode = .always
     }
     
     required init?(coder: NSCoder) {

@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Toast
 
 class HeadlineViewController: UIViewController {
     /**
@@ -30,12 +31,14 @@ class HeadlineViewController: UIViewController {
     }
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.title = "Headlines"
         newsWebViewController = NewsWebViewController()
         view.addSubview(activityIndicator)
         let flowLayout = UICollectionViewFlowLayout()
+        if let navigationController = navigationController{
+            navigationController.navigationBar.isHidden = false
+        }
         
-        var btnItem = UIBarButtonItem(image: UIImage(systemName: "person"), style: .plain, target: self, action: #selector(s))
+        let btnItem = UIBarButtonItem(image: UIImage(systemName: "person"), style: .plain, target: self, action: #selector(s))
         self.navigationItem.rightBarButtonItem = btnItem
         self.navigationItem.rightBarButtonItem?.isHidden = false
         flowLayout.scrollDirection = .vertical
@@ -54,10 +57,21 @@ class HeadlineViewController: UIViewController {
         addConstraints()
 
         let countryCode = UserDefaults.standard.string(forKey: "country-code")
+        print(("hjeadline: ", countryCode))
         activityIndicator.startAnimating()
-        NewsroomAPIService.APIManager.fetchHeadlines(category: .entertainment, countryCode: countryCode ?? "in") { res, err in
+        NewsroomAPIService.APIManager.fetchHeadlines(category: .entertainment, countryCode: "in") { res, err in
             if let err = err{
-                print(err)
+                let configuration = ToastConfiguration(
+                    autoHide: true,
+                    enablePanToClose: true,
+                    displayTime: 3,
+                    animationTime: 0.2
+                )
+                let toast = Toast.default(image: nil, title: "No results found!", subtitle: "No news articles found for your current location",configuration: configuration)
+                DispatchQueue.main.async {
+                    toast.show(haptic: .warning)
+                }
+                return
             }else{
                 self.topHeadlineData = res
             }

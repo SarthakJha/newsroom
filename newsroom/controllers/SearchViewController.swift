@@ -18,8 +18,10 @@ class SearchViewController: UIViewController {
     var searchBar:SearchBarView!
     var newsWebViewController: NewsWebViewController!
     var categoriesTableView: UITableView!
+    var activityIndicator: UIActivityIndicatorView!
     
-    private var animationView: LottieAnimationView!
+    private var notFoundAnimationView: LottieAnimationView!
+    private var loadingAnimationView: LottieAnimationView!
     var selectedCategoryIndexPath: IndexPath? {
         didSet{
             searchBar.searchButton.isEnabled = true
@@ -28,22 +30,24 @@ class SearchViewController: UIViewController {
     var searchResults: ArticleResponse? {
         didSet{
             DispatchQueue.main.async { [self] in
+                loadingAnimationView.stop()
+                loadingAnimationView.isHidden = true
                 if((searchResults?.totalResults)! > 0){
                     searchResultCollectionView.reloadData()
                     searchResultCollectionView.isHidden = false
-                    animationView.isHidden = true
+                    notFoundAnimationView.isHidden = true
                 }else{
                     let configuration = ToastConfiguration(
                         autoHide: true,
                         enablePanToClose: true,
-                        displayTime: 5,
+                        displayTime: 3,
                         animationTime: 0.2
                     )
-                    let toast = Toast.default(image: nil, title: "No results found!", subtitle: "no news articles could be founf with your search text",configuration: configuration)
+                    let toast = Toast.default(image: nil, title: "No results found!", subtitle: "No news articles could be founf with your search text",configuration: configuration)
                     toast.enableTapToClose()
                     searchResultCollectionView.isHidden = true
-                    animationView.isHidden = false
-                    animationView.play()
+                    notFoundAnimationView.isHidden = false
+                    notFoundAnimationView.play()
                     toast.show(haptic: .warning)
                 }
             }
@@ -53,13 +57,25 @@ class SearchViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        animationView = .init(name: "notfoundresults")
-        animationView.translatesAutoresizingMaskIntoConstraints = false
-        animationView.frame = CGRect(x: 0, y: 0, width: 70, height: 70)
-        animationView.contentMode = .scaleAspectFit
-        animationView.loopMode = .loop
-        animationView.animationSpeed = 1
-        view.addSubview(animationView)
+        activityIndicator = UIActivityIndicatorView(style: .medium)
+        view.addSubview(activityIndicator)
+//        activityIndicator.backgroundColor = .red
+        activityIndicator.translatesAutoresizingMaskIntoConstraints = false
+        notFoundAnimationView = .init(name: "notfoundresults")
+        loadingAnimationView = .init(name: "loading")
+        notFoundAnimationView.translatesAutoresizingMaskIntoConstraints = false
+        notFoundAnimationView.frame = CGRect(x: 0, y: 0, width: 70, height: 70)
+        notFoundAnimationView.contentMode = .scaleAspectFit
+        notFoundAnimationView.loopMode = .loop
+        notFoundAnimationView.animationSpeed = 1
+        
+        loadingAnimationView.translatesAutoresizingMaskIntoConstraints = false
+        loadingAnimationView.frame = CGRect(x: 0, y: 0, width: 50, height: 50)
+        loadingAnimationView.contentMode = .scaleAspectFit
+        loadingAnimationView.loopMode = .loop
+        loadingAnimationView.animationSpeed = 1
+        view.addSubview(notFoundAnimationView)
+        view.addSubview(loadingAnimationView)
         newsWebViewController = NewsWebViewController()
         searchBar = SearchBarView()
         categoriesTableView = UITableView()
@@ -69,7 +85,7 @@ class SearchViewController: UIViewController {
         view.addSubview(searchBar)
         view.addSubview(categoriesTableView)
         searchBar.searchButton.isEnabled = false
-        animationView.isHidden = true
+        notFoundAnimationView.isHidden = true
         print("view did load")
         categoriesTableView.delegate = self
         categoriesTableView.dataSource = self
@@ -100,8 +116,10 @@ class SearchViewController: UIViewController {
         constraints.append(categoriesTableView.bottomAnchor.constraint(equalTo: view.bottomAnchor))
         constraints.append(categoriesTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor,constant: -20))
         constraints.append(categoriesTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor,constant: 20))
-        constraints.append(animationView.centerXAnchor.constraint(equalTo: searchResultCollectionView.centerXAnchor))
-        constraints.append(animationView.centerYAnchor.constraint(equalTo: searchResultCollectionView.centerYAnchor))
+        constraints.append(notFoundAnimationView.centerXAnchor.constraint(equalTo: searchResultCollectionView.centerXAnchor))
+        constraints.append(notFoundAnimationView.centerYAnchor.constraint(equalTo: searchResultCollectionView.centerYAnchor))
+        constraints.append(loadingAnimationView.centerXAnchor.constraint(equalTo: view.centerXAnchor))
+        constraints.append(loadingAnimationView.centerYAnchor.constraint(equalTo: view.centerYAnchor))
         NSLayoutConstraint.activate(constraints)
     }
     
@@ -116,9 +134,28 @@ class SearchViewController: UIViewController {
     @objc func searchButtonPressed(){
         guard let searchText = searchBar.searchTextField.text else {return}
         guard let selectedCategoryIndexPath = selectedCategoryIndexPath else {return}
+        DispatchQueue.main.async { [self] in
+            searchResultCollectionView.isHidden = true
+//            activityIndicator.startAnimating()
+            loadingAnimationView.isHidden = false
+            loadingAnimationView.play()
+            notFoundAnimationView.isHidden = true
+        }
+        if(searchText == ""){
+            let configuration = ToastConfiguration(
+                autoHide: true,
+                enablePanToClose: true,
+                displayTime: 3,
+                animationTime: 0.2
+            )
+            let toast = Toast.default(image: nil, title: "No results found!", subtitle: "No news articles could be founf with your search text",configuration: configuration)
+            toast.enableTapToClose()
+            toast.show(haptic: .warning)
+            return
+        }
         NewsroomAPIService.APIManager.fetchSearchResults(category: CategoryData.data[selectedCategoryIndexPath.row],searchText: searchText) { data, error in
             if let error = error {
-                print(error)
+                print("errorrr: ",error)
                 return
             }
             guard let data = data else {return}
@@ -136,9 +173,11 @@ extension SearchViewController: UICollectionViewDelegate, UICollectionViewDelega
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if let url = URL(string: (searchResults?.articles[indexPath.row].url!)!){
-            newsWebViewController.url = url
-            if let navigationController = navigationController{
-                navigationController.pushViewController(self.newsWebViewController, animated: true)
+            DispatchQueue.main.async { [self] in
+                if let navigationController = navigationController{
+                    newsWebViewController.url = url
+                    navigationController.pushViewController(self.newsWebViewController, animated: true)
+                }
             }
         }
     }
@@ -174,7 +213,7 @@ extension SearchViewController: UITextFieldDelegate{
         if (textField.text == ""){
             searchResultCollectionView.isHidden = true
             categoriesTableView.isHidden = false
-            animationView.isHidden = true
+            notFoundAnimationView.isHidden = true
         }
     }
 }
