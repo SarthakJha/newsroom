@@ -7,6 +7,7 @@
 
 import UIKit
 import Toast
+import Lottie
 
 class HeadlineViewController: UIViewController {
     /**
@@ -15,13 +16,17 @@ class HeadlineViewController: UIViewController {
     
     var activityIndicator: UIActivityIndicatorView = UIActivityIndicatorView(style: .large)
     var headlineCollectionView: UICollectionView!
+    var loadingAnimationView: LottieAnimationView!
     var newsWebViewController: NewsWebViewController!
     var topHeadlineData: ArticleResponse? {
         didSet{
-            DispatchQueue.main.async {
+            DispatchQueue.main.async {[self] in
                 
-                self.headlineCollectionView.reloadData()
-                self.activityIndicator.stopAnimating()
+                headlineCollectionView.isHidden = false
+                headlineCollectionView.reloadData()
+//                self.activityIndicator.stopAnimating()
+                loadingAnimationView.stop()
+                loadingAnimationView.isHidden = true
             }
         }
     }
@@ -31,6 +36,11 @@ class HeadlineViewController: UIViewController {
     }
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.backgroundColor = .white
+        loadingAnimationView = .init(name: "loading")
+        loadingAnimationView.frame = CGRect(x: 0, y: 0, width: 30, height: 30)
+        loadingAnimationView.translatesAutoresizingMaskIntoConstraints = false
+        
         newsWebViewController = NewsWebViewController()
         view.addSubview(activityIndicator)
         let flowLayout = UICollectionViewFlowLayout()
@@ -44,6 +54,7 @@ class HeadlineViewController: UIViewController {
         flowLayout.scrollDirection = .vertical
         flowLayout.minimumLineSpacing = 20
         headlineCollectionView = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
+        view.addSubview(loadingAnimationView)
         view.addSubview(headlineCollectionView)
         headlineCollectionView.translatesAutoresizingMaskIntoConstraints = false
         activityIndicator.center = view.center
@@ -58,9 +69,14 @@ class HeadlineViewController: UIViewController {
 
         let countryCode = UserDefaults.standard.string(forKey: "country-code")
         print(("hjeadline: ", countryCode))
-        activityIndicator.startAnimating()
+        DispatchQueue.main.async {
+            self.loadingAnimationView.isHidden = false
+            self.headlineCollectionView.isHidden = true
+            self.loadingAnimationView.play()
+        }
         NewsroomAPIService.APIManager.fetchHeadlines(category: .entertainment, countryCode: "in") { res, err in
             if let err = err{
+                print(err)
                 let configuration = ToastConfiguration(
                     autoHide: true,
                     enablePanToClose: true,
@@ -84,7 +100,8 @@ class HeadlineViewController: UIViewController {
             headlineCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             headlineCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             headlineCollectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            
+            loadingAnimationView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            loadingAnimationView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
         ]
         NSLayoutConstraint.activate(constraints)
     }
