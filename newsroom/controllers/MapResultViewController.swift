@@ -52,13 +52,14 @@ class MapResultViewController: UIViewController, UICollectionViewDelegate, UICol
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = newsCollectionView.dequeueReusableCell(withReuseIdentifier: "map-cell", for: indexPath) as! HeadlineCollectionViewCell
         cell.headlineText.text = articleResponse?.articles[indexPath.row].title
+        cell.sourceLabel.text = articleResponse?.articles[indexPath.row].source.name
         cell.cellBackgroundImage.sd_setImage(with: URL(string: articleResponse?.articles[indexPath.row].urlToImage ?? ""))
         return cell
     }
     
     
     var newsCollectionView: UICollectionView!
-
+        
     override func viewDidLoad() {
         super.viewDidLoad()
         

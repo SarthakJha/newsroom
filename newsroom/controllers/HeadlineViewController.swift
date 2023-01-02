@@ -18,6 +18,7 @@ class HeadlineViewController: UIViewController {
     var headlineCollectionView: UICollectionView!
     var loadingAnimationView: LottieAnimationView!
     var newsWebViewController: NewsWebViewController!
+    var refreshController: UIRefreshControl = UIRefreshControl()
     var topHeadlineData: ArticleResponse? {
         didSet{
             DispatchQueue.main.async {[self] in
@@ -27,15 +28,35 @@ class HeadlineViewController: UIViewController {
 //                self.activityIndicator.stopAnimating()
                 loadingAnimationView.stop()
                 loadingAnimationView.isHidden = true
+                refreshController.endRefreshing()
             }
         }
     }
     
-    @objc func s(){
-        print("lololololl")
+    @objc func refreshScreen(){
+        NewsroomAPIService.APIManager.fetchHeadlines(category: .general, countryCode: "in") { res, err in
+            if let err = err{
+                print(err)
+                let configuration = ToastConfiguration(
+                    autoHide: true,
+                    enablePanToClose: true,
+                    displayTime: 3,
+                    animationTime: 0.2
+                )
+                let toast = Toast.default(image: nil, title: "No results found!", subtitle: "No news articles found for your current location",configuration: configuration)
+                DispatchQueue.main.async {
+                    toast.show(haptic: .warning)
+                    self.refreshController.endRefreshing()
+                }
+                return
+            }else{
+                self.topHeadlineData = res
+            }
+        }
     }
     override func viewDidLoad() {
         super.viewDidLoad()
+     
         view.backgroundColor = .white
         loadingAnimationView = .init(name: "loading")
         loadingAnimationView.frame = CGRect(x: 0, y: 0, width: 30, height: 30)
@@ -44,18 +65,18 @@ class HeadlineViewController: UIViewController {
         newsWebViewController = NewsWebViewController()
         view.addSubview(activityIndicator)
         let flowLayout = UICollectionViewFlowLayout()
-        if let navigationController = navigationController{
-            navigationController.navigationBar.isHidden = false
-        }
-        
-        let btnItem = UIBarButtonItem(image: UIImage(systemName: "person"), style: .plain, target: self, action: #selector(s))
-        self.navigationItem.rightBarButtonItem = btnItem
-        self.navigationItem.rightBarButtonItem?.isHidden = false
         flowLayout.scrollDirection = .vertical
         flowLayout.minimumLineSpacing = 20
         headlineCollectionView = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
         view.addSubview(loadingAnimationView)
         view.addSubview(headlineCollectionView)
+        if #available(iOS 10.0, *){
+            headlineCollectionView.refreshControl = refreshController
+        }else{
+            view.addSubview(refreshController)
+        }
+        
+        refreshController.addTarget(self, action: #selector(refreshScreen), for: .valueChanged)
         headlineCollectionView.translatesAutoresizingMaskIntoConstraints = false
         activityIndicator.center = view.center
         activityIndicator.backgroundColor = .red
@@ -140,7 +161,7 @@ extension HeadlineViewController: UICollectionViewDelegateFlowLayout{
     }
     
 //    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-//        return UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+//        return UIEdgeInsets(top: view.safeAreaInsets.top, left: 0, bottom: 0, right: 0)
 //    }
     
 }

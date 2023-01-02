@@ -97,10 +97,9 @@ class SearchViewController: UIViewController {
         searchResultCollectionView.register(HeadlineCollectionViewCell.self, forCellWithReuseIdentifier: "search-cell")
         view.backgroundColor = .white
         searchBar.searchButton.addTarget(self, action: #selector(searchButtonPressed), for: .touchUpInside)
-      
         addConstraints()
     }
-    
+
     private func addConstraints(){
         var constraints = [NSLayoutConstraint]()
         
@@ -192,6 +191,7 @@ extension SearchViewController: UICollectionViewDataSource{
     {
         let cell = searchResultCollectionView.dequeueReusableCell(withReuseIdentifier: "search-cell", for: indexPath) as! HeadlineCollectionViewCell
         cell.headlineText.text = searchResults?.articles[indexPath.row].title
+        cell.sourceLabel.text = searchResults?.articles[indexPath.row].source.name
         cell.cellBackgroundImage.sd_setImage(with: URL(string: searchResults?.articles[indexPath.row].urlToImage ?? ""))
         return cell
     }
