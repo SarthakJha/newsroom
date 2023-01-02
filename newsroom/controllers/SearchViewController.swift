@@ -20,6 +20,8 @@ class SearchViewController: UIViewController {
     var categoriesTableView: UITableView!
     var sourcesTableViewController: SourcesViewController!
     var activityIndicator: UIActivityIndicatorView!
+    var currentPage: Int?
+    var didReachEnd: Bool = false
     var selectedSourceId: String? {
         didSet{
             searchBar.searchButton.isEnabled = true
@@ -135,6 +137,7 @@ class SearchViewController: UIViewController {
     }()
     
     @objc func searchButtonPressed(){
+        currentPage = 1
         guard let searchText = searchBar.searchTextField.text else {return}
         guard let selectedCategoryIndexPath = selectedCategoryIndexPath else {return}
         DispatchQueue.main.async { [self] in
@@ -156,7 +159,7 @@ class SearchViewController: UIViewController {
             toast.show(haptic: .warning)
             return
         }
-        NewsroomAPIService.APIManager.fetchSearchResults(searchText: searchText, sourceId: selectedSourceId) { data, error in
+        NewsroomAPIService.APIManager.fetchSearchResults(searchText: searchText, sourceId: selectedSourceId,page: currentPage) { data, error in
             if let error = error {
                 print("errorrr: ",error)
                 return
@@ -193,6 +196,26 @@ extension SearchViewController: UICollectionViewDataSource{
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell
     {
+        if (indexPath.row == (searchResults?.articles.count)!-1 && !didReachEnd){
+            print("pagination bitch: ", currentPage!,(searchResults?.articles.count)!)
+            currentPage = currentPage! + 1
+            NewsroomAPIService.APIManager.fetchSearchResults(searchText: searchBar.searchTextField.text!, sourceId: selectedSourceId,  page: currentPage) { data, error in
+                if((self.searchResults?.articles.count)! == (self.searchResults?.totalResults!)!){
+                    self.didReachEnd = true
+                }
+                if let error = error {
+                    print("errorrr: ",error)
+//                    didReachEnd = true
+                    return
+                }
+                guard let data = data else {return}
+                print("total: ", data.totalResults)
+                self.searchResults?.articles.append(contentsOf: data.articles)
+                DispatchQueue.main.async {
+                    self.searchResultCollectionView.reloadData()
+                }
+            }
+        }
         let cell = searchResultCollectionView.dequeueReusableCell(withReuseIdentifier: "search-cell", for: indexPath) as! HeadlineCollectionViewCell
         cell.headlineText.text = searchResults?.articles[indexPath.row].title
         cell.sourceLabel.text = searchResults?.articles[indexPath.row].source.name

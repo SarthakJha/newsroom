@@ -25,7 +25,7 @@ final class NetworkManager {
     /**
      * default category= entertainment
      */
-    func fetchHeadlines(category cat: Category?, countryCode: String?, completion: @escaping((ArticleResponse?, Error?)-> Void)) {
+    func fetchHeadlines(category cat: Category?, countryCode: String?,page:Int?, completion: @escaping((ArticleResponse?, Error?)-> Void)) {
         
         guard var url: URL = URL(string: baseURL!+apiVersion+topHeadlineRoute) else {return}
         var topHeadlines: ArticleResponse?
@@ -40,6 +40,12 @@ final class NetworkManager {
         if let countryCode = countryCode{
             queryItems.append(URLQueryItem(name: "country", value: countryCode))
         }
+        if let page = page{
+            queryItems.append(URLQueryItem(name: "page", value: String(page)))
+            queryItems.append(URLQueryItem(name: "pageSize", value: String(5)))
+        }
+
+
         
         url.append(queryItems: queryItems)
 
@@ -62,7 +68,7 @@ final class NetworkManager {
         
     }
     
-    func fetchSearchResults(searchText text: String ,sourceId: String?, completion: @escaping((ArticleResponse?,Error?) -> Void)){
+    func fetchSearchResults(searchText text: String ,sourceId: String?, page: Int?, completion: @escaping((ArticleResponse?,Error?) -> Void)){
         
         if text == "" {
             return
@@ -74,7 +80,10 @@ final class NetworkManager {
         if let source = sourceId{
             queryItems.append(URLQueryItem(name: "sources", value: source))
         }
-        
+        if let page = page{
+            queryItems.append(URLQueryItem(name: "page", value: String(page)))
+            queryItems.append(URLQueryItem(name: "pageSize", value: String(5)))
+        }
         url.append(queryItems: queryItems)
 
         var searchResponse: ArticleResponse?

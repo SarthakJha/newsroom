@@ -20,6 +20,7 @@ class MapViewController: UIViewController {
     var newsWebViewController: NewsWebViewController!
     var marker: GMSMarker!
     var mapresultViewController: MapResultViewController!
+    var didReachEnd: Bool = false
     
     var newsItems: ArticleResponse? {
         didSet{
@@ -31,6 +32,7 @@ class MapViewController: UIViewController {
                     sheet.detents = [.medium(),.large()]
                 }
                 guard let mapresultViewController = mapresultViewController else {return}
+                mapresultViewController.didReachEnd = self.didReachEnd
                 activityIndicator.stopAnimating()
                 present(mapresultViewController, animated: true)
             }
@@ -109,7 +111,7 @@ extension MapViewController: GMSMapViewDelegate {
             }
             self.marker.title = country
             self.activityIndicator.startAnimating()
-            NewsroomAPIService.APIManager.fetchHeadlines(category: nil, countryCode: countryCode) { response, error in
+            NewsroomAPIService.APIManager.fetchHeadlines(category: nil, countryCode: countryCode, page: 1) { response, error in
                 if let error = error{
                     print(error)
                     let toast = Toast.default(image: nil, title: "Internal Error!", subtitle: "Something went wrong!",configuration: configuration)
@@ -121,6 +123,9 @@ extension MapViewController: GMSMapViewDelegate {
                 }
                 if response?.status == .ok && (response?.totalResults)! > 0{
                     self.newsItems = response
+                    if((self.newsItems?.articles.count)! == (self.newsItems?.totalResults!)!){
+                        self.didReachEnd = true
+                    }
                 }else{
                     DispatchQueue.main.async {
                         

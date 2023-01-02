@@ -10,6 +10,10 @@ import CoreLocation
 
 class MapResultViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource {
     var delegate:MapViewControllerDelegate!
+    var currentPage: Int?
+    var newsCollectionView: UICollectionView!
+    var didReachEnd: Bool?
+
     var dismissButton: UIButton = {
         let button = UIButton()
         button.backgroundColor = .black
@@ -50,6 +54,23 @@ class MapResultViewController: UIViewController, UICollectionViewDelegate, UICol
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        if (indexPath.row == (articleResponse?.articles.count)!-1 && !didReachEnd!){
+            print("pagination bitch: ", currentPage!,(articleResponse?.articles.count)!)
+            currentPage = currentPage! + 1
+            NewsroomAPIService.APIManager.fetchHeadlines(category: nil, countryCode: nil,page: currentPage!) { articles, error in
+                if let error = error{
+                    print("pagination err:", error)
+                    return
+                }
+                self.articleResponse?.articles.append(contentsOf: articles!.articles)
+                DispatchQueue.main.async {
+                    self.newsCollectionView.reloadData()
+                }
+                if((self.articleResponse?.articles.count)! == (self.articleResponse?.totalResults!)!){
+                    self.didReachEnd = true
+                }
+            }
+        }
         let cell = newsCollectionView.dequeueReusableCell(withReuseIdentifier: "map-cell", for: indexPath) as! HeadlineCollectionViewCell
         cell.headlineText.text = articleResponse?.articles[indexPath.row].title
         cell.sourceLabel.text = articleResponse?.articles[indexPath.row].source.name
@@ -57,12 +78,13 @@ class MapResultViewController: UIViewController, UICollectionViewDelegate, UICol
         return cell
     }
     
-    
-    var newsCollectionView: UICollectionView!
-        
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        currentPage = 2
+        if (didReachEnd == nil){
+            print("sus")
+            didReachEnd = false
+        }
         navBar = UINavigationBar(frame: CGRect(x: 0, y: 0, width: self.view.frame.size.width, height: 44))
         self.view.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(navBar)
@@ -86,6 +108,11 @@ class MapResultViewController: UIViewController, UICollectionViewDelegate, UICol
         newsCollectionView.dataSource = self
         addConstraints()
 
+    }
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        currentPage = 2
+        articleResponse = nil
     }
     
     

@@ -15,7 +15,7 @@ enum StatusValues: String, Decodable {
 struct ArticleResponse: Decodable {
     let status: StatusValues
     let totalResults: Int64?
-    let articles: [Article]
+    var articles: [Article]
 }
 
 struct Article:Decodable {

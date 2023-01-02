@@ -18,6 +18,8 @@ class HeadlineViewController: UIViewController {
     var headlineCollectionView: UICollectionView!
     var loadingAnimationView: LottieAnimationView!
     var newsWebViewController: NewsWebViewController!
+    var currentPage: Int?
+    var didReachEnd: Bool = false
     var refreshController: UIRefreshControl = UIRefreshControl()
     var topHeadlineData: ArticleResponse? {
         didSet{
@@ -34,7 +36,8 @@ class HeadlineViewController: UIViewController {
     }
     
     @objc func refreshScreen(){
-        NewsroomAPIService.APIManager.fetchHeadlines(category: .general, countryCode: "in") { res, err in
+        currentPage = 1
+        NewsroomAPIService.APIManager.fetchHeadlines(category: .general, countryCode: "in", page: currentPage!) { res, err in
             if let err = err{
                 print(err)
                 let configuration = ToastConfiguration(
@@ -51,12 +54,16 @@ class HeadlineViewController: UIViewController {
                 return
             }else{
                 self.topHeadlineData = res
+                if((self.topHeadlineData?.articles.count)! == (self.topHeadlineData?.totalResults!)!){
+                    self.didReachEnd = true
+                }
             }
         }
     }
     override func viewDidLoad() {
         super.viewDidLoad()
      
+        currentPage = 1
         view.backgroundColor = .white
         loadingAnimationView = .init(name: "loading")
         loadingAnimationView.frame = CGRect(x: 0, y: 0, width: 30, height: 30)
@@ -95,7 +102,7 @@ class HeadlineViewController: UIViewController {
             self.headlineCollectionView.isHidden = true
             self.loadingAnimationView.play()
         }
-        NewsroomAPIService.APIManager.fetchHeadlines(category: .entertainment, countryCode: "in") { res, err in
+        NewsroomAPIService.APIManager.fetchHeadlines(category: .entertainment, countryCode: "in", page: currentPage!) { res, err in
             if let err = err{
                 print(err)
                 let configuration = ToastConfiguration(
@@ -111,6 +118,9 @@ class HeadlineViewController: UIViewController {
                 return
             }else{
                 self.topHeadlineData = res
+                if((self.topHeadlineData?.articles.count)! == (self.topHeadlineData?.totalResults!)!){
+                    self.didReachEnd = true
+                }
             }
         }
     }
@@ -175,6 +185,23 @@ extension HeadlineViewController: UICollectionViewDataSource{
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        if (indexPath.row == (topHeadlineData?.articles.count)!-1 && !didReachEnd){
+            print("pagination bitch: ", currentPage!,(topHeadlineData?.articles.count)!)
+            currentPage = currentPage! + 1
+            NewsroomAPIService.APIManager.fetchHeadlines(category: nil, countryCode: nil,page: currentPage!) { articles, error in
+                if let error = error{
+                    print("pagination err:", error)
+                    return
+                }
+                self.topHeadlineData?.articles.append(contentsOf: articles!.articles)
+                DispatchQueue.main.async {
+                    self.headlineCollectionView.reloadData()
+                }
+                if((self.topHeadlineData?.articles.count)! == (self.topHeadlineData?.totalResults!)!){
+                    self.didReachEnd = true
+                }
+            }
+        }
         let cell = headlineCollectionView.dequeueReusableCell(withReuseIdentifier: "headline-cell", for: indexPath) as! HeadlineCollectionViewCell
         cell.headlineText.text = topHeadlineData?.articles[indexPath.row].title
         if let imageUrl = topHeadlineData?.articles[indexPath.row].urlToImage{
