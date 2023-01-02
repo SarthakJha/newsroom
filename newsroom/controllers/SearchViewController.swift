@@ -18,15 +18,17 @@ class SearchViewController: UIViewController {
     var searchBar:SearchBarView!
     var newsWebViewController: NewsWebViewController!
     var categoriesTableView: UITableView!
+    var sourcesTableViewController: SourcesViewController!
     var activityIndicator: UIActivityIndicatorView!
-    
-    private var notFoundAnimationView: LottieAnimationView!
-    private var loadingAnimationView: LottieAnimationView!
-    var selectedCategoryIndexPath: IndexPath? {
+    var selectedSourceId: String? {
         didSet{
             searchBar.searchButton.isEnabled = true
         }
     }
+    
+    private var notFoundAnimationView: LottieAnimationView!
+    private var loadingAnimationView: LottieAnimationView!
+    var selectedCategoryIndexPath: IndexPath? 
     var searchResults: ArticleResponse? {
         didSet{
             DispatchQueue.main.async { [self] in
@@ -119,6 +121,8 @@ class SearchViewController: UIViewController {
         constraints.append(notFoundAnimationView.centerYAnchor.constraint(equalTo: searchResultCollectionView.centerYAnchor))
         constraints.append(loadingAnimationView.centerXAnchor.constraint(equalTo: view.centerXAnchor))
         constraints.append(loadingAnimationView.centerYAnchor.constraint(equalTo: view.centerYAnchor))
+        constraints.append(loadingAnimationView.heightAnchor.constraint(equalToConstant: 60))
+        constraints.append(loadingAnimationView.widthAnchor.constraint(equalToConstant: 60))
         NSLayoutConstraint.activate(constraints)
     }
     
@@ -152,7 +156,7 @@ class SearchViewController: UIViewController {
             toast.show(haptic: .warning)
             return
         }
-        NewsroomAPIService.APIManager.fetchSearchResults(category: CategoryData.data[selectedCategoryIndexPath.row],searchText: searchText) { data, error in
+        NewsroomAPIService.APIManager.fetchSearchResults(searchText: searchText, sourceId: selectedSourceId) { data, error in
             if let error = error {
                 print("errorrr: ",error)
                 return
@@ -239,12 +243,21 @@ extension SearchViewController: UITableViewDelegate,UITableViewDataSource{
         categoriesTableView.cellForRow(at: indexPath)?.textLabel?.textColor = .white
         categoriesTableView.cellForRow(at: indexPath)?.selectionStyle = .none
         selectedCategoryIndexPath = indexPath
-
+        sourcesTableViewController = SourcesViewController()
+        sourcesTableViewController.delegate = self
+        sourcesTableViewController.category = CategoryData.data[indexPath.row]
+        present(sourcesTableViewController, animated: true)
     }
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         return "Select category"
     }
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 30
+    }
+}
+
+extension SearchViewController: SourcesDelgate{
+    func didSelectSource(_ controller: UIViewController, sourceId: String) {
+        selectedSourceId = sourceId
     }
 }

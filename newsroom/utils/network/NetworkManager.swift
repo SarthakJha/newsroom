@@ -14,6 +14,7 @@ final class NetworkManager {
     fileprivate let apiVersion = "/v2"
     fileprivate let topHeadlineRoute = "/top-headlines"
     fileprivate var everythingRoute = "/everything"
+    fileprivate var sourceRoute = "/top-headlines/sources"
     
     init(baseURL:String, apiKey: String){
         self.baseURL = baseURL
@@ -61,10 +62,7 @@ final class NetworkManager {
         
     }
     
-    
-    // MARK :- put sources also
-    
-    func fetchSearchResults(category: String?, searchText text: String ,Source completion: @escaping((ArticleResponse?,Error?) -> Void)){
+    func fetchSearchResults(searchText text: String ,sourceId: String?, completion: @escaping((ArticleResponse?,Error?) -> Void)){
         
         if text == "" {
             return
@@ -73,8 +71,8 @@ final class NetworkManager {
         var queryItems: [URLQueryItem] = [URLQueryItem(name: "apiKey", value: Secrets.APIKey)]
         queryItems.append(URLQueryItem(name: "apiKey", value: Secrets.APIKey))
         queryItems.append(URLQueryItem(name: "q", value: text))
-        if let category = category{
-            queryItems.append(URLQueryItem(name: "category", value: category))
+        if let source = sourceId{
+            queryItems.append(URLQueryItem(name: "sources", value: source))
         }
         
         url.append(queryItems: queryItems)
@@ -98,5 +96,37 @@ final class NetworkManager {
         dataSession.resume()
     }
     
+    func fetchSources(category: String?, completion: @escaping((Sources?, Error?)-> Void)){
+        if(category == ""){
+            return
+        }
+        guard var url: URL = URL(string: baseURL!+apiVersion+sourceRoute) else {return}
+        var queryItems: [URLQueryItem] = [URLQueryItem(name: "apiKey", value: Secrets.APIKey)]
+        queryItems.append(URLQueryItem(name: "apiKey", value: Secrets.APIKey))
+        if let category = category{
+            queryItems.append(URLQueryItem(name: "category", value: category))
+        }
+        
+        url.append(queryItems: queryItems)
+
+        var searchResponse: Sources?
+        let dataSession = URLSession.shared.dataTask(with: url) { data, response, error in
+            if let error = error{
+                completion(nil, error)
+                return
+            }
+            guard let data = data else {return}
+
+            do{
+                searchResponse = try JSONDecoder().decode(Sources.self, from: data)
+                completion(searchResponse,nil)
+            }catch let error{
+                completion(nil, error)
+            }
+        }
+        
+        dataSession.resume()
+        
+    }
     
 }

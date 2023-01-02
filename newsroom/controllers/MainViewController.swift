@@ -24,22 +24,18 @@ class MainViewController: UITabBarController, UITabBarControllerDelegate {
         let mapVC = MapViewController()
         let headlineVC = HeadlineViewController()
         
-//        tabBar.backgroundColor = .black
-        
-        let searchBarItem = UITabBarItem(title: "search", image: UIImage(systemName: "magnifyingglass"), tag: 0)
+        let searchBarItem = UITabBarItem(title: "search", image: UIImage(systemName: "magnifyingglass"), selectedImage: UIImage(systemName: "magnifyingglass.fill"))
         searchVC.tabBarItem = searchBarItem
         
-        let categoryBarItem = UITabBarItem(title: "map", image: UIImage(systemName: "map"), tag: 1)
+        let categoryBarItem = UITabBarItem(title: "map", image: UIImage(systemName: "map"), selectedImage: UIImage(systemName: "map.fill"))
         mapVC.tabBarItem = categoryBarItem
         
-    
-        
-        
-        let mapBarItem = UITabBarItem(title: "headlines", image: UIImage(systemName: "bolt") , tag: 2)
+        let mapBarItem = UITabBarItem(title: "headlines", image: UIImage(systemName: "bolt") ,selectedImage: UIImage(systemName: "bolt.fill"))
         headlineVC.tabBarItem = mapBarItem
+        
         self.viewControllers = [searchVC, mapVC ,headlineVC]
         tabBar.backgroundColor = UIColor(white: 1, alpha: 1)
-        
+        tabBar.tintColor = .black
     }
 }
 

@@ -123,6 +123,8 @@ class HeadlineViewController: UIViewController {
             headlineCollectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             loadingAnimationView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             loadingAnimationView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            loadingAnimationView.heightAnchor.constraint(equalToConstant: 60),
+            loadingAnimationView.widthAnchor.constraint(equalToConstant: 60)
         ]
         NSLayoutConstraint.activate(constraints)
     }
