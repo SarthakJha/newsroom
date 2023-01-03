@@ -33,6 +33,7 @@ class MapViewController: UIViewController {
                 }
                 guard let mapresultViewController = mapresultViewController else {return}
                 mapresultViewController.didReachEnd = self.didReachEnd
+                view.isUserInteractionEnabled = true
                 activityIndicator.stopAnimating()
                 present(mapresultViewController, animated: true)
             }
@@ -95,6 +96,9 @@ class MapViewController: UIViewController {
 
 extension MapViewController: GMSMapViewDelegate {
     func mapView(_ mapView: GMSMapView, didTapAt coordinate: CLLocationCoordinate2D) {
+        DispatchQueue.main.async {
+            self.view.isUserInteractionEnabled = false
+        }
         currentCamera = GMSCameraPosition(latitude: coordinate.latitude, longitude: coordinate.longitude, zoom: 4)
         let configuration = ToastConfiguration(
             autoHide: true,
@@ -106,7 +110,9 @@ extension MapViewController: GMSMapViewDelegate {
             if (countryCode == ""){
                 let toast = Toast.default(image: nil, title: "Unknown Location!", subtitle: "Location couldn't be identified",configuration: configuration)
                 toast.enableTapToClose()
+                self.view.isUserInteractionEnabled = true
                 toast.show(haptic: .error)
+                
                 return
             }
             self.marker.title = country
@@ -116,6 +122,7 @@ extension MapViewController: GMSMapViewDelegate {
                     print(error)
                     let toast = Toast.default(image: nil, title: "Internal Error!", subtitle: "Something went wrong!",configuration: configuration)
                     toast.enableTapToClose()
+                    self.view.isUserInteractionEnabled = true
                     DispatchQueue.main.async {
                         toast.show(haptic: .error)
                     }
@@ -131,6 +138,7 @@ extension MapViewController: GMSMapViewDelegate {
                         
                         let toast = Toast.default(image: nil, title: "No results found!", subtitle: "No news articles could be found for \(country)",configuration: configuration)
                         toast.enableTapToClose()
+                        self.view.isUserInteractionEnabled = true
                         toast.show(haptic: .error)
                     }
                 }
