@@ -128,7 +128,12 @@ final class NetworkManager {
 
             do{
                 searchResponse = try JSONDecoder().decode(Sources.self, from: data)
-                completion(searchResponse,nil)
+                if searchResponse?.status == .ok{
+                    completion(searchResponse,nil)
+                }else{
+                    print("lololol: ",searchResponse?.error)
+                    completion(nil,error)
+                }
             }catch let error{
                 completion(nil, error)
             }

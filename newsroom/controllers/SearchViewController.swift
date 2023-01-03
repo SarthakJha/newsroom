@@ -57,6 +57,7 @@ class SearchViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        print("view hogya")
         activityIndicator = UIActivityIndicatorView(style: .medium)
         view.addSubview(activityIndicator)
 //        activityIndicator.backgroundColor = .red
@@ -68,7 +69,8 @@ class SearchViewController: UIViewController {
         notFoundAnimationView.contentMode = .scaleAspectFit
         notFoundAnimationView.loopMode = .loop
         notFoundAnimationView.animationSpeed = 1
-        
+        view.backgroundColor = .white
+        searchResultCollectionView.backgroundColor = .white
         loadingAnimationView.translatesAutoresizingMaskIntoConstraints = false
         loadingAnimationView.frame = CGRect(x: 0, y: 0, width: 50, height: 50)
         loadingAnimationView.contentMode = .scaleAspectFit
@@ -81,6 +83,7 @@ class SearchViewController: UIViewController {
         categoriesTableView = UITableView()
         categoriesTableView.translatesAutoresizingMaskIntoConstraints = false
         guard let searchBar = searchBar else {return}
+        categoriesTableView.backgroundColor = .white
         view.addSubview(searchResultCollectionView)
         view.addSubview(searchBar)
         view.addSubview(categoriesTableView)
@@ -100,7 +103,10 @@ class SearchViewController: UIViewController {
         searchBar.searchButton.addTarget(self, action: #selector(searchButtonPressed), for: .touchUpInside)
         addConstraints()
     }
-
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        print("dissapear hogya")
+    }
     private func addConstraints(){
         var constraints = [NSLayoutConstraint]()
         
@@ -153,7 +159,7 @@ class SearchViewController: UIViewController {
             )
             let toast = Toast.default(image: nil, title: "No results found!", subtitle: "No news articles could be founf with your search text",configuration: configuration)
             toast.enableTapToClose()
-            toast.show(haptic: .warning)
+//            self.toast.show(haptic: .warning)
             return
         }
         NewsroomAPIService.APIManager.fetchSearchResults(searchText: searchText, sourceId: selectedSourceId,page: currentPage) { data, error in
@@ -240,6 +246,9 @@ extension SearchViewController: UITextFieldDelegate{
             searchResultCollectionView.isHidden = true
             categoriesTableView.isHidden = false
             notFoundAnimationView.isHidden = true
+            searchResultCollectionView.setContentOffset(.zero, animated: false)
+            didReachEnd = false
+            currentPage = 1
         }else{
             if let selectedSourceId = selectedSourceId{
                 searchBar.searchButton.isEnabled = true
@@ -256,7 +265,10 @@ extension SearchViewController: UITableViewDelegate,UITableViewDataSource{
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = UITableViewCell(style: .default, reuseIdentifier: nil)
-        cell.textLabel?.text = CategoryData.data[indexPath.row]
+        let ad = "CATEGORY_\(CategoryData.data[indexPath.row].uppercased())"
+        cell.textLabel?.text = String(localized: String.LocalizationValue(ad))
+        cell.backgroundColor = .white
+        cell.textLabel?.textColor = .black
         return cell
     }
     
@@ -276,10 +288,10 @@ extension SearchViewController: UITableViewDelegate,UITableViewDataSource{
         present(sourcesTableViewController, animated: true)
     }
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return "Select category"
+        return String(localized: "CATEGORY_TABLE_VIEW_TITLE")
     }
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 30
+        return 50
     }
 }
 

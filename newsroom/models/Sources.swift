@@ -10,6 +10,7 @@ import Foundation
 struct Sources: Decodable{
     let status: StatusValues
     let sources: [SourceData]?
+    let error: String?
 }
 
 struct SourceData: Decodable{

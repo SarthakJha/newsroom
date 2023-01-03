@@ -34,6 +34,7 @@ class MapViewController: UIViewController {
                 guard let mapresultViewController = mapresultViewController else {return}
                 mapresultViewController.didReachEnd = self.didReachEnd
                 view.isUserInteractionEnabled = true
+                view.alpha = 1
                 activityIndicator.stopAnimating()
                 present(mapresultViewController, animated: true)
             }
@@ -51,6 +52,7 @@ class MapViewController: UIViewController {
             }
             print("this is coordinates:", coordinates)
             guard let country = places?[0].country else {return}
+            print(country)
             if let code = CountryCode.data[country] {
                 completion(code, country)
             }else{
@@ -86,6 +88,7 @@ class MapViewController: UIViewController {
         mapresultViewController.delegate = self
         view.backgroundColor = .blue
         view.addSubview(mapView)
+        mapView.isMyLocationEnabled = true
         mapView.delegate = self
         marker = GMSMarker()
         currentCamera = defaultCamera
@@ -96,8 +99,9 @@ class MapViewController: UIViewController {
 
 extension MapViewController: GMSMapViewDelegate {
     func mapView(_ mapView: GMSMapView, didTapAt coordinate: CLLocationCoordinate2D) {
-        DispatchQueue.main.async {
+        DispatchQueue.main.async { [self] in
             self.view.isUserInteractionEnabled = false
+            view.alpha = 0.7
         }
         currentCamera = GMSCameraPosition(latitude: coordinate.latitude, longitude: coordinate.longitude, zoom: 4)
         let configuration = ToastConfiguration(
@@ -107,9 +111,11 @@ extension MapViewController: GMSMapViewDelegate {
             animationTime: 0.2
         )
         MapViewController.getISO3166CountryCode(coordinates: coordinate) { countryCode, country in
+            print("this is country code: ", countryCode)
             if (countryCode == ""){
                 let toast = Toast.default(image: nil, title: "Unknown Location!", subtitle: "Location couldn't be identified",configuration: configuration)
                 toast.enableTapToClose()
+                self.view.alpha = 1
                 self.view.isUserInteractionEnabled = true
                 toast.show(haptic: .error)
                 
@@ -122,6 +128,7 @@ extension MapViewController: GMSMapViewDelegate {
                     print(error)
                     let toast = Toast.default(image: nil, title: "Internal Error!", subtitle: "Something went wrong!",configuration: configuration)
                     toast.enableTapToClose()
+                    self.view.alpha = 1
                     self.view.isUserInteractionEnabled = true
                     DispatchQueue.main.async {
                         toast.show(haptic: .error)
@@ -139,6 +146,7 @@ extension MapViewController: GMSMapViewDelegate {
                         let toast = Toast.default(image: nil, title: "No results found!", subtitle: "No news articles could be found for \(country)",configuration: configuration)
                         toast.enableTapToClose()
                         self.view.isUserInteractionEnabled = true
+                        self.view.alpha = 1
                         toast.show(haptic: .error)
                     }
                 }

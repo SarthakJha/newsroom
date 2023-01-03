@@ -1,0 +1,27 @@
+/* 
+  Localizable.strings
+  newsroom
+
+  Created by Sarthak Jha on 03/01/23.
+  
+*/
+
+
+"SEARCH_BUTTON_TEXT" = "खोज";
+"SEARCH_BAR_PLACEHOLDER_TEXT" = "कुछ भी खोजो";
+"TAB_BAR_SEARCH_TEXT" = "खोज";
+"TAB_BAR_MAP_TEXT" = "नक्शा";
+"TAB_BAR_HEADLINES_TEXT" = "समाचार";
+"CATEGORY_TABLE_VIEW_TITLE" = "श्रेणी चुनें";
+"CATEGORY_BUSINESS" = "व्यापार";
+"CATEGORY_ENTERTAINMENT" = "मनोरंजन";
+"CATEGORY_GENERAL" = "सामान्य";
+"CATEGORY_HEALTH" = "स्वास्थ्य";
+"CATEGORY_SCIENCE" = "विज्ञान";
+"CATEGORY_SPORTS" = "खेल";
+"CATEGORY_TECHNOLOGY" = "तकनीकी";
+"SOURCE_TABLE_VIEW_TITLE" = "एक स्रोत का चयन करें";
+
+
+
+

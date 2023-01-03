@@ -33,6 +33,8 @@ class SourcesViewController: UIViewController {
         view.addSubview(loadingIndicator)
         loadingIndicator.translatesAutoresizingMaskIntoConstraints = false
         sourcesTableView = UITableView()
+        sourcesTableView.backgroundColor = .white
+        view.backgroundColor = .white
         sourcesTableView.translatesAutoresizingMaskIntoConstraints = false
         sourcesTableView.delegate = self
         sourcesTableView.isHidden = true
@@ -81,6 +83,8 @@ extension SourcesViewController: UITableViewDelegate, UITableViewDataSource{
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = UITableViewCell(style: .default, reuseIdentifier: "cell")
         cell.textLabel?.text = sources?.sources![indexPath.row].name
+        cell.backgroundColor = .white
+        cell.textLabel?.textColor = .black
         return cell
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -92,6 +96,6 @@ extension SourcesViewController: UITableViewDelegate, UITableViewDataSource{
         dismiss(animated: true)
     }
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return "Select a source"
+        return String(localized: "SOURCE_TABLE_VIEW_TITLE")
     }
 }

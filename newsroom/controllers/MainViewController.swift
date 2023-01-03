@@ -24,13 +24,13 @@ class MainViewController: UITabBarController, UITabBarControllerDelegate {
         let mapVC = MapViewController()
         let headlineVC = HeadlineViewController()
         
-        let searchBarItem = UITabBarItem(title: "search", image: UIImage(systemName: "magnifyingglass"), selectedImage: UIImage(systemName: "magnifyingglass.fill"))
+        let searchBarItem = UITabBarItem(title: String(localized: "TAB_BAR_SEARCH_TEXT"), image: UIImage(systemName: "magnifyingglass"), selectedImage: UIImage(systemName: "magnifyingglass.fill"))
         searchVC.tabBarItem = searchBarItem
         
-        let categoryBarItem = UITabBarItem(title: "map", image: UIImage(systemName: "map"), selectedImage: UIImage(systemName: "map.fill"))
+        let categoryBarItem = UITabBarItem(title: String(localized: "TAB_BAR_MAP_TEXT"), image: UIImage(systemName: "map"), selectedImage: UIImage(systemName: "map.fill"))
         mapVC.tabBarItem = categoryBarItem
         
-        let mapBarItem = UITabBarItem(title: "headlines", image: UIImage(systemName: "bolt") ,selectedImage: UIImage(systemName: "bolt.fill"))
+        let mapBarItem = UITabBarItem(title: String(localized: "TAB_BAR_HEADLINES_TEXT"), image: UIImage(systemName: "bolt") ,selectedImage: UIImage(systemName: "bolt.fill"))
         headlineVC.tabBarItem = mapBarItem
         
         self.viewControllers = [searchVC, mapVC ,headlineVC]

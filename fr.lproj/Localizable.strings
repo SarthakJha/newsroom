@@ -1,0 +1,24 @@
+/* 
+  Localizable.strings
+  newsroom
+
+  Created by Sarthak Jha on 03/01/23.
+  
+*/
+
+
+"SEARCH_BUTTON_TEXT" = "Chercé";
+"SEARCH_BAR_PLACEHOLDER_TEXT" = "search keyword";
+"TAB_BAR_SEARCH_TEXT" = "Search";
+"TAB_BAR_MAP_TEXT" = "Map";
+"TAB_BAR_HEADLINES_TEXT" = "Headlines";
+"CATEGORY_TABLE_VIEW_TITLE" = "Select category";
+"CATEGORY_BUSINESS" = "";
+"CATEGORY_ENTERTAINMENT" = "business";
+"CATEGORY_GENERAL" = "general";
+"CATEGORY_HEALTH" = "health";
+"CATEGORY_SCIENCE" = "science";
+"CATEGORY_SPORTS" = "sports";
+"CATEGORY_TECHNOLOGY" = "technology";
+"SOURCE_TABLE_VIEW_TITLE" = "Select a source";
+

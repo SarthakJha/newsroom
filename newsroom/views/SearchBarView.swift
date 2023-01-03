@@ -15,7 +15,7 @@ class SearchBarView: UIView {
         addSubview(searchTextField)
         addSubview(searchButton)
         self.translatesAutoresizingMaskIntoConstraints = false
-        searchButton.setTitle("search", for: .normal)
+        searchButton.setTitle(String(localized: "SEARCH_BUTTON_TEXT"), for: .normal)
         searchButton.setTitleColor(.white, for: .normal)
         searchTextField.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 20, height: 10))
         searchTextField.leftViewMode = .always
@@ -44,10 +44,14 @@ class SearchBarView: UIView {
     
     lazy var searchTextField: UITextField = {
        let textField = UITextField()
-        textField.placeholder = "search text"
+        textField.textColor = .black
         textField.backgroundColor = .white
         textField.layer.cornerRadius = 10
         textField.translatesAutoresizingMaskIntoConstraints = false
+        textField.attributedPlaceholder = NSAttributedString(
+            string: String(localized: "SEARCH_BAR_PLACEHOLDER_TEXT"),
+            attributes: [NSAttributedString.Key.foregroundColor: UIColor.darkGray]
+        )
         textField.layer.shadowOpacity = 1
         textField.layer.shadowRadius = 5.0
         textField.layer.shadowOffset = CGSize.zero // Use any CGSize
