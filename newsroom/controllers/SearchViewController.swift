@@ -22,11 +22,7 @@ class SearchViewController: UIViewController {
     var activityIndicator: UIActivityIndicatorView!
     var currentPage: Int?
     var didReachEnd: Bool = false
-    var selectedSourceId: String? {
-        didSet{
-            searchBar.searchButton.isEnabled = true
-        }
-    }
+    var selectedSourceId: String?
     
     private var notFoundAnimationView: LottieAnimationView!
     private var loadingAnimationView: LottieAnimationView!
@@ -89,6 +85,7 @@ class SearchViewController: UIViewController {
         view.addSubview(searchBar)
         view.addSubview(categoriesTableView)
         searchBar.searchButton.isEnabled = false
+        searchBar.searchButton.alpha = 0.5
         notFoundAnimationView.isHidden = true
         print("view did load")
         categoriesTableView.delegate = self
@@ -238,9 +235,16 @@ extension SearchViewController: UITextFieldDelegate{
     }
     func textFieldDidChangeSelection(_ textField: UITextField) {
         if (textField.text == ""){
+            searchBar.searchButton.isEnabled = false
+            searchBar.searchButton.alpha = 0.5
             searchResultCollectionView.isHidden = true
             categoriesTableView.isHidden = false
             notFoundAnimationView.isHidden = true
+        }else{
+            if let selectedSourceId = selectedSourceId{
+                searchBar.searchButton.isEnabled = true
+                searchBar.searchButton.alpha = 1
+            }
         }
     }
 }

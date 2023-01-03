@@ -34,6 +34,10 @@ class MapResultViewController: UIViewController, UICollectionViewDelegate, UICol
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         delegate.didTapOnSearchResults(self, indexPath: indexPath)
     }
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
+        newsCollectionView.setContentOffset(.zero, animated: false)
+    }
     
     @objc func dissmissSheet(){
         self.dismiss(animated: true)
