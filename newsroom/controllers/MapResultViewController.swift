@@ -59,11 +59,9 @@ class MapResultViewController: UIViewController, UICollectionViewDelegate, UICol
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if (indexPath.row == (articleResponse?.articles.count)!-1 && !didReachEnd!){
-            print("pagination bitch: ", currentPage!,(articleResponse?.articles.count)!)
             currentPage = currentPage! + 1
             NewsroomAPIService.APIManager.fetchHeadlines(category: nil, countryCode: nil,page: currentPage!) { articles, error in
                 if let error = error{
-                    print("pagination err:", error)
                     return
                 }
                 self.articleResponse?.articles.append(contentsOf: articles!.articles)
@@ -86,7 +84,6 @@ class MapResultViewController: UIViewController, UICollectionViewDelegate, UICol
         super.viewDidLoad()
         currentPage = 2
         if (didReachEnd == nil){
-            print("sus")
             didReachEnd = false
         }
         navBar = UINavigationBar(frame: CGRect(x: 0, y: 0, width: self.view.frame.size.width, height: 44))

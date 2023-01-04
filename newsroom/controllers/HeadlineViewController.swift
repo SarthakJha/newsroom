@@ -39,7 +39,6 @@ class HeadlineViewController: UIViewController {
         currentPage = 1
         NewsroomAPIService.APIManager.fetchHeadlines(category: .general, countryCode: "in", page: currentPage!) { res, err in
             if let err = err{
-                print(err)
                 let configuration = ToastConfiguration(
                     autoHide: true,
                     enablePanToClose: true,
@@ -96,7 +95,6 @@ class HeadlineViewController: UIViewController {
         addConstraints()
 
         let countryCode = UserDefaults.standard.string(forKey: "country-code")
-        print(("hjeadline: ", countryCode))
         DispatchQueue.main.async {
             self.loadingAnimationView.isHidden = false
             self.headlineCollectionView.isHidden = true
@@ -104,7 +102,6 @@ class HeadlineViewController: UIViewController {
         }
         NewsroomAPIService.APIManager.fetchHeadlines(category: .entertainment, countryCode: "in", page: currentPage!) { res, err in
             if let err = err{
-                print(err)
                 let configuration = ToastConfiguration(
                     autoHide: true,
                     enablePanToClose: true,
@@ -186,11 +183,9 @@ extension HeadlineViewController: UICollectionViewDataSource{
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if (indexPath.row == (topHeadlineData?.articles.count)!-1 && !didReachEnd){
-            print("pagination bitch: ", currentPage!,(topHeadlineData?.articles.count)!)
             currentPage = currentPage! + 1
             NewsroomAPIService.APIManager.fetchHeadlines(category: nil, countryCode: nil,page: currentPage!) { articles, error in
                 if let error = error{
-                    print("pagination err:", error)
                     return
                 }
                 self.topHeadlineData?.articles.append(contentsOf: articles!.articles)

@@ -46,13 +46,15 @@ class MapViewController: UIViewController {
         let geoCoder = CLGeocoder()
         geoCoder.reverseGeocodeLocation(CLLocation(latitude: coordinates.latitude.magnitude, longitude: coordinates.longitude.magnitude)) { places, error in
             if let error = error{
-                print("decoding error: ", error)
                 completion("","")
                 return
             }
-            print("this is coordinates:", coordinates)
-            guard let country = places?[0].country else {return}
-            print(country)
+            print(places)
+            guard var country = places?[0].country else {return}
+            if(Locale.preferredLanguages[0] == "hi"){
+                country = CountryCode.hindiCountryData[country] ?? country
+            }
+            print("country ", country)
             if let code = CountryCode.data[country] {
                 completion(code, country)
             }else{
@@ -111,7 +113,6 @@ extension MapViewController: GMSMapViewDelegate {
             animationTime: 0.2
         )
         MapViewController.getISO3166CountryCode(coordinates: coordinate) { countryCode, country in
-            print("this is country code: ", countryCode)
             if (countryCode == ""){
                 let toast = Toast.default(image: nil, title: "Unknown Location!", subtitle: "Location couldn't be identified",configuration: configuration)
                 toast.enableTapToClose()
@@ -125,7 +126,6 @@ extension MapViewController: GMSMapViewDelegate {
             self.activityIndicator.startAnimating()
             NewsroomAPIService.APIManager.fetchHeadlines(category: nil, countryCode: countryCode, page: 1) { response, error in
                 if let error = error{
-                    print(error)
                     let toast = Toast.default(image: nil, title: "Internal Error!", subtitle: "Something went wrong!",configuration: configuration)
                     toast.enableTapToClose()
                     self.view.alpha = 1

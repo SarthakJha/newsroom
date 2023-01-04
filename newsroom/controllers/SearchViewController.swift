@@ -57,7 +57,6 @@ class SearchViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        print("view hogya")
         activityIndicator = UIActivityIndicatorView(style: .medium)
         view.addSubview(activityIndicator)
 //        activityIndicator.backgroundColor = .red
@@ -90,7 +89,6 @@ class SearchViewController: UIViewController {
         searchBar.searchButton.isEnabled = false
         searchBar.searchButton.alpha = 0.5
         notFoundAnimationView.isHidden = true
-        print("view did load")
         categoriesTableView.delegate = self
         categoriesTableView.dataSource = self
         categoriesTableView.isScrollEnabled = false
@@ -105,7 +103,6 @@ class SearchViewController: UIViewController {
     }
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        print("dissapear hogya")
     }
     private func addConstraints(){
         var constraints = [NSLayoutConstraint]()
@@ -164,7 +161,6 @@ class SearchViewController: UIViewController {
         }
         NewsroomAPIService.APIManager.fetchSearchResults(searchText: searchText, sourceId: selectedSourceId,page: currentPage) { data, error in
             if let error = error {
-                print("errorrr: ",error)
                 return
             }
             guard let data = data else {return}
@@ -200,19 +196,16 @@ extension SearchViewController: UICollectionViewDataSource{
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell
     {
         if (indexPath.row == (searchResults?.articles.count)!-1 && !didReachEnd){
-            print("pagination bitch: ", currentPage!,(searchResults?.articles.count)!)
             currentPage = currentPage! + 1
             NewsroomAPIService.APIManager.fetchSearchResults(searchText: searchBar.searchTextField.text!, sourceId: selectedSourceId,  page: currentPage) { data, error in
                 if((self.searchResults?.articles.count)! == (self.searchResults?.totalResults!)!){
                     self.didReachEnd = true
                 }
                 if let error = error {
-                    print("errorrr: ",error)
 //                    didReachEnd = true
                     return
                 }
                 guard let data = data else {return}
-                print("total: ", data.totalResults)
                 self.searchResults?.articles.append(contentsOf: data.articles)
                 DispatchQueue.main.async {
                     self.searchResultCollectionView.reloadData()
@@ -229,12 +222,7 @@ extension SearchViewController: UICollectionViewDataSource{
 
 
 extension SearchViewController: UITextFieldDelegate{
-    func textFieldDidBeginEditing(_ textField: UITextField) {
-        print("editing started")
-    }
-    func textFieldDidEndEditing(_ textField: UITextField) {
-        print("ended editing")
-    }
+
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         searchBar.searchTextField.resignFirstResponder()
         return true

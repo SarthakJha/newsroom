@@ -131,7 +131,6 @@ final class NetworkManager {
                 if searchResponse?.status == .ok{
                     completion(searchResponse,nil)
                 }else{
-                    print("lololol: ",searchResponse?.error)
                     completion(nil,error)
                 }
             }catch let error{

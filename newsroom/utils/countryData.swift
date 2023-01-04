@@ -9,6 +9,7 @@ import Foundation
 
 enum CountryCode {
     static let data = countryCodeDictionary
+    static let hindiCountryData = hindiData
 }
 
 private let countryCodeDictionary: [String:String] = [
@@ -261,3 +262,19 @@ private let countryCodeDictionary: [String:String] = [
     "Zambia": "ZM",
     "Zimbabwe": "ZW",
     "Åland Islands": "AX"]
+
+private let hindiData: [String:String] = [
+    "अमेरिका": "America",
+    "अर्जेंटीना": "Argentina",
+    "अज़रबैजान": "Azerbaijan",
+    "ब्राजील": "Brazil",
+    "चीन": "China",
+    "फ़्रांस": "France",
+    "जापान": "Japan",
+    "पाकिस्तान": "Pakistan",
+    "रूस": "Russia",
+    "स्वीडन": "Sweden",
+    "थाईलैंड": "Thailand",
+    "यूनाइटेड अमेरिका": "United States",
+    "भारत": "India"
+]

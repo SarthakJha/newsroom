@@ -45,7 +45,6 @@ class SourcesViewController: UIViewController {
         loadingIndicator.play()
         NewsroomAPIService.APIManager.fetchSources(category: category) { sources, err in
             if let error = err{
-                print("sources:", error)
                 DispatchQueue.main.async {
                     self.sourcesTableView.isHidden = false
                     self.loadingIndicator.stop()
