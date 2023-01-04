@@ -27,7 +27,6 @@ class HeadlineViewController: UIViewController {
                 
                 headlineCollectionView.isHidden = false
                 headlineCollectionView.reloadData()
-//                self.activityIndicator.stopAnimating()
                 loadingAnimationView.stop()
                 loadingAnimationView.isHidden = true
                 refreshController.endRefreshing()
@@ -158,7 +157,6 @@ extension HeadlineViewController: UICollectionViewDelegate{
             if let navigationController = navigationController{
                 navigationController.pushViewController(self.newsWebViewController, animated: true)
             }
-//            UIApplication.shared.open(url)
         }
     }
 }
@@ -168,11 +166,6 @@ extension HeadlineViewController: UICollectionViewDelegateFlowLayout{
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: view.frame.width-20, height: 300)
     }
-    
-//    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-//        return UIEdgeInsets(top: view.safeAreaInsets.top, left: 0, bottom: 0, right: 0)
-//    }
-    
 }
 
 extension HeadlineViewController: UICollectionViewDataSource{
@@ -206,7 +199,6 @@ extension HeadlineViewController: UICollectionViewDataSource{
         }
         cell.cellBackgroundImage.sd_setImage(with: URL(string: topHeadlineData?.articles[indexPath.row].urlToImage ?? ""))
         cell.sourceLabel.text = topHeadlineData?.articles[indexPath.row].source.name ?? ""
-//        cell.cellBackgroundImage.sd = topHeadlineData?.articles[indexPath.row].urlToImage
         return cell
     }
     

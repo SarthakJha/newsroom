@@ -156,7 +156,9 @@ class SearchViewController: UIViewController {
             )
             let toast = Toast.default(image: nil, title: String(localized: "TOAST_NOT_FOUND_TITLE"), subtitle: String(localized: "TOAST_NOT_FOUND_DESCRIPTION"),configuration: configuration)
             toast.enableTapToClose()
-//            self.toast.show(haptic: .warning)
+            DispatchQueue.main.async {
+                self.toast.show(haptic: .warning)
+            }
             return
         }
         NewsroomAPIService.APIManager.fetchSearchResults(searchText: searchText, sourceId: selectedSourceId,page: currentPage) { data, error in

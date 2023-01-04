@@ -128,12 +128,6 @@ class MapResultViewController: UIViewController, UICollectionViewDelegate, UICol
         constraints.append(newsCollectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor))
         constraints.append(newsCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor))
         constraints.append(newsCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor))
-//        constraints.append(dismissButton.topAnchor.constraint(equalTo: view.topAnchor))
-//        constraints.append(dismissButton.trailingAnchor.constraint(equalTo: view.trailingAnchor))
-//        constraints.append(dismissButton.bottomAnchor.constraint(equalTo: newsCollectionView.topAnchor))
-//        constraints.append(dismissButton.heightAnchor.constraint(equalToConstant: 20))
-//        constraints.append(dismissButton.widthAnchor.constraint(equalToConstant: 20))
-
         NSLayoutConstraint.activate(constraints)
     }
     

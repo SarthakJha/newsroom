@@ -32,8 +32,6 @@ class NewsWebViewController: UIViewController, WKNavigationDelegate {
         webView.navigationDelegate = self
         navBar = UINavigationBar()
         view.addSubview(navBar)
-//        backButtonItem.backBarButtonItem = UIBarButtonItem(title: "back", style: .done, target: self, action: #selector(dismiss))
-//        navBar.setItems([backButtonItem], animated: true)
         navBar.translatesAutoresizingMaskIntoConstraints = false
         navBar.isHidden = false
         navBar.backgroundColor = .white
