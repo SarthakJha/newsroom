@@ -138,7 +138,7 @@ class SearchViewController: UIViewController {
     
     @objc func searchButtonPressed(){
         currentPage = 1
-        guard let searchText = searchBar.searchTextField.text else {return}
+        guard let searchText = searchBar.searchTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines) else {return}
         guard let selectedCategoryIndexPath = selectedCategoryIndexPath else {return}
         DispatchQueue.main.async { [self] in
             searchResultCollectionView.isHidden = true
@@ -197,7 +197,7 @@ extension SearchViewController: UICollectionViewDataSource{
     {
         if (indexPath.row == (searchResults?.articles.count)!-1 && !didReachEnd){
             currentPage = currentPage! + 1
-            NewsroomAPIService.APIManager.fetchSearchResults(searchText: searchBar.searchTextField.text!, sourceId: selectedSourceId,  page: currentPage) { data, error in
+            NewsroomAPIService.APIManager.fetchSearchResults(searchText: (searchBar.searchTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines))!, sourceId: selectedSourceId,  page: currentPage) { data, error in
                 if((self.searchResults?.articles.count)! == (self.searchResults?.totalResults!)!){
                     self.didReachEnd = true
                 }

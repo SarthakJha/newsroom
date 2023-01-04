@@ -49,12 +49,11 @@ class MapViewController: UIViewController {
                 completion("","")
                 return
             }
-            print(places)
             guard var country = places?[0].country else {return}
             if(Locale.preferredLanguages[0] == "hi"){
-                country = CountryCode.hindiCountryData[country] ?? country
+                country = CountryCode.hindiCountryData[country.trimmingCharacters(in: .whitespaces)] ?? country
             }
-            print("country ", country)
+            print("country", country)
             if let code = CountryCode.data[country] {
                 completion(code, country)
             }else{
