@@ -22,7 +22,16 @@ class SearchViewController: UIViewController {
     var activityIndicator: UIActivityIndicatorView!
     var currentPage: Int?
     var didReachEnd: Bool = false
-    var selectedSourceId: String?
+    var selectedSourceId: String? {
+        didSet{
+            DispatchQueue.main.async {
+                if(self.searchBar.searchTextField.text != ""){
+                    self.searchBar.searchButton.isEnabled = true
+                    self.searchBar.searchButton.alpha = 1
+                }
+            }
+        }
+    }
     
     private var notFoundAnimationView: LottieAnimationView!
     private var loadingAnimationView: LottieAnimationView!
@@ -142,22 +151,21 @@ class SearchViewController: UIViewController {
         guard let selectedCategoryIndexPath = selectedCategoryIndexPath else {return}
         DispatchQueue.main.async { [self] in
             searchResultCollectionView.isHidden = true
-//            activityIndicator.startAnimating()
             loadingAnimationView.isHidden = false
             loadingAnimationView.play()
             notFoundAnimationView.isHidden = true
         }
         if(searchText == ""){
-            let configuration = ToastConfiguration(
-                autoHide: true,
-                enablePanToClose: true,
-                displayTime: 3,
-                animationTime: 0.2
-            )
-            let toast = Toast.default(image: nil, title: String(localized: "TOAST_NOT_FOUND_TITLE"), subtitle: String(localized: "TOAST_NOT_FOUND_DESCRIPTION"),configuration: configuration)
-            toast.enableTapToClose()
             DispatchQueue.main.async {
-                self.toast.show(haptic: .warning)
+                let configuration = ToastConfiguration(
+                    autoHide: true,
+                    enablePanToClose: true,
+                    displayTime: 3,
+                    animationTime: 0.2
+                )
+                let toast = Toast.default(image: nil, title: String(localized: "TOAST_NOT_FOUND_TITLE"), subtitle: String(localized: "TOAST_NOT_FOUND_DESCRIPTION"),configuration: configuration)
+                toast.enableTapToClose()
+                toast.show(haptic: .warning)
             }
             return
         }
