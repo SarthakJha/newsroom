@@ -16,13 +16,32 @@ protocol MapViewControllerDelegate {
 
 class MapViewController: UIViewController {
     
-    var activityIndicator: UIActivityIndicatorView = UIActivityIndicatorView(style: .large)
-    var newsWebViewController: NewsWebViewController!
-    var marker: GMSMarker!
-    var mapresultViewController: MapResultViewController!
-    var didReachEnd: Bool = false
+    private var activityIndicator: UIActivityIndicatorView = UIActivityIndicatorView(style: .large)
+    private var newsWebViewController: NewsWebViewController!
+    private var marker: GMSMarker!
+    private var mapresultViewController: MapResultViewController!
+    private var currentCamera: GMSCameraPosition? {
+        didSet{
+            guard let currentCamera = currentCamera else {return}
+            mapView.animate(to: currentCamera)
+            marker.position = currentCamera.target
+        }
+    }
     
-    var newsItems: ArticleResponse? {
+    private lazy var mapView: GMSMapView = {
+        return GMSMapView(frame: view.frame)
+    }()
+    private lazy var defaultCamera: GMSCameraPosition = {
+        let lat = UserDefaults.standard.double(forKey: "location-latitude")
+        let long = UserDefaults.standard.double(forKey: "location-longitude")
+           return GMSCameraPosition(latitude: CLLocationDegrees(lat),
+                                    longitude: CLLocationDegrees(long),
+                                     zoom: 3)
+     }()
+   
+    private var didReachEnd: Bool = false
+    
+    private var newsItems: ArticleResponse? {
         didSet{
 
             DispatchQueue.main.async { [self] in
@@ -49,7 +68,10 @@ class MapViewController: UIViewController {
                 completion("","")
                 return
             }
-            guard var country = places?[0].country else {return}
+            guard var country = places?[0].country else {
+                completion("","")
+                return
+            }
             if(Locale.preferredLanguages[0] == "hi"){
                 country = CountryCode.hindiCountryData[country.trimmingCharacters(in: .whitespaces)] ?? country
             }
@@ -62,24 +84,6 @@ class MapViewController: UIViewController {
         }
     }
     
-    var currentCamera: GMSCameraPosition? {
-        didSet{
-            guard let currentCamera = currentCamera else {return}
-            mapView.animate(to: currentCamera)
-            marker.position = currentCamera.target
-        }
-    }
-    
-    lazy var mapView: GMSMapView = {
-        return GMSMapView(frame: view.frame)
-    }()
-    private lazy var defaultCamera: GMSCameraPosition = {
-        let lat = UserDefaults.standard.double(forKey: "location-latitude")
-        let long = UserDefaults.standard.double(forKey: "location-longitude")
-           return GMSCameraPosition(latitude: CLLocationDegrees(lat),
-                                    longitude: CLLocationDegrees(long),
-                                     zoom: 3)
-     }()
     override func viewDidLoad() {
         super.viewDidLoad()
         view.addSubview(activityIndicator)
@@ -151,7 +155,7 @@ extension MapViewController: GMSMapViewDelegate {
                 }
             }
         }
-       
+        
     }
 }
 

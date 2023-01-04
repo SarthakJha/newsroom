@@ -15,14 +15,14 @@ class SearchViewController: UIViewController {
      Allow user to filter search based on category and sources
      */
     
-    var searchBar:SearchBarView!
-    var newsWebViewController: NewsWebViewController!
-    var categoriesTableView: UITableView!
-    var sourcesTableViewController: SourcesViewController!
-    var activityIndicator: UIActivityIndicatorView!
-    var currentPage: Int?
-    var didReachEnd: Bool = false
-    var selectedSourceId: String? {
+    private var searchBar:SearchBarView!
+    private var newsWebViewController: NewsWebViewController!
+    private var categoriesTableView: UITableView!
+    private var sourcesTableViewController: SourcesViewController!
+    private var activityIndicator: UIActivityIndicatorView!
+    private var currentPage: Int?
+    private var didReachEnd: Bool = false
+    private var selectedSourceId: String? {
         didSet{
             DispatchQueue.main.async {
                 if(self.searchBar.searchTextField.text != ""){
@@ -35,8 +35,8 @@ class SearchViewController: UIViewController {
     
     private var notFoundAnimationView: LottieAnimationView!
     private var loadingAnimationView: LottieAnimationView!
-    var selectedCategoryIndexPath: IndexPath? 
-    var searchResults: ArticleResponse? {
+    private var selectedCategoryIndexPath: IndexPath?
+    private var searchResults: ArticleResponse? {
         didSet{
             DispatchQueue.main.async { [self] in
                 loadingAnimationView.stop()
@@ -145,7 +145,7 @@ class SearchViewController: UIViewController {
         return collectionView
     }()
     
-    @objc func searchButtonPressed(){
+    @objc private func searchButtonPressed(){
         currentPage = 1
         guard let searchText = searchBar.searchTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines) else {return}
         guard let selectedCategoryIndexPath = selectedCategoryIndexPath else {return}

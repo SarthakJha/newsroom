@@ -10,11 +10,11 @@ import CoreLocation
 
 class MapResultViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource {
     var delegate:MapViewControllerDelegate!
-    var currentPage: Int?
-    var newsCollectionView: UICollectionView!
+    private var currentPage: Int?
+    private var newsCollectionView: UICollectionView!
     var didReachEnd: Bool?
 
-    var dismissButton: UIButton = {
+    private var dismissButton: UIButton = {
         let button = UIButton()
         button.backgroundColor = .black
         button.translatesAutoresizingMaskIntoConstraints = true
@@ -22,7 +22,7 @@ class MapResultViewController: UIViewController, UICollectionViewDelegate, UICol
         return button
     }()
     
-    var dragable: UIView = {
+    private var dragable: UIView = {
         let dragableView = UIView()
         dragableView.translatesAutoresizingMaskIntoConstraints = true
         dragableView.backgroundColor = .systemGray
@@ -31,6 +31,14 @@ class MapResultViewController: UIViewController, UICollectionViewDelegate, UICol
         return dragableView
     }()
     
+    var articleResponse: ArticleResponse? {
+        didSet{
+            DispatchQueue.main.async {
+                guard let newsCollectionView = self.newsCollectionView else {return}
+                newsCollectionView.reloadData()
+            }
+        }
+    }
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         delegate.didTapOnSearchResults(self, indexPath: indexPath)
     }
@@ -43,16 +51,6 @@ class MapResultViewController: UIViewController, UICollectionViewDelegate, UICol
         self.dismiss(animated: true)
     }
     
-    var navBar: UINavigationBar!
-    
-    var articleResponse: ArticleResponse? {
-        didSet{
-            DispatchQueue.main.async {
-                guard let newsCollectionView = self.newsCollectionView else {return}
-                newsCollectionView.reloadData()
-            }
-        }
-    }
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return articleResponse?.articles.count ?? 0
     }
@@ -86,12 +84,7 @@ class MapResultViewController: UIViewController, UICollectionViewDelegate, UICol
         if (didReachEnd == nil){
             didReachEnd = false
         }
-        navBar = UINavigationBar(frame: CGRect(x: 0, y: 0, width: self.view.frame.size.width, height: 44))
         self.view.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(navBar)
-
-        navBar.setItems([UINavigationItem(title: "results")], animated: true)
-        
         let flowLayout = UICollectionViewFlowLayout()
         flowLayout.scrollDirection = .vertical
         newsCollectionView = UICollectionView(frame: view.bounds, collectionViewLayout: flowLayout)

@@ -10,18 +10,15 @@ import Toast
 import Lottie
 
 class HeadlineViewController: UIViewController {
-    /**
-     Allow user to filter the headline results based on category
-     */
-    
-    var activityIndicator: UIActivityIndicatorView = UIActivityIndicatorView(style: .large)
-    var headlineCollectionView: UICollectionView!
-    var loadingAnimationView: LottieAnimationView!
-    var newsWebViewController: NewsWebViewController!
-    var currentPage: Int?
-    var didReachEnd: Bool = false
-    var refreshController: UIRefreshControl = UIRefreshControl()
-    var topHeadlineData: ArticleResponse? {
+
+    private var activityIndicator: UIActivityIndicatorView = UIActivityIndicatorView(style: .large)
+    private var headlineCollectionView: UICollectionView!
+    private var loadingAnimationView: LottieAnimationView!
+    private var newsWebViewController: NewsWebViewController!
+    private var currentPage: Int?
+    private var didReachEnd: Bool = false
+    private var refreshController: UIRefreshControl = UIRefreshControl()
+    private var topHeadlineData: ArticleResponse? {
         didSet{
             DispatchQueue.main.async {[self] in
                 
