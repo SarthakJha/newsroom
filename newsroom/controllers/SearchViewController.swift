@@ -43,7 +43,7 @@ class SearchViewController: UIViewController {
                         displayTime: 3,
                         animationTime: 0.2
                     )
-                    let toast = Toast.default(image: nil, title: "No results found!", subtitle: "No news articles could be founf with your search text",configuration: configuration)
+                    let toast = Toast.default(image: nil, title: String(localized: "TOAST_NOT_FOUND_TITLE"), subtitle: String(localized: "TOAST_NOT_FOUND_DESCRIPTION"),configuration: configuration)
                     toast.enableTapToClose()
                     searchResultCollectionView.isHidden = true
                     notFoundAnimationView.isHidden = false
@@ -154,7 +154,7 @@ class SearchViewController: UIViewController {
                 displayTime: 3,
                 animationTime: 0.2
             )
-            let toast = Toast.default(image: nil, title: "No results found!", subtitle: "No news articles could be founf with your search text",configuration: configuration)
+            let toast = Toast.default(image: nil, title: String(localized: "TOAST_NOT_FOUND_TITLE"), subtitle: String(localized: "TOAST_NOT_FOUND_DESCRIPTION"),configuration: configuration)
             toast.enableTapToClose()
 //            self.toast.show(haptic: .warning)
             return

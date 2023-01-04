@@ -21,6 +21,11 @@
 "CATEGORY_SPORTS" = "sports";
 "CATEGORY_TECHNOLOGY" = "technology";
 "SOURCE_TABLE_VIEW_TITLE" = "Select a source";
-
+"TOAST_NOT_FOUND_TITLE" = "No results found!";
+"TOAST_INTERNAL_ERROR_TITLE" = "Internal error!";
+"TOAST_UNKNOWN_LOCATION_TITLE" = "Unknown location!";
+"TOAST_NOT_FOUND_DESCRIPTION" = "No news articles could be found";
+"TOAST_INTERNAL_ERROR_DESCRIPTION" = "Something went wrong";
+"TOAST_UNKNOWN_LOCATION_DESCRIPTION" = "No articles found for selected location";
 
 

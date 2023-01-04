@@ -113,7 +113,7 @@ extension MapViewController: GMSMapViewDelegate {
         )
         MapViewController.getISO3166CountryCode(coordinates: coordinate) { countryCode, country in
             if (countryCode == ""){
-                let toast = Toast.default(image: nil, title: "Unknown Location!", subtitle: "Location couldn't be identified",configuration: configuration)
+                let toast = Toast.default(image: nil, title: String(localized: "TOAST_UNKNOWN_LOCATION_TITLE"), subtitle: String(localized: "TOAST_UNKNOWN_LOCATION_DESCRIPTION"),configuration: configuration)
                 toast.enableTapToClose()
                 self.view.alpha = 1
                 self.view.isUserInteractionEnabled = true
@@ -125,7 +125,7 @@ extension MapViewController: GMSMapViewDelegate {
             self.activityIndicator.startAnimating()
             NewsroomAPIService.APIManager.fetchHeadlines(category: nil, countryCode: countryCode, page: 1) { response, error in
                 if let error = error{
-                    let toast = Toast.default(image: nil, title: "Internal Error!", subtitle: "Something went wrong!",configuration: configuration)
+                    let toast = Toast.default(image: nil, title: String(localized: "TOAST_INTERNAL_ERROR_TITLE"), subtitle: String(localized: "TOAST_INTERNAL_ERROR_DESCRIPTION"),configuration: configuration)
                     toast.enableTapToClose()
                     self.view.alpha = 1
                     self.view.isUserInteractionEnabled = true
@@ -142,7 +142,7 @@ extension MapViewController: GMSMapViewDelegate {
                 }else{
                     DispatchQueue.main.async {
                         
-                        let toast = Toast.default(image: nil, title: "No results found!", subtitle: "No news articles could be found for \(country)",configuration: configuration)
+                        let toast = Toast.default(image: nil, title: String(localized: "TOAST_NOT_FOUND_TITLE"), subtitle: NSLocalizedString("TOAST_UNKNOWN_LOCATION_DESCRIPTION", comment: ""),configuration: configuration)
                         toast.enableTapToClose()
                         self.view.isUserInteractionEnabled = true
                         self.view.alpha = 1

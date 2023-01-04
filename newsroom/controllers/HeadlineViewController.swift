@@ -45,7 +45,7 @@ class HeadlineViewController: UIViewController {
                     displayTime: 3,
                     animationTime: 0.2
                 )
-                let toast = Toast.default(image: nil, title: "No results found!", subtitle: "No news articles found for your current location",configuration: configuration)
+                let toast = Toast.default(image: nil, title: String(localized: "TOAST_NOT_FOUND_TITLE"), subtitle: String(localized: "TOAST_UKNOWN_LOCATION_DESCRIPTION"),configuration: configuration)
                 DispatchQueue.main.async {
                     toast.show(haptic: .warning)
                     self.refreshController.endRefreshing()
@@ -108,7 +108,7 @@ class HeadlineViewController: UIViewController {
                     displayTime: 3,
                     animationTime: 0.2
                 )
-                let toast = Toast.default(image: nil, title: "No results found!", subtitle: "No news articles found for your current location",configuration: configuration)
+                let toast = Toast.default(image: nil, title: String(localized: "TOAST_NOT_FOUND_TITLE"), subtitle: String(localized: "TOAST_UKNOWN_LOCATION_DESCRIPTION"),configuration: configuration)
                 DispatchQueue.main.async {
                     toast.show(haptic: .warning)
                 }

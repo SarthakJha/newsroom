@@ -21,6 +21,12 @@
 "CATEGORY_SPORTS" = "खेल";
 "CATEGORY_TECHNOLOGY" = "तकनीकी";
 "SOURCE_TABLE_VIEW_TITLE" = "एक स्रोत का चयन करें";
+"TOAST_NOT_FOUND_TITLE" = "कोई परिणाम नहीं मिला!";
+"TOAST_INTERNAL_ERROR_TITLE" = "आंतरिक गलती!";
+"TOAST_UNKNOWN_LOCATION_TITLE" = "अज्ञात स्थान!";
+"TOAST_NOT_FOUND_DESCRIPTION" = "कोई समाचार लेख नहीं मिला";
+"TOAST_INTERNAL_ERROR_DESCRIPTION" = "कुछ गलत हो गया";
+"TOAST_UNKNOWN_LOCATION_DESCRIPTION" = "चयनित स्थान के लिए कोई लेख नहीं मिला";
 
 
 
