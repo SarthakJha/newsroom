@@ -15,11 +15,22 @@ class SearchViewController: UIViewController {
      Allow user to filter search based on category and sources
      */
     
-    private var searchBar:SearchBarView!
-    private var newsWebViewController: NewsWebViewController!
-    private var categoriesTableView: UITableView!
+    private var searchBar:SearchBarView! = {
+        var view = SearchBarView()
+        view.searchButton.isEnabled = false
+        view.searchButton.alpha = 0.5
+
+        return view
+    }()
+    private var newsWebViewController: NewsWebViewController! = NewsWebViewController()
+    private var categoriesTableView: UITableView! = {
+        var tableView = UITableView()
+        tableView.backgroundColor = .white
+        tableView.isScrollEnabled = false
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        return tableView
+    }()
     private var sourcesTableViewController: SourcesViewController!
-    private var activityIndicator: UIActivityIndicatorView!
     private var currentPage: Int?
     private var didReachEnd: Bool = false
     private var selectedSourceId: String? {
@@ -33,18 +44,48 @@ class SearchViewController: UIViewController {
         }
     }
     
-    private var notFoundAnimationView: LottieAnimationView!
-    private var loadingAnimationView: LottieAnimationView!
+    private var notFoundAnimationView: LottieAnimationView! = {
+        var animation = LottieAnimationView.init(name: "notfoundresults")
+        animation.translatesAutoresizingMaskIntoConstraints = false
+        animation.frame = CGRect(x: 0, y: 0, width: 70, height: 70)
+        animation.contentMode = .scaleAspectFit
+        animation.loopMode = .loop
+        animation.isHidden = true
+        animation.animationSpeed = 1
+        return animation
+    }()
+    
+    private var loadingAnimationView: LottieAnimationView! = {
+        var loadingAnimationView = LottieAnimationView.init(name: "loading")
+        loadingAnimationView.translatesAutoresizingMaskIntoConstraints = false
+        loadingAnimationView.contentMode = .scaleAspectFit
+        loadingAnimationView.loopMode = .loop
+        loadingAnimationView.animationSpeed = 1
+        return loadingAnimationView
+    }()
+    
+    private lazy var searchResultCollectionView: UICollectionView = {
+        var collectionViewFlow = UICollectionViewFlowLayout()
+        collectionViewFlow.scrollDirection = .vertical
+        var collectionView = UICollectionView(frame: .zero,collectionViewLayout: collectionViewFlow)
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
+        collectionView.backgroundColor = .white
+        collectionView.register(HeadlineCollectionViewCell.self, forCellWithReuseIdentifier: "search-cell")
+        return collectionView
+    }()
+    
+    
     private var selectedCategoryIndexPath: IndexPath?
     private var searchResults: ArticleResponse? {
         didSet{
-            DispatchQueue.main.async { [self] in
-                loadingAnimationView.stop()
-                loadingAnimationView.isHidden = true
-                if((searchResults?.totalResults)! > 0){
-                    searchResultCollectionView.reloadData()
-                    searchResultCollectionView.isHidden = false
-                    notFoundAnimationView.isHidden = true
+            DispatchQueue.main.async { [weak self] in
+                guard let self = self else {return}
+                self.loadingAnimationView.stop()
+                self.loadingAnimationView.isHidden = true
+                if((self.searchResults?.totalResults)! > 0){
+                    self.searchResultCollectionView.reloadData()
+                    self.searchResultCollectionView.isHidden = false
+                    self.notFoundAnimationView.isHidden = true
                 }else{
                     let configuration = ToastConfiguration(
                         autoHide: true,
@@ -54,9 +95,9 @@ class SearchViewController: UIViewController {
                     )
                     let toast = Toast.default(image: nil, title: String(localized: "TOAST_NOT_FOUND_TITLE"), subtitle: String(localized: "TOAST_NOT_FOUND_DESCRIPTION"),configuration: configuration)
                     toast.enableTapToClose()
-                    searchResultCollectionView.isHidden = true
-                    notFoundAnimationView.isHidden = false
-                    notFoundAnimationView.play()
+                    self.searchResultCollectionView.isHidden = true
+                    self.notFoundAnimationView.isHidden = false
+                    self.notFoundAnimationView.play()
                     toast.show(haptic: .warning)
                 }
             }
@@ -66,94 +107,43 @@ class SearchViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        activityIndicator = UIActivityIndicatorView(style: .medium)
-        view.addSubview(activityIndicator)
-//        activityIndicator.backgroundColor = .red
-        activityIndicator.translatesAutoresizingMaskIntoConstraints = false
-        notFoundAnimationView = .init(name: "notfoundresults")
-        loadingAnimationView = .init(name: "loading")
-        notFoundAnimationView.translatesAutoresizingMaskIntoConstraints = false
-        notFoundAnimationView.frame = CGRect(x: 0, y: 0, width: 70, height: 70)
-        notFoundAnimationView.contentMode = .scaleAspectFit
-        notFoundAnimationView.loopMode = .loop
-        notFoundAnimationView.animationSpeed = 1
         view.backgroundColor = .white
-        searchResultCollectionView.backgroundColor = .white
-        loadingAnimationView.translatesAutoresizingMaskIntoConstraints = false
-        loadingAnimationView.frame = CGRect(x: 0, y: 0, width: 50, height: 50)
-        loadingAnimationView.contentMode = .scaleAspectFit
-        loadingAnimationView.loopMode = .loop
-        loadingAnimationView.animationSpeed = 1
+        
+        // adding subviews
         view.addSubview(notFoundAnimationView)
         view.addSubview(loadingAnimationView)
-        newsWebViewController = NewsWebViewController()
-        searchBar = SearchBarView()
-        categoriesTableView = UITableView()
-        categoriesTableView.translatesAutoresizingMaskIntoConstraints = false
-        guard let searchBar = searchBar else {return}
-        categoriesTableView.backgroundColor = .white
         view.addSubview(searchResultCollectionView)
         view.addSubview(searchBar)
         view.addSubview(categoriesTableView)
-        searchBar.searchButton.isEnabled = false
-        searchBar.searchButton.alpha = 0.5
-        notFoundAnimationView.isHidden = true
+        
+        // setting tableview/collectionview delegates
         categoriesTableView.delegate = self
         categoriesTableView.dataSource = self
-        categoriesTableView.isScrollEnabled = false
-        
         searchBar.searchTextField.delegate = self
         searchResultCollectionView.delegate = self
         searchResultCollectionView.dataSource = self
-        searchResultCollectionView.register(HeadlineCollectionViewCell.self, forCellWithReuseIdentifier: "search-cell")
-        view.backgroundColor = .white
+                
+        // button targets
         searchBar.searchButton.addTarget(self, action: #selector(searchButtonPressed), for: .touchUpInside)
+        
         addConstraints()
     }
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-    }
-    private func addConstraints(){
-        var constraints = [NSLayoutConstraint]()
-        
-        constraints.append(searchBar.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: 20))
-        constraints.append( searchResultCollectionView.topAnchor.constraint(equalTo:searchBar.bottomAnchor))
-        constraints.append(searchResultCollectionView.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor))
-        constraints.append(searchBar.bottomAnchor.constraint(equalTo: searchResultCollectionView.topAnchor,constant: -20))
-        constraints.append(searchBar.leadingAnchor.constraint(equalTo: self.view.leadingAnchor))
-        constraints.append(searchBar.trailingAnchor.constraint(equalTo: self.view.trailingAnchor))
-        constraints.append(searchResultCollectionView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor))
-        constraints.append(searchResultCollectionView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor))
-        constraints.append(categoriesTableView.topAnchor.constraint(equalTo: searchBar.bottomAnchor,constant: 70))
-        constraints.append(categoriesTableView.bottomAnchor.constraint(equalTo: view.bottomAnchor))
-        constraints.append(categoriesTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor,constant: -20))
-        constraints.append(categoriesTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor,constant: 20))
-        constraints.append(notFoundAnimationView.centerXAnchor.constraint(equalTo: searchResultCollectionView.centerXAnchor))
-        constraints.append(notFoundAnimationView.centerYAnchor.constraint(equalTo: searchResultCollectionView.centerYAnchor))
-        constraints.append(loadingAnimationView.centerXAnchor.constraint(equalTo: view.centerXAnchor))
-        constraints.append(loadingAnimationView.centerYAnchor.constraint(equalTo: view.centerYAnchor))
-        constraints.append(loadingAnimationView.heightAnchor.constraint(equalToConstant: 60))
-        constraints.append(loadingAnimationView.widthAnchor.constraint(equalToConstant: 60))
-        NSLayoutConstraint.activate(constraints)
-    }
+
+   
     
-    private lazy var searchResultCollectionView: UICollectionView = {
-        var collectionViewFlow = UICollectionViewFlowLayout()
-        collectionViewFlow.scrollDirection = .vertical
-        var collectionView = UICollectionView(frame: .zero,collectionViewLayout: collectionViewFlow)
-        collectionView.translatesAutoresizingMaskIntoConstraints = false
-        return collectionView
-    }()
     
+
     @objc private func searchButtonPressed(){
         currentPage = 1
         guard let searchText = searchBar.searchTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines) else {return}
         guard let selectedCategoryIndexPath = selectedCategoryIndexPath else {return}
-        DispatchQueue.main.async { [self] in
-            searchResultCollectionView.isHidden = true
-            loadingAnimationView.isHidden = false
-            loadingAnimationView.play()
-            notFoundAnimationView.isHidden = true
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else {return}
+
+            self.searchResultCollectionView.isHidden = true
+            self.loadingAnimationView.isHidden = false
+            self.loadingAnimationView.play()
+            self.notFoundAnimationView.isHidden = true
         }
         if(searchText == ""){
             DispatchQueue.main.async {
@@ -170,7 +160,7 @@ class SearchViewController: UIViewController {
             return
         }
         NewsroomAPIService.APIManager.fetchSearchResults(searchText: searchText, sourceId: selectedSourceId,page: currentPage) { data, error in
-            if let error = error {
+            if let _ = error {
                 return
             }
             guard let data = data else {return}
@@ -179,26 +169,30 @@ class SearchViewController: UIViewController {
         categoriesTableView.isHidden = true
         searchBar.searchTextField.resignFirstResponder()
     }
+    
 }
 
-extension SearchViewController: UICollectionViewDelegate, UICollectionViewDelegateFlowLayout{
+private typealias CollectionViewDelegates = SearchViewController
+extension CollectionViewDelegates: UICollectionViewDelegate, UICollectionViewDelegateFlowLayout{
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: view.frame.width-20, height: 300)
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if let url = URL(string: (searchResults?.articles[indexPath.row].url!)!){
-            DispatchQueue.main.async { [self] in
-                if let navigationController = navigationController{
-                    newsWebViewController.url = url
+            DispatchQueue.main.async { [weak self] in
+                guard let self = self else {return}
+
+                if let navigationController = self.navigationController{
+                    self.newsWebViewController.url = url
                     navigationController.pushViewController(self.newsWebViewController, animated: true)
                 }
             }
         }
     }
 }
-
-extension SearchViewController: UICollectionViewDataSource{
+private typealias CollectionViewDataSources = SearchViewController
+extension CollectionViewDataSources: UICollectionViewDataSource{
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return searchResults?.articles.count ?? 0
     }
@@ -212,7 +206,6 @@ extension SearchViewController: UICollectionViewDataSource{
                     self.didReachEnd = true
                 }
                 if let error = error {
-//                    didReachEnd = true
                     return
                 }
                 guard let data = data else {return}
@@ -223,15 +216,13 @@ extension SearchViewController: UICollectionViewDataSource{
             }
         }
         let cell = searchResultCollectionView.dequeueReusableCell(withReuseIdentifier: "search-cell", for: indexPath) as! HeadlineCollectionViewCell
-        cell.headlineText.text = searchResults?.articles[indexPath.row].title
-        cell.sourceLabel.text = searchResults?.articles[indexPath.row].source.name
-        cell.cellBackgroundImage.sd_setImage(with: URL(string: searchResults?.articles[indexPath.row].urlToImage ?? ""))
+        cell.setData(headlineText: searchResults?.articles[indexPath.row].title, sourceText: searchResults?.articles[indexPath.row].source.name, backgroundImgURL: searchResults?.articles[indexPath.row].urlToImage)
         return cell
     }
 }
 
-
-extension SearchViewController: UITextFieldDelegate{
+private typealias TextFieldSearchVC = SearchViewController
+extension TextFieldSearchVC: UITextFieldDelegate{
 
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         searchBar.searchTextField.resignFirstResponder()
@@ -256,7 +247,8 @@ extension SearchViewController: UITextFieldDelegate{
     }
 }
 
-extension SearchViewController: UITableViewDelegate,UITableViewDataSource{
+private typealias TableViewDelegates = SearchViewController
+extension TableViewDelegates: UITableViewDelegate,UITableViewDataSource{
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return CategoryData.data.count
     }
@@ -293,8 +285,67 @@ extension SearchViewController: UITableViewDelegate,UITableViewDataSource{
     }
 }
 
-extension SearchViewController: SourcesDelgate{
+private typealias SourceDelegates = SearchViewController
+extension SourceDelegates: SourcesDelgate {
     func didSelectSource(_ controller: UIViewController, sourceId: String) {
         selectedSourceId = sourceId
+    }
+}
+
+private typealias SearchViewControllerConstraints = SearchViewController
+extension SearchViewControllerConstraints {
+    
+    private func addConstraints(){
+        
+        NSLayoutConstraint.activate(searchBarConstraints())
+        NSLayoutConstraint.activate(loadingAnimationConstraints())
+        NSLayoutConstraint.activate(notFoundAnimationContraints())
+        NSLayoutConstraint.activate(categoriesTableViewConstraints())
+        NSLayoutConstraint.activate(searchResultCollectionViewConstraints())
+    }
+    
+    private func searchBarConstraints()->[NSLayoutConstraint]{
+        var constraints: [NSLayoutConstraint] = []
+        constraints.append(searchBar.bottomAnchor.constraint(equalTo: searchResultCollectionView.topAnchor,constant: -20))
+        constraints.append(searchBar.leadingAnchor.constraint(equalTo: self.view.leadingAnchor))
+        constraints.append(searchBar.trailingAnchor.constraint(equalTo: self.view.trailingAnchor))
+        constraints.append(searchBar.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: 20))
+        return constraints
+    }
+    
+    private func loadingAnimationConstraints()->[NSLayoutConstraint] {
+        var constraints: [NSLayoutConstraint] = []
+        constraints.append(loadingAnimationView.centerXAnchor.constraint(equalTo: view.centerXAnchor))
+        constraints.append(loadingAnimationView.centerYAnchor.constraint(equalTo: view.centerYAnchor))
+        constraints.append(loadingAnimationView.widthAnchor.constraint(equalToConstant: 60))
+        return constraints
+    }
+    
+    private func categoriesTableViewConstraints()->[NSLayoutConstraint] {
+        var constraints: [NSLayoutConstraint] = []
+        constraints.append(categoriesTableView.topAnchor.constraint(equalTo: searchBar.bottomAnchor,constant: 70))
+        constraints.append(categoriesTableView.bottomAnchor.constraint(equalTo: view.bottomAnchor))
+        constraints.append(categoriesTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor,constant: -20))
+        constraints.append(categoriesTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor,constant: 20))
+        return constraints
+    }
+    
+    private func searchResultCollectionViewConstraints()->[NSLayoutConstraint] {
+        var constraints: [NSLayoutConstraint] = []
+        constraints.append( searchResultCollectionView.topAnchor.constraint(equalTo:searchBar.bottomAnchor))
+        constraints.append(searchResultCollectionView.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor))
+        
+        constraints.append(searchResultCollectionView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor))
+        constraints.append(searchResultCollectionView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor))
+        return constraints
+    }
+    
+    private func notFoundAnimationContraints()->[NSLayoutConstraint] {
+        var constraints: [NSLayoutConstraint] = []
+        constraints.append(notFoundAnimationView.centerXAnchor.constraint(equalTo: view.centerXAnchor))
+        constraints.append(notFoundAnimationView.centerYAnchor.constraint(equalTo: view.centerYAnchor))
+        constraints.append(notFoundAnimationView.heightAnchor.constraint(equalToConstant: 60))
+        constraints.append(notFoundAnimationView.widthAnchor.constraint(equalToConstant: 60))
+        return constraints
     }
 }

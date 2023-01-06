@@ -19,10 +19,11 @@ class SourcesViewController: UIViewController {
     var category: String?
     var sources: Sources? {
         didSet{
-            DispatchQueue.main.async { [self] in
-                loadingIndicator.stop()
-                sourcesTableView.reloadData()
-                sourcesTableView.isHidden = false
+            DispatchQueue.main.async { [weak self] in
+                guard let self = self else {return}
+                self.loadingIndicator.stop()
+                self.sourcesTableView.reloadData()
+                self.sourcesTableView.isHidden = false
             }
         }
     }

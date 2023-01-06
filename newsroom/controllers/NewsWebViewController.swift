@@ -24,8 +24,9 @@ class NewsWebViewController: UIViewController, WKNavigationDelegate {
         view.addSubview(webView)
         webView.translatesAutoresizingMaskIntoConstraints = false
 
-        DispatchQueue.main.async { [self] in
-            self.title = url.absoluteString
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else {return}
+            self.title = self.url.absoluteString
             self.webView.load(URLRequest(url: self.url))
         }
         webView.allowsBackForwardNavigationGestures = true

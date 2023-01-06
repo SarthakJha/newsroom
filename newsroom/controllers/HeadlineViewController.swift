@@ -11,7 +11,6 @@ import Lottie
 
 class HeadlineViewController: UIViewController {
 
-    private var activityIndicator: UIActivityIndicatorView = UIActivityIndicatorView(style: .large)
     private var headlineCollectionView: UICollectionView!
     private var loadingAnimationView: LottieAnimationView!
     private var newsWebViewController: NewsWebViewController!
@@ -20,13 +19,14 @@ class HeadlineViewController: UIViewController {
     private var refreshController: UIRefreshControl = UIRefreshControl()
     private var topHeadlineData: ArticleResponse? {
         didSet{
-            DispatchQueue.main.async {[self] in
-                
-                headlineCollectionView.isHidden = false
-                headlineCollectionView.reloadData()
-                loadingAnimationView.stop()
-                loadingAnimationView.isHidden = true
-                refreshController.endRefreshing()
+            DispatchQueue.main.async {[weak self] in
+                guard let self = self else {return}
+
+                self.headlineCollectionView.isHidden = false
+                self.headlineCollectionView.reloadData()
+                self.loadingAnimationView.stop()
+                self.loadingAnimationView.isHidden = true
+                self.refreshController.endRefreshing()
             }
         }
     }
@@ -65,7 +65,6 @@ class HeadlineViewController: UIViewController {
         loadingAnimationView.translatesAutoresizingMaskIntoConstraints = false
         
         newsWebViewController = NewsWebViewController()
-        view.addSubview(activityIndicator)
         let flowLayout = UICollectionViewFlowLayout()
         flowLayout.scrollDirection = .vertical
         flowLayout.minimumLineSpacing = 20
@@ -80,8 +79,6 @@ class HeadlineViewController: UIViewController {
         
         refreshController.addTarget(self, action: #selector(refreshScreen), for: .valueChanged)
         headlineCollectionView.translatesAutoresizingMaskIntoConstraints = false
-        activityIndicator.center = view.center
-        activityIndicator.backgroundColor = .red
         self.headlineCollectionView.delegate = self
         self.headlineCollectionView.dataSource = self
         self.headlineCollectionView.register(HeadlineCollectionViewCell.self, forCellWithReuseIdentifier: "headline-cell")
@@ -188,14 +185,7 @@ extension HeadlineViewController: UICollectionViewDataSource{
             }
         }
         let cell = headlineCollectionView.dequeueReusableCell(withReuseIdentifier: "headline-cell", for: indexPath) as! HeadlineCollectionViewCell
-        cell.headlineText.text = topHeadlineData?.articles[indexPath.row].title
-        if let imageUrl = topHeadlineData?.articles[indexPath.row].urlToImage{
-            cell.cellBackgroundImage.sd_setImage(with: URL(string: imageUrl))
-        }else{
-            cell.cellBackgroundImage.image = UIImage(named: "news-default")
-        }
-        cell.cellBackgroundImage.sd_setImage(with: URL(string: topHeadlineData?.articles[indexPath.row].urlToImage ?? ""))
-        cell.sourceLabel.text = topHeadlineData?.articles[indexPath.row].source.name ?? ""
+        cell.setData(headlineText: topHeadlineData?.articles[indexPath.row].title, sourceText:  topHeadlineData?.articles[indexPath.row].source.name, backgroundImgURL: topHeadlineData?.articles[indexPath.row].urlToImage)
         return cell
     }
     

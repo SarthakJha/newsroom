@@ -37,7 +37,7 @@ final class NetworkManager {
             queryItems.append(URLQueryItem(name: "category", value: "entertainment"))
         }
         
-        if let countryCode = countryCode{
+        if let countryCode = countryCode {
             queryItems.append(URLQueryItem(name: "country", value: countryCode))
         }
         if let page = page{

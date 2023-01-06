@@ -47,6 +47,7 @@ class SearchBarView: UIView {
         textField.textColor = .black
         textField.backgroundColor = .white
         textField.layer.cornerRadius = 10
+        textField.clearButtonMode = .whileEditing
         textField.translatesAutoresizingMaskIntoConstraints = false
         textField.attributedPlaceholder = NSAttributedString(
             string: String(localized: "SEARCH_BAR_PLACEHOLDER_TEXT"),

@@ -10,12 +10,10 @@ import SDWebImage
 
 class HeadlineCollectionViewCell: UICollectionViewCell {
     
-    var cellImageURL: String?
-    var headlineLabelText: String?
+    private var cellImageURL: String?
+    private var headlineLabelText: String?
     
-    
-
-    var headlineText: UILabel = {
+    private var headlineText: UILabel = {
         var label = UILabel()
         label.textColor = .black
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -26,23 +24,14 @@ class HeadlineCollectionViewCell: UICollectionViewCell {
         return label
     }()
     
-    var fullNewsIcon: UIImageView = {
-        let imageView = UIImageView(image: UIImage(named: "next-icon"))
-        imageView.frame = CGRect(x: 0, y: 0, width: 5, height: 5)
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.clipsToBounds = true
-        imageView.contentMode = .scaleAspectFill
-        return imageView
-    }()
-    
-    var fullNewsButton: UIButton = {
+    private var fullNewsButton: UIButton = {
         var button = UIButton()
         button.frame = CGRect(x: 0, y: 0, width: 5, height: 5)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
     
-    var cellBackgroundImage: UIImageView = {
+    private var cellBackgroundImage: UIImageView = {
         let imageview = UIImageView()
         imageview.translatesAutoresizingMaskIntoConstraints = false
         imageview.sizeToFit()
@@ -51,7 +40,7 @@ class HeadlineCollectionViewCell: UICollectionViewCell {
         return imageview
     }()
     
-    var sourceLabel: UILabel = {
+    private var sourceLabel: UILabel = {
        var label = UILabel()
         label.numberOfLines = 1
         label.textColor = .systemGray
@@ -60,10 +49,9 @@ class HeadlineCollectionViewCell: UICollectionViewCell {
 
         return label
     }()
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
-        
-
         self.backgroundColor = .black
         self.layer.cornerRadius = 40
         self.addSubview(cellBackgroundImage)
@@ -74,8 +62,13 @@ class HeadlineCollectionViewCell: UICollectionViewCell {
         cellBackgroundImage.clipsToBounds = true
     }
     
+    func setData(headlineText: String?, sourceText: String?, backgroundImgURL: String?){
+        self.headlineText.text = headlineText
+        self.sourceLabel.text = sourceText
+        self.cellBackgroundImage.sd_setImage(with: URL(string: backgroundImgURL ?? ""))
+    }
     
-    func constraintsCell(){
+    private func constraintsCell(){
         let constraints: [NSLayoutConstraint] = [
             headlineText.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -20),
             headlineText.leadingAnchor.constraint(equalTo: self.leadingAnchor,constant: 20),

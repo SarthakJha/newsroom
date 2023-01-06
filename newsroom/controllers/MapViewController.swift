@@ -16,10 +16,15 @@ protocol MapViewControllerDelegate {
 
 class MapViewController: UIViewController {
     
-    private var activityIndicator: UIActivityIndicatorView = UIActivityIndicatorView(style: .large)
     private var newsWebViewController: NewsWebViewController!
     private var marker: GMSMarker!
     private var mapresultViewController: MapResultViewController!
+    private let configuration = ToastConfiguration(
+        autoHide: true,
+        enablePanToClose: true,
+        displayTime: 3,
+        animationTime: 0.2
+    )
     private var currentCamera: GMSCameraPosition? {
         didSet{
             guard let currentCamera = currentCamera else {return}
@@ -29,6 +34,7 @@ class MapViewController: UIViewController {
     }
     
     private lazy var mapView: GMSMapView = {
+        var mapview = GMSMapView(frame: view.frame)
         return GMSMapView(frame: view.frame)
     }()
     private lazy var defaultCamera: GMSCameraPosition = {
@@ -44,18 +50,18 @@ class MapViewController: UIViewController {
     private var newsItems: ArticleResponse? {
         didSet{
 
-            DispatchQueue.main.async { [self] in
-                mapresultViewController.articleResponse = newsItems
+            DispatchQueue.main.async { [weak self] in
+                guard let self = self else {return}
+
+                self.mapresultViewController.articleResponse = self.newsItems
                 
-                if let sheet = mapresultViewController?.sheetPresentationController{
+                if let sheet = self.mapresultViewController?.sheetPresentationController{
                     sheet.detents = [.medium(),.large()]
                 }
-                guard let mapresultViewController = mapresultViewController else {return}
+                guard let mapresultViewController = self.mapresultViewController else {return}
                 mapresultViewController.didReachEnd = self.didReachEnd
-                view.isUserInteractionEnabled = true
-                view.alpha = 1
-                activityIndicator.stopAnimating()
-                present(mapresultViewController, animated: true)
+                GeneralUtility.makeViewActive(view: &(self.view))
+                self.present(mapresultViewController, animated: true)
             }
         }
     }
@@ -86,8 +92,6 @@ class MapViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.addSubview(activityIndicator)
-        activityIndicator.backgroundColor = .red
         newsWebViewController = NewsWebViewController()
         mapresultViewController = MapResultViewController()
         mapresultViewController.delegate = self
@@ -104,68 +108,56 @@ class MapViewController: UIViewController {
 
 extension MapViewController: GMSMapViewDelegate {
     func mapView(_ mapView: GMSMapView, didTapAt coordinate: CLLocationCoordinate2D) {
-        DispatchQueue.main.async { [self] in
-            self.view.isUserInteractionEnabled = false
-            view.alpha = 0.7
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else {return}
+            GeneralUtility.makeViewInactive(view: &(self.view))
         }
         currentCamera = GMSCameraPosition(latitude: coordinate.latitude, longitude: coordinate.longitude, zoom: 4)
-        let configuration = ToastConfiguration(
-            autoHide: true,
-            enablePanToClose: true,
-            displayTime: 3,
-            animationTime: 0.2
-        )
         MapViewController.getISO3166CountryCode(coordinates: coordinate) { countryCode, country in
             if (countryCode == ""){
-                let toast = Toast.default(image: nil, title: String(localized: "TOAST_UNKNOWN_LOCATION_TITLE"), subtitle: String(localized: "TOAST_UNKNOWN_LOCATION_DESCRIPTION"),configuration: configuration)
-                toast.enableTapToClose()
-                self.view.alpha = 1
-                self.view.isUserInteractionEnabled = true
-                toast.show(haptic: .error)
-                
+                ToastHandler.performToast(toastTitle: String(localized: "TOAST_UNKNOWN_LOCATION_TITLE"), toastDescription: String(localized: "TOAST_UNKNOWN_LOCATION_DESCRIPTION"), toastConfig: self.configuration)
+                GeneralUtility.makeViewActive(view: &(self.view))
                 return
             }
             self.marker.title = country
-            self.activityIndicator.startAnimating()
             NewsroomAPIService.APIManager.fetchHeadlines(category: nil, countryCode: countryCode, page: 1) { response, error in
                 if let error = error{
-                    let toast = Toast.default(image: nil, title: String(localized: "TOAST_INTERNAL_ERROR_TITLE"), subtitle: String(localized: "TOAST_INTERNAL_ERROR_DESCRIPTION"),configuration: configuration)
-                    toast.enableTapToClose()
-                    self.view.alpha = 1
-                    self.view.isUserInteractionEnabled = true
                     DispatchQueue.main.async {
-                        toast.show(haptic: .error)
+                        GeneralUtility.makeViewActive(view: &(self.view))
+                        ToastHandler.performToast(toastTitle: String(localized: "TOAST_INTERNAL_ERROR_TITLE"), toastDescription: String(localized: "TOAST_INTERNAL_ERROR_DESCRIPTION"), toastConfig: self.configuration)
                     }
                     return
                 }
-                if response?.status == .ok && (response?.totalResults)! > 0{
-                    self.newsItems = response
-                    if((self.newsItems?.articles.count)! == (self.newsItems?.totalResults!)!){
-                        self.didReachEnd = true
-                    }
-                }else{
-                    DispatchQueue.main.async {
-                        
-                        let toast = Toast.default(image: nil, title: String(localized: "TOAST_NOT_FOUND_TITLE"), subtitle: NSLocalizedString("TOAST_UNKNOWN_LOCATION_DESCRIPTION", comment: ""),configuration: configuration)
-                        toast.enableTapToClose()
-                        self.view.isUserInteractionEnabled = true
-                        self.view.alpha = 1
-                        toast.show(haptic: .error)
-                    }
-                }
+                self.handleResponse(response: response)
             }
         }
         
+    }
+    
+    private func handleResponse(response: ArticleResponse?) {
+        guard let response = response else {return}
+        if response.status == .ok && (response.totalResults)! > 0{
+            self.newsItems = response
+            if((self.newsItems?.articles.count)! == (self.newsItems?.totalResults!)!){
+                self.didReachEnd = true
+            }
+        }else{
+            DispatchQueue.main.async {
+                GeneralUtility.makeViewActive(view: &(self.view))
+                ToastHandler.performToast(toastTitle: String(localized: "TOAST_NOT_FOUND_TITLE"), toastDescription: NSLocalizedString("TOAST_UNKNOWN_LOCATION_DESCRIPTION", comment: ""), toastConfig: self.configuration)
+            }
+        }
     }
 }
 
 extension MapViewController: MapViewControllerDelegate{
     func didTapOnSearchResults(_ viewContrller: UIViewController, indexPath: IndexPath) {
         mapresultViewController.dissmissSheet()
-        DispatchQueue.main.async { [self] in
-            if let navigationController = navigationController{
-                newsWebViewController.url = URL(string: (newsItems?.articles[indexPath.row].url)!)
-                navigationController.pushViewController(newsWebViewController, animated: true)
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else {return}
+            if let navigationController = self.navigationController{
+                self.newsWebViewController.url = URL(string: (self.newsItems?.articles[indexPath.row].url)!)
+                navigationController.pushViewController(self.newsWebViewController, animated: true)
             }
         }
     }
