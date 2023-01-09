@@ -72,9 +72,6 @@ class MapResultViewController: UIViewController, UICollectionViewDelegate, UICol
             }
         }
         let cell = newsCollectionView.dequeueReusableCell(withReuseIdentifier: "map-cell", for: indexPath) as! HeadlineCollectionViewCell
-//        cell.headlineText.text = articleResponse?.articles[indexPath.row].title
-//        cell.sourceLabel.text = articleResponse?.articles[indexPath.row].source.name
-//        cell.cellBackgroundImage.sd_setImage(with: URL(string: articleResponse?.articles[indexPath.row].urlToImage ?? ""))
         cell.setData(headlineText: articleResponse?.articles[indexPath.row].title, sourceText: articleResponse?.articles[indexPath.row].source.name, backgroundImgURL: articleResponse?.articles[indexPath.row].urlToImage)
         return cell
     }

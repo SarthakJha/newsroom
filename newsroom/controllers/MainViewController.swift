@@ -8,11 +8,32 @@
 import UIKit
 
 class MainViewController: UITabBarController, UITabBarControllerDelegate {
+    private var noInternetView: NoInternetView = {
+       var view = NoInternetView()
+        view.backgroundColor = .white
+        view.isHidden = true
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        NotificationCenter.default.addObserver(self, selector: #selector(internetStatus), name: NSNotification.Name("isConnected"), object: nil)
+        view.addSubview(noInternetView)
+        noInternetView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+        noInternetView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        noInternetView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+        noInternetView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+
     }
     
+    @objc private func internetStatus(){
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else {return}
+            self.noInternetView.startView()
+
+        }
+    }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         if let navigationController = navigationController {
@@ -35,5 +56,6 @@ class MainViewController: UITabBarController, UITabBarControllerDelegate {
         tabBar.backgroundColor = UIColor(white: 1, alpha: 1)
         tabBar.tintColor = .black
     }
+    
 }
 

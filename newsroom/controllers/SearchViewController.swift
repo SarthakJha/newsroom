@@ -129,10 +129,6 @@ class SearchViewController: UIViewController {
         addConstraints()
     }
 
-   
-    
-    
-
     @objc private func searchButtonPressed(){
         currentPage = 1
         guard let searchText = searchBar.searchTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines) else {return}
