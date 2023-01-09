@@ -27,5 +27,5 @@
 "TOAST_NOT_FOUND_DESCRIPTION" = "No news articles could be found";
 "TOAST_INTERNAL_ERROR_DESCRIPTION" = "Something went wrong";
 "TOAST_UNKNOWN_LOCATION_DESCRIPTION" = "No articles found for selected location";
-
+"SOURCE_PLACEHOLDER" = "source:";
 

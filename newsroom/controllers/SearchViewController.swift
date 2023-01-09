@@ -49,7 +49,8 @@ class SearchViewController: UIViewController {
                     self.searchBar.searchButton.isEnabled = true
                     self.searchBar.searchButton.alpha = 1
                 }
-                self.sourceLabel.text = "    source: \(self.selectedSourceId ?? "")"
+                
+                self.sourceLabel.text = "    \(String(localized: "SOURCE_PLACEHOLDER")) \(self.selectedSourceId ?? "")"
             }
         }
     }
