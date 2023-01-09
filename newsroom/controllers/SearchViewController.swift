@@ -22,6 +22,15 @@ class SearchViewController: UIViewController {
 
         return view
     }()
+    private var sourceLabel: UILabel = {
+        var label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.numberOfLines = 1
+        label.textColor = .gray
+        label.layer.cornerRadius = 20
+        label.font = UIFont(name: "Avenir", size: 20)
+        return label
+    }()
     private var newsWebViewController: NewsWebViewController! = NewsWebViewController()
     private var categoriesTableView: UITableView! = {
         var tableView = UITableView()
@@ -40,6 +49,7 @@ class SearchViewController: UIViewController {
                     self.searchBar.searchButton.isEnabled = true
                     self.searchBar.searchButton.alpha = 1
                 }
+                self.sourceLabel.text = "    source: \(self.selectedSourceId ?? "")"
             }
         }
     }
@@ -115,6 +125,7 @@ class SearchViewController: UIViewController {
         view.addSubview(searchResultCollectionView)
         view.addSubview(searchBar)
         view.addSubview(categoriesTableView)
+        view.addSubview(sourceLabel)
         
         // setting tableview/collectionview delegates
         categoriesTableView.delegate = self
@@ -302,7 +313,7 @@ extension SearchViewControllerConstraints {
     
     private func searchBarConstraints()->[NSLayoutConstraint]{
         var constraints: [NSLayoutConstraint] = []
-        constraints.append(searchBar.bottomAnchor.constraint(equalTo: searchResultCollectionView.topAnchor,constant: -20))
+        constraints.append(searchBar.bottomAnchor.constraint(equalTo: sourceLabel.topAnchor,constant: -5))
         constraints.append(searchBar.leadingAnchor.constraint(equalTo: self.view.leadingAnchor))
         constraints.append(searchBar.trailingAnchor.constraint(equalTo: self.view.trailingAnchor))
         constraints.append(searchBar.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: 20))
@@ -328,7 +339,7 @@ extension SearchViewControllerConstraints {
     
     private func searchResultCollectionViewConstraints()->[NSLayoutConstraint] {
         var constraints: [NSLayoutConstraint] = []
-        constraints.append( searchResultCollectionView.topAnchor.constraint(equalTo:searchBar.bottomAnchor))
+        constraints.append( searchResultCollectionView.topAnchor.constraint(equalTo:sourceLabel.bottomAnchor,constant: 15))
         constraints.append(searchResultCollectionView.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor))
         
         constraints.append(searchResultCollectionView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor))
@@ -342,6 +353,15 @@ extension SearchViewControllerConstraints {
         constraints.append(notFoundAnimationView.centerYAnchor.constraint(equalTo: view.centerYAnchor))
         constraints.append(notFoundAnimationView.heightAnchor.constraint(equalToConstant: 60))
         constraints.append(notFoundAnimationView.widthAnchor.constraint(equalToConstant: 60))
+        return constraints
+    }
+    
+    private func sourceLabelConstraints()->[NSLayoutConstraint] {
+        var constraints: [NSLayoutConstraint] = []
+        constraints.append(sourceLabel.topAnchor.constraint(equalTo:searchBar.bottomAnchor))
+        constraints.append(sourceLabel.bottomAnchor.constraint(equalTo: self.categoriesTableView.topAnchor))
+        constraints.append(sourceLabel.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 20))
+        constraints.append(sourceLabel.trailingAnchor.constraint(equalTo: self.view.trailingAnchor))
         return constraints
     }
 }
