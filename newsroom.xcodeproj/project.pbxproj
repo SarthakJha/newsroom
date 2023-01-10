@@ -14,6 +14,7 @@
 		624F39E5296B61A9003DD51B /* networkMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 624F39E4296B61A9003DD51B /* networkMonitor.swift */; };
 		624F39EB296BE168003DD51B /* NoInternetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 624F39EA296BE168003DD51B /* NoInternetView.swift */; };
 		624F39ED296BE216003DD51B /* noInternet.json in Resources */ = {isa = PBXBuildFile; fileRef = 624F39EC296BE216003DD51B /* noInternet.json */; };
+		624F39F5296D3834003DD51B /* debouncer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 624F39F4296D3834003DD51B /* debouncer.swift */; };
 		6253859C2951AFB1008DA6BB /* SearchBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6253859B2951AFB1008DA6BB /* SearchBarView.swift */; };
 		625620E72954256F002FA17D /* countryData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 625620E62954256F002FA17D /* countryData.swift */; };
 		625620E9295428D2002FA17D /* MapResultViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 625620E8295428D2002FA17D /* MapResultViewController.swift */; };
@@ -74,6 +75,7 @@
 		624F39E4296B61A9003DD51B /* networkMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = networkMonitor.swift; sourceTree = "<group>"; };
 		624F39EA296BE168003DD51B /* NoInternetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoInternetView.swift; sourceTree = "<group>"; };
 		624F39EC296BE216003DD51B /* noInternet.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = noInternet.json; sourceTree = "<group>"; };
+		624F39F4296D3834003DD51B /* debouncer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = debouncer.swift; sourceTree = "<group>"; };
 		6253859B2951AFB1008DA6BB /* SearchBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBarView.swift; sourceTree = "<group>"; };
 		625620E62954256F002FA17D /* countryData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = countryData.swift; sourceTree = "<group>"; };
 		625620E8295428D2002FA17D /* MapResultViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapResultViewController.swift; sourceTree = "<group>"; };
@@ -262,6 +264,7 @@
 				62F25CC42967FAB40022E97A /* toast.swift */,
 				62F25CC6296803390022E97A /* generalUtility.swift */,
 				624F39E4296B61A9003DD51B /* networkMonitor.swift */,
+				624F39F4296D3834003DD51B /* debouncer.swift */,
 			);
 			path = utils;
 			sourceTree = "<group>";
@@ -589,6 +592,7 @@
 				62798514294C35DF007EDA41 /* HeadlineViewController.swift in Sources */,
 				620A334829504498009F6BFF /* category.swift in Sources */,
 				62798512294C34DB007EDA41 /* MapViewController.swift in Sources */,
+				624F39F5296D3834003DD51B /* debouncer.swift in Sources */,
 				62798519294C3D35007EDA41 /* NewsroomAPIService.swift in Sources */,
 				62FF7D4B29598B82000D2E16 /* CollectionHeaderCollectionReusableView.swift in Sources */,
 				624F39EB296BE168003DD51B /* NoInternetView.swift in Sources */,

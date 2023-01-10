@@ -15,6 +15,7 @@ class SearchViewController: UIViewController {
      Allow user to filter search based on category and sources
      */
     
+    private var debouncer: Debouncer?
     private var searchBar:SearchBarView! = {
         var view = SearchBarView()
         view.searchButton.isEnabled = false
@@ -119,7 +120,7 @@ class SearchViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
-        
+        debouncer = Debouncer(delay: 1, callback: handleSearch)
         // adding subviews
         view.addSubview(notFoundAnimationView)
         view.addSubview(loadingAnimationView)
@@ -142,6 +143,11 @@ class SearchViewController: UIViewController {
     }
 
     @objc private func searchButtonPressed(){
+        handleSearch()
+        searchBar.searchTextField.resignFirstResponder()
+    }
+    
+    private func handleSearch(){
         currentPage = 1
         guard let searchText = searchBar.searchTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines) else {return}
         guard let selectedCategoryIndexPath = selectedCategoryIndexPath else {return}
@@ -175,9 +181,7 @@ class SearchViewController: UIViewController {
             self.searchResults = data
         }
         categoriesTableView.isHidden = true
-        searchBar.searchTextField.resignFirstResponder()
     }
-    
 }
 
 private typealias CollectionViewDelegates = SearchViewController
@@ -250,7 +254,10 @@ extension TextFieldSearchVC: UITextFieldDelegate{
             if let selectedSourceId = selectedSourceId{
                 searchBar.searchButton.isEnabled = true
                 searchBar.searchButton.alpha = 1
+                guard let debouncer = debouncer else {return}
+                debouncer.call()
             }
+            
         }
     }
 }
