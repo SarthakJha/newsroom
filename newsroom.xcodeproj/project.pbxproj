@@ -19,7 +19,6 @@
 		625620E72954256F002FA17D /* countryData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 625620E62954256F002FA17D /* countryData.swift */; };
 		625620E9295428D2002FA17D /* MapResultViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 625620E8295428D2002FA17D /* MapResultViewController.swift */; };
 		627984DD294C27A1007EDA41 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 627984DC294C27A1007EDA41 /* AppDelegate.swift */; };
-		627984DF294C27A1007EDA41 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 627984DE294C27A1007EDA41 /* SceneDelegate.swift */; };
 		627984E1294C27A1007EDA41 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 627984E0294C27A1007EDA41 /* MainViewController.swift */; };
 		627984E6294C27A2007EDA41 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 627984E5294C27A2007EDA41 /* Assets.xcassets */; };
 		627984E9294C27A2007EDA41 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 627984E7294C27A2007EDA41 /* LaunchScreen.storyboard */; };
@@ -81,7 +80,6 @@
 		625620E8295428D2002FA17D /* MapResultViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapResultViewController.swift; sourceTree = "<group>"; };
 		627984D9294C27A1007EDA41 /* newsroom.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = newsroom.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		627984DC294C27A1007EDA41 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		627984DE294C27A1007EDA41 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		627984E0294C27A1007EDA41 /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
 		627984E5294C27A2007EDA41 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		627984E8294C27A2007EDA41 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -204,7 +202,6 @@
 				6279850E294C321B007EDA41 /* controllers */,
 				6279850D294C3209007EDA41 /* views */,
 				627984DC294C27A1007EDA41 /* AppDelegate.swift */,
-				627984DE294C27A1007EDA41 /* SceneDelegate.swift */,
 				627984E5294C27A2007EDA41 /* Assets.xcassets */,
 				627984E7294C27A2007EDA41 /* LaunchScreen.storyboard */,
 				627984EA294C27A2007EDA41 /* Info.plist */,
@@ -609,7 +606,6 @@
 				627984DD294C27A1007EDA41 /* AppDelegate.swift in Sources */,
 				62798510294C33B1007EDA41 /* SearchViewController.swift in Sources */,
 				62F25CB52961D7DD0022E97A /* Sources.swift in Sources */,
-				627984DF294C27A1007EDA41 /* SceneDelegate.swift in Sources */,
 				624F39E5296B61A9003DD51B /* networkMonitor.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

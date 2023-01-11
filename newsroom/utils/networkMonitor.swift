@@ -5,9 +5,8 @@
 //  Created by Sarthak Jha on 09/01/23.
 //
 
-import Foundation
-import Network
 import NotificationCenter
+import Network
 
 public class NetworkMonitor {
     public static let shared = NetworkMonitor()

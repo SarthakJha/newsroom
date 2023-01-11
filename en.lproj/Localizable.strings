@@ -12,7 +12,7 @@
 "TAB_BAR_SEARCH_TEXT" = "Search";
 "TAB_BAR_MAP_TEXT" = "Map";
 "TAB_BAR_HEADLINES_TEXT" = "Headlines";
-"CATEGORY_TABLE_VIEW_TITLE" = "Select category";
+"CATEGORY_TABLE_VIEW_TITLE" = "Select category:";
 "CATEGORY_BUSINESS" = "business";
 "CATEGORY_ENTERTAINMENT" = "entertainment";
 "CATEGORY_GENERAL" = "general";

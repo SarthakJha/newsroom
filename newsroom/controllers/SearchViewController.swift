@@ -33,7 +33,7 @@ class SearchViewController: UIViewController {
         return label
     }()
     private var newsWebViewController: NewsWebViewController! = NewsWebViewController()
-    private var categoriesTableView: UITableView! = {
+    private var categoriesTableView: UITableView = {
         var tableView = UITableView()
         tableView.backgroundColor = .white
         tableView.isScrollEnabled = false
@@ -203,6 +203,8 @@ extension CollectionViewDelegates: UICollectionViewDelegate, UICollectionViewDel
         }
     }
 }
+
+
 private typealias CollectionViewDataSources = SearchViewController
 extension CollectionViewDataSources: UICollectionViewDataSource{
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -266,6 +268,16 @@ private typealias TableViewDelegates = SearchViewController
 extension TableViewDelegates: UITableViewDelegate,UITableViewDataSource{
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return CategoryData.data.count
+    }
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let view = UIView(frame: CGRect(x: 0, y: 0, width: tableView.frame.width, height: 50))
+        let label = UILabel()
+        label.frame = CGRect.init(x: 5, y: 5, width: tableView.frame.width-10, height: 30)
+        label.text = String(localized: "CATEGORY_TABLE_VIEW_TITLE")
+        label.font = UIFont(name: "Avenir", size: 20)
+        label.textColor = .black
+        view.addSubview(label)
+        return view
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -338,7 +350,7 @@ extension SearchViewControllerConstraints {
     
     private func categoriesTableViewConstraints()->[NSLayoutConstraint] {
         var constraints: [NSLayoutConstraint] = []
-        constraints.append(categoriesTableView.topAnchor.constraint(equalTo: searchBar.bottomAnchor,constant: 70))
+        constraints.append(categoriesTableView.topAnchor.constraint(equalTo: sourceLabel.bottomAnchor, constant: 20))
         constraints.append(categoriesTableView.bottomAnchor.constraint(equalTo: view.bottomAnchor))
         constraints.append(categoriesTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor,constant: -20))
         constraints.append(categoriesTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor,constant: 20))

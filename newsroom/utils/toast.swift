@@ -10,7 +10,7 @@ import Toast
 
 
 public final class ToastHandler {
-    
+
     @MainActor static func performToast(toastTitle title: String, toastDescription desc: String, toastConfig config: ToastConfiguration) {
         
         let toast = Toast.default(image: nil, title: title, subtitle: desc,configuration: config)
