@@ -7,7 +7,7 @@
 
 import Foundation
 
-public class Debouncer: NSObject {
+final class Debouncer: NSObject {
     public var callback: (() -> Void)
     public var delay: Double
     public weak var timer: Timer?

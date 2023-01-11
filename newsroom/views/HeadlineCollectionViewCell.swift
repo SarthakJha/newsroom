@@ -8,7 +8,7 @@
 import UIKit
 import SDWebImage
 
-class HeadlineCollectionViewCell: UICollectionViewCell {
+final class HeadlineCollectionViewCell: UICollectionViewCell {
     
     private var cellImageURL: String?
     private var headlineLabelText: String?

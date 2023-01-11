@@ -14,7 +14,7 @@ protocol MapViewControllerDelegate {
     func didTapOnSearchResults(_ viewContrller: UIViewController, indexPath: IndexPath)
 }
 
-class MapViewController: UIViewController {
+final class MapViewController: UIViewController {
     
     private var newsWebViewController: NewsWebViewController!
     private var marker: GMSMarker!

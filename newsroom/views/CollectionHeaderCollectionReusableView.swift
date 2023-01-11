@@ -7,7 +7,7 @@
 
 import UIKit
 
-class CollectionHeaderCollectionReusableView: UICollectionReusableView {
+final class CollectionHeaderCollectionReusableView: UICollectionReusableView {
     override init(frame: CGRect) {
         super.init(frame: frame)
     }

@@ -8,7 +8,7 @@
 import UIKit
 import WebKit
 
-class NewsWebViewController: UIViewController, WKNavigationDelegate {
+final class NewsWebViewController: UIViewController, WKNavigationDelegate {
 
     var webView: WKWebView!
     var navBar: UINavigationBar!

@@ -7,7 +7,7 @@
 
 import UIKit
 
-class SearchBarView: UIView {
+final class SearchBarView: UIView {
 
     override init(frame: CGRect) {
         super.init(frame: frame)

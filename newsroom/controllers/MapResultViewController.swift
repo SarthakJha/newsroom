@@ -8,7 +8,7 @@
 import UIKit
 import CoreLocation
 
-class MapResultViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource {
+final class MapResultViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource {
     var delegate:MapViewControllerDelegate!
     private var currentPage: Int?
     private var newsCollectionView: UICollectionView!

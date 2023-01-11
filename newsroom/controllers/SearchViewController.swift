@@ -9,7 +9,7 @@ import UIKit
 import Lottie
 import Toast
 
-class SearchViewController: UIViewController {
+final class SearchViewController: UIViewController {
 
     /**
      Allow user to filter search based on category and sources

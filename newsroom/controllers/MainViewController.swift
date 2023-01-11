@@ -7,7 +7,7 @@
 
 import UIKit
 
-class MainViewController: UITabBarController, UITabBarControllerDelegate {
+final class MainViewController: UITabBarController, UITabBarControllerDelegate {
     private var noInternetView: NoInternetView = {
        var view = NoInternetView()
         view.backgroundColor = .white

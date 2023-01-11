@@ -9,7 +9,7 @@ import Foundation
 import Toast
 
 
-public final class ToastHandler {
+final class ToastHandler {
 
     @MainActor static func performToast(toastTitle title: String, toastDescription desc: String, toastConfig config: ToastConfiguration) {
         

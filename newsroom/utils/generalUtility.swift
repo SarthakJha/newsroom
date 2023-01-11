@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-public class GeneralUtility {
+final class GeneralUtility {
     static func makeViewInactive(view: inout UIView){
         view.alpha = 0.7
         view.isUserInteractionEnabled = false

@@ -8,7 +8,7 @@
 import NotificationCenter
 import Network
 
-public class NetworkMonitor {
+final class NetworkMonitor {
     public static let shared = NetworkMonitor()
     
     let monitor = NWPathMonitor()

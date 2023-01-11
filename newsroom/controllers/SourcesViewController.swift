@@ -11,7 +11,7 @@ import Lottie
 protocol SourcesDelgate {
     func didSelectSource(_ controller: UIViewController, sourceId: String)
 }
-class SourcesViewController: UIViewController {
+final class SourcesViewController: UIViewController {
     var delegate: SourcesDelgate?
     var loadingIndicator: LottieAnimationView!
     var selectedSourceId: String?

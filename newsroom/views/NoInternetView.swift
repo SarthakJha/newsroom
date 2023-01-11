@@ -9,7 +9,7 @@ import UIKit
 import Lottie
 import Toast
 
-class NoInternetView: UIView {
+final class NoInternetView: UIView {
     
     private var noInternetLottie: LottieAnimationView = {
         var view = LottieAnimationView.init(name: "noInternet")

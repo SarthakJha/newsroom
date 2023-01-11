@@ -9,7 +9,7 @@ import UIKit
 import Toast
 import Lottie
 
-class HeadlineViewController: UIViewController {
+final class HeadlineViewController: UIViewController {
 
     private var headlineCollectionView: UICollectionView!
     private var loadingAnimationView: LottieAnimationView!
