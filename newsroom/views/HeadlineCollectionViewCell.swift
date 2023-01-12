@@ -67,6 +67,11 @@ final class HeadlineCollectionViewCell: UICollectionViewCell {
         self.sourceLabel.text = sourceText
         self.cellBackgroundImage.sd_setImage(with: URL(string: backgroundImgURL ?? ""))
     }
+    func setDataNew(article: Article){
+        self.headlineText.text = article.title
+        self.sourceLabel.text = article.source.name
+        self.cellBackgroundImage.sd_setImage(with: URL(string: article.urlToImage ?? ""))
+    }
     
     private func constraintsCell(){
         let constraints: [NSLayoutConstraint] = [

@@ -9,7 +9,7 @@ import UIKit
 
 class SampleViewController: UIViewController {
     
-    var newsViewCollection: NewsCollectionViewController!
+    var newsViewCollection: NewsViewController!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -17,7 +17,7 @@ class SampleViewController: UIViewController {
         let flowLayout = UICollectionViewFlowLayout()
         flowLayout.scrollDirection = .vertical
         flowLayout.minimumLineSpacing = 20
-        newsViewCollection = NewsCollectionViewController(collectionViewLayout: flowLayout)
+        newsViewCollection = NewsViewController(collectionViewLayout: flowLayout)
         newsViewCollection.setControllerType(controllerType: .topHeadlines)
         view.addSubview(newsViewCollection.collectionView)
         
