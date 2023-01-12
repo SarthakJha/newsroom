@@ -42,6 +42,7 @@ final class MainViewController: UITabBarController, UITabBarControllerDelegate {
         let searchVC = SearchViewController()
         let mapVC = MapViewController()
         let headlineVC = HeadlineViewController()
+        let sampleVC = SampleViewController()
         
         let searchBarItem = UITabBarItem(title: String(localized: "TAB_BAR_SEARCH_TEXT"), image: UIImage(systemName: "magnifyingglass"), selectedImage: UIImage(systemName: "magnifyingglass.fill"))
         searchVC.tabBarItem = searchBarItem
@@ -52,7 +53,11 @@ final class MainViewController: UITabBarController, UITabBarControllerDelegate {
         let mapBarItem = UITabBarItem(title: String(localized: "TAB_BAR_HEADLINES_TEXT"), image: UIImage(systemName: "bolt") ,selectedImage: UIImage(systemName: "bolt.fill"))
         headlineVC.tabBarItem = mapBarItem
         
-        self.viewControllers = [searchVC, mapVC ,headlineVC]
+        // MARK:sample
+        let sampleItem = UITabBarItem(title: "sample", image: nil, selectedImage: nil)
+        sampleVC.tabBarItem = sampleItem
+        
+        self.viewControllers = [searchVC, mapVC, headlineVC, sampleVC]
         tabBar.backgroundColor = UIColor(white: 1, alpha: 1)
         tabBar.tintColor = .black
     }
