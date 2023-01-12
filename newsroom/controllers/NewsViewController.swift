@@ -11,6 +11,7 @@ private let reuseIdentifier = "news-cell"
 
 protocol ViewModelDelegate {
     func reloadCollectionview()
+    func stopRefreshing()
 }
 
 class NewsViewController: UICollectionViewController {
@@ -19,16 +20,21 @@ class NewsViewController: UICollectionViewController {
     private var sourceId: String?
     private var searchText: String?
     private var countryCode: String?
+    private var refreshController: UIRefreshControl = {
+        var rc = UIRefreshControl()
+        return rc
+    }()
     private var newsViewModel: NewsViewmodel?
     
     private var controllerType: NewsControllerType?
-    
         
     override func viewDidLoad() {
         
         super.viewDidLoad()
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(collectionView)
+        
+        collectionView.refreshControl = refreshController
         collectionView.delegate = self
         collectionView.dataSource = self
         
@@ -37,6 +43,17 @@ class NewsViewController: UICollectionViewController {
         guard let controllerType = controllerType else {return}
         newsViewModel = NewsViewmodel(screenType: controllerType)
         newsViewModel?.delegate = self
+        newsViewModel?.getResponses()
+        
+        refreshController.addTarget(self, action: #selector(didEnableRefreshing), for: .valueChanged)
+    }
+    
+    public func setControllerType(controllerType: NewsControllerType){
+        self.controllerType = controllerType
+    }
+    
+    @objc private func didEnableRefreshing(){
+        newsViewModel?.resetCurrentPage()
         newsViewModel?.getResponses()
     }
 }
@@ -112,10 +129,6 @@ extension CollectionViewDelegates: UICollectionViewDelegateFlowLayout {
 //            print("went wrong")
 //        }
 //    }
-    
-//    public func setControllerType(controllerType: NewsControllerType){
-//        self.controllerType = controllerType
-//    }
 //    public func setSource(source: String){
 //        self.sourceId = source
 //    }
@@ -132,6 +145,12 @@ extension NewsViewmodelExtension: ViewModelDelegate {
     func reloadCollectionview() {
         DispatchQueue.main.async {
             self.collectionView.reloadData()
+        }
+    }
+    
+    func stopRefreshing() {
+        DispatchQueue.main.async {
+            self.refreshController.endRefreshing()
         }
     }
 }

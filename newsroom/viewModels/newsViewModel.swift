@@ -19,6 +19,7 @@ final class NewsViewmodel {
     private var newsArticles: ArticleResponse?{
         didSet{
             delegate?.reloadCollectionview()
+            delegate?.stopRefreshing()
         }
     }
     private var category: String? = "general"
@@ -36,6 +37,10 @@ final class NewsViewmodel {
     
     init(screenType: NewsControllerType) {
         self.screenType = screenType
+    }
+    
+    public func resetCurrentPage(){
+        currentPage = 1
     }
     
     public func getArticleForIndexPath(indexPath: IndexPath)->Article?{
