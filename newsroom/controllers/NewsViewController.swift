@@ -6,12 +6,14 @@
 //
 
 import UIKit
+import Lottie
 
 private let reuseIdentifier = "news-cell"
 
 protocol ViewModelDelegate {
     func reloadCollectionview()
     func stopRefreshing()
+    func startRefreshing()
 }
 
 class NewsViewController: UICollectionViewController {
@@ -24,6 +26,16 @@ class NewsViewController: UICollectionViewController {
         var rc = UIRefreshControl()
         return rc
     }()
+    public var loadingAnimation: LottieAnimationView! = {
+        var loadingAnimationView = LottieAnimationView.init(name: "loading")
+        loadingAnimationView.translatesAutoresizingMaskIntoConstraints = false
+        loadingAnimationView.contentMode = .scaleAspectFit
+        loadingAnimationView.loopMode = .loop
+        loadingAnimationView.animationSpeed = 1
+        loadingAnimationView.alpha = 0
+        return loadingAnimationView
+    }()
+
     private var newsViewModel: NewsViewmodel?
     
     private var controllerType: NewsControllerType?
@@ -32,8 +44,6 @@ class NewsViewController: UICollectionViewController {
         
         super.viewDidLoad()
         collectionView.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(collectionView)
-        
         collectionView.refreshControl = refreshController
         collectionView.delegate = self
         collectionView.dataSource = self
@@ -142,14 +152,27 @@ extension CollectionViewDelegates: UICollectionViewDelegateFlowLayout {
 
 private typealias NewsViewmodelExtension = NewsViewController
 extension NewsViewmodelExtension: ViewModelDelegate {
+    
+    func startRefreshing() {
+        DispatchQueue.main.async {
+            self.loadingAnimation.play()
+            self.loadingAnimation.alpha = 1
+            self.collectionView.alpha = 0
+        }
+    }
+    
     func reloadCollectionview() {
         DispatchQueue.main.async {
             self.collectionView.reloadData()
+            self.collectionView.alpha = 0
         }
     }
     
     func stopRefreshing() {
         DispatchQueue.main.async {
+            self.loadingAnimation.stop()
+            self.loadingAnimation.alpha = 0
+            self.collectionView.alpha = 1
             self.refreshController.endRefreshing()
         }
     }

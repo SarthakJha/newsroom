@@ -49,6 +49,7 @@ final class NewsViewmodel {
     
     public func getResponses(){
         if (!isEndReached){
+            delegate?.startRefreshing()
             switch screenType{
             case .topHeadlines:
                 service.fetchHeadlines(category: .general, countryCode: "in", page: currentPage) { res, err in
