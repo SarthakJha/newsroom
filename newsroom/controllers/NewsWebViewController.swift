@@ -39,14 +39,15 @@ final class NewsWebViewController: UIViewController, WKNavigationDelegate {
         addConstraints()
     }
     
-    @objc func dismiss(){
+    @objc func dismiss() {
         webView.goBack()
     }
     deinit{
+        webView.stopLoading()
         webView = nil
     }
     
-    func addConstraints(){
+    func addConstraints() {
         let constrains: [NSLayoutConstraint] = [
             navBar.topAnchor.constraint(equalTo: view.topAnchor),
             navBar.leadingAnchor.constraint(equalTo: view.leadingAnchor),

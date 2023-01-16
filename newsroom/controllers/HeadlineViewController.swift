@@ -20,6 +20,7 @@ final class HeadlineViewController: UIViewController {
         flowLayout.minimumLineSpacing = 20
         newsViewCollection = NewsViewController(collectionViewLayout: flowLayout)
         newsViewCollection.setControllerType(controllerType: .topHeadlines)
+        newsViewCollection.delegate = self
         view.addSubview(newsViewCollection.collectionView)
         view.addSubview(newsViewCollection.loadingAnimation)
 
@@ -42,4 +43,16 @@ final class HeadlineViewController: UIViewController {
         newsViewCollection.loadingAnimation.widthAnchor.constraint(equalToConstant: 50).isActive = true
     }
 
+}
+
+extension HeadlineViewController: NewsViewControllerDelegate {
+    
+    func pushWebView(_ viewController: UIViewController) {
+        
+        if let navigationController = navigationController {
+            DispatchQueue.main.async {
+                navigationController.pushViewController(viewController, animated: true)
+            }
+        }
+    }
 }

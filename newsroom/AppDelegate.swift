@@ -49,7 +49,7 @@ extension AppDelegate: CLLocationManagerDelegate {
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         print("location: ", locations[locations.count - 1].coordinate)
-        MapViewController.getISO3166CountryCode(coordinates: locations[locations.count-1].coordinate) { CountryCode, countryName in
+        MapViewModel.getISO3166CountryCode(coordinates: locations[locations.count-1].coordinate) { CountryCode, countryName in
             if(CountryCode == ""){
                 return
             }

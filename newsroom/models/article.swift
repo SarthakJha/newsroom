@@ -12,13 +12,13 @@ enum StatusValues: String, Decodable {
     case error = "error"
 }
 
-struct ArticleResponse: Decodable {
+public struct ArticleResponse: Decodable {
     let status: StatusValues
     let totalResults: Int64?
     var articles: [Article]
 }
 
-struct Article:Decodable {
+public struct Article:Decodable {
     let source: Source
     let author: String?
     let title: String?
@@ -29,7 +29,7 @@ struct Article:Decodable {
     let content: String?
 }
 
-struct Source: Decodable {
+public struct Source: Decodable {
     let id: String?
     let name: String?
 }
