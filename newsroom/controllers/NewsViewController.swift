@@ -24,8 +24,24 @@ public protocol NewsViewControllerDelegate {
 class NewsViewController: UICollectionViewController {
     
     private var category: String?
-    private var sourceId: String?
-    private var searchText: String?
+    private var sourceId: String? {
+        didSet{
+            newsViewModel?.sourceId = sourceId
+            if searchText != nil {
+                newsViewModel?.resetCurrentPage()
+                newsViewModel?.getResponses()
+            }
+        }
+    }
+    private var searchText: String? {
+        didSet {
+            newsViewModel?.searchText = searchText
+            if sourceId != nil {
+                newsViewModel?.resetCurrentPage()
+                newsViewModel?.getResponses()
+            }
+        }
+    }
     private var countryCode: String?
     private var refreshController: UIRefreshControl = {
         var rc = UIRefreshControl()
@@ -69,8 +85,9 @@ class NewsViewController: UICollectionViewController {
         guard let controllerType = controllerType else {return}
         newsViewModel = NewsViewmodel(screenType: controllerType, countryCode: countryCode)
         newsViewModel?.delegate = self
-        newsViewModel?.getResponses()
-    
+        if(controllerType != .searchResult){
+            newsViewModel?.getResponses()
+        }
         refreshController.addTarget(self, action: #selector(didEnableRefreshing), for: .valueChanged)
     }
     
@@ -128,50 +145,19 @@ extension CollectionViewDelegates: UICollectionViewDelegateFlowLayout {
 
 private typealias NewsCollectionHelpers = NewsViewController
 extension NewsCollectionHelpers{
-//
-//    private func loadInitialAPIResponse(){
-//        switch controllerType {
-//        case .topHeadlines:
-//            NewsroomAPIService.APIManager.fetchHeadlines(category: .entertainment, countryCode: "in", page: currentPage) { res, err in
-//                if let err = err{
-//                    return
-//                }else{
-//                    self.newsArticles = res
-//                }
-//            }
-//            break
-//        case .mapResult:
-//            guard let countryCode = countryCode else {return}
-//            NewsroomAPIService.APIManager.fetchHeadlines(category: nil, countryCode: countryCode, page: 1) { response, error in
-//                if let error = error{
-//                    return
-//                }
-//                self.newsArticles = response
-//            }
-//            break
-//        case .searchResult:
-//            guard let searchText = searchText else {return}
-//            NewsroomAPIService.APIManager.fetchSearchResults(searchText: searchText, sourceId: sourceId,page: currentPage) { data, error in
-//                if let _ = error {
-//                    return
-//                }
-//                guard let data = data else {return}
-//                self.newsArticles = data
-//            }
-//            break
-//        default:
-//            print("went wrong")
-//        }
-//    }
+
     public func setCountryCode(countryCode: String){
         self.countryCode = countryCode
     }
-//    public func setCategory(category: String){
-//        self.category = category
-//    }
-//    public func setSearchText(searchText: String){
-//        self.searchText = searchText
-//    }
+    public func setCategory(category: String){
+        self.category = category
+    }
+    public func setSearchText(searchText: String){
+        self.searchText = searchText
+    }
+    public func setSourceId(sourceId: String){
+        self.sourceId = sourceId
+    }
 }
 
 private typealias NewsViewmodelExtension = NewsViewController
@@ -198,7 +184,7 @@ extension NewsViewmodelExtension: ViewModelDelegate {
     func reloadCollectionview() {
         DispatchQueue.main.async {
             self.collectionView.reloadData()
-            self.collectionView.alpha = 0
+//            self.collectionView.alpha = 0
         }
     }
     
@@ -206,6 +192,7 @@ extension NewsViewmodelExtension: ViewModelDelegate {
         DispatchQueue.main.async {
             self.loadingAnimation.stop()
             self.loadingAnimation.alpha = 0
+            self.notFoundAnimation.alpha = 0
             self.collectionView.alpha = 1
             self.refreshController.endRefreshing()
         }

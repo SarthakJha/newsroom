@@ -37,7 +37,7 @@ final class MainViewController: UITabBarController, UITabBarControllerDelegate {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         if let navigationController = navigationController {
-            navigationController.navigationBar.isHidden = false
+            navigationController.navigationBar.isHidden = true
         }
         let searchVC = SearchViewController()
         let mapVC = MapViewController()

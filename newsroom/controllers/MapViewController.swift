@@ -28,7 +28,7 @@ final class MapViewController: UIViewController {
         animationTime: 0.2
     )
     
-    private lazy var mapView: GMSMapView = {
+    private lazy var mapView: GMSMapView? = {
         var mapview = GMSMapView(frame: view.frame)
         mapview.isMyLocationEnabled = true
         return GMSMapView(frame: view.frame)
@@ -36,6 +36,7 @@ final class MapViewController: UIViewController {
         
     override func viewDidLoad() {
         super.viewDidLoad()
+        guard let mapView = mapView else {return}
         view.addSubview(mapView)
 
         newsWebViewController = NewsWebViewController()
@@ -43,6 +44,10 @@ final class MapViewController: UIViewController {
         mapView.delegate = self
 
         marker.map = mapView
+    }
+    
+    deinit {
+        mapView = nil
     }
 }
 
@@ -78,26 +83,10 @@ extension MapViewController: GMSMapViewDelegate {
         }
         
     }
-    
-//    private func handleResponse(response: ArticleResponse?) {
-//        guard let response = response else {return}
-//        if response.status == .ok && (response.totalResults)! > 0{
-//            self.newsItems = response
-//            if((self.newsItems?.articles.count)! == (self.newsItems?.totalResults!)!){
-//                self.didReachEnd = true
-//            }
-//        }else{
-//            DispatchQueue.main.async {
-//                GeneralUtility.makeViewActive(view: &(self.view))
-//                ToastHandler.performToast(toastTitle: String(localized: "TOAST_NOT_FOUND_TITLE"), toastDescription: NSLocalizedString("TOAST_UNKNOWN_LOCATION_DESCRIPTION", comment: ""), toastConfig: self.configuration)
-//            }
-//        }
-//    }
 }
 
 extension MapViewController: MapViewControllerDelegate{
     func didTapOnSearchResults(_ viewContrller: UIViewController, indexPath: IndexPath) {
-//        mapresultViewController.dissmissSheet()
         DispatchQueue.main.async { [weak self] in
             guard let self = self else {return}
             if let navigationController = self.navigationController{
@@ -113,9 +102,10 @@ extension MapViewController: MapViewControllerDelegate{
 
 extension MapViewController: MapViewDelegate {
     func animateToCurrentCamera(currentCamera: GMSCameraPosition) {
+        
         DispatchQueue.main.async {
-            self.mapView.animate(to: currentCamera)
-            self.marker.position = currentCamera.target
+                self.mapView!.animate(to: currentCamera)
+                self.marker.position = currentCamera.target
         }
     }
    

@@ -35,6 +35,7 @@
 		6279851B294C3D81007EDA41 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6279851A294C3D81007EDA41 /* NetworkManager.swift */; };
 		6279851F294C3F83007EDA41 /* secrets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6279851E294C3F83007EDA41 /* secrets.swift */; };
 		62798521294C4A08007EDA41 /* HeadlineCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62798520294C4A08007EDA41 /* HeadlineCollectionViewCell.swift */; };
+		62B166192977192900482CF8 /* ControllerHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62B166182977192900482CF8 /* ControllerHeaderView.swift */; };
 		62F25CB52961D7DD0022E97A /* Sources.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62F25CB42961D7DD0022E97A /* Sources.swift */; };
 		62F25CB72962C4800022E97A /* SourcesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62F25CB62962C4800022E97A /* SourcesViewController.swift */; };
 		62F25CBD296403B70022E97A /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 62F25CBF296403B70022E97A /* Localizable.strings */; };
@@ -102,6 +103,7 @@
 		6279851A294C3D81007EDA41 /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
 		6279851E294C3F83007EDA41 /* secrets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = secrets.swift; sourceTree = "<group>"; };
 		62798520294C4A08007EDA41 /* HeadlineCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeadlineCollectionViewCell.swift; sourceTree = "<group>"; };
+		62B166182977192900482CF8 /* ControllerHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ControllerHeaderView.swift; sourceTree = "<group>"; };
 		62F25CB42961D7DD0022E97A /* Sources.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources.swift; sourceTree = "<group>"; };
 		62F25CB62962C4800022E97A /* SourcesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SourcesViewController.swift; sourceTree = "<group>"; };
 		62F25CBE296403B70022E97A /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -250,6 +252,7 @@
 				6253859B2951AFB1008DA6BB /* SearchBarView.swift */,
 				62FF7D4A29598B82000D2E16 /* CollectionHeaderCollectionReusableView.swift */,
 				624F39EA296BE168003DD51B /* NoInternetView.swift */,
+				62B166182977192900482CF8 /* ControllerHeaderView.swift */,
 			);
 			path = views;
 			sourceTree = "<group>";
@@ -609,6 +612,7 @@
 				62798512294C34DB007EDA41 /* MapViewController.swift in Sources */,
 				624F39F5296D3834003DD51B /* debouncer.swift in Sources */,
 				62798519294C3D35007EDA41 /* NewsroomAPIService.swift in Sources */,
+				62B166192977192900482CF8 /* ControllerHeaderView.swift in Sources */,
 				62FF7D4B29598B82000D2E16 /* CollectionHeaderCollectionReusableView.swift in Sources */,
 				624F39EB296BE168003DD51B /* NoInternetView.swift in Sources */,
 				62FF7D53295C0784000D2E16 /* categoryData.swift in Sources */,

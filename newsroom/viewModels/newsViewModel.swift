@@ -26,10 +26,11 @@ public class NewsViewmodel {
             } else {
                 delegate?.handleNotFound()
             }
-            
         }
     }
     private var category: String? = "general"
+    public var sourceId: String?
+    public var searchText: String?
     private var screenType: NewsControllerType?
     private var currentPage: Int = 1
     private var isEndReached: Bool = false
@@ -85,6 +86,28 @@ public class NewsViewmodel {
             case .mapResult:
                 guard let countryCode = countryCode else {return}
                 service.fetchHeadlines(category: .general, countryCode: countryCode, page: currentPage) { res, err in
+                    if let err = err {
+                        print("error")
+                        return
+                    }
+                    guard let res = res else {return}
+                    
+                    if var newsArticles = self.newsArticles{
+                        newsArticles.articles.append(contentsOf: res.articles)
+                        if(newsArticles.articles.count == newsArticles.totalResults!){
+                            self.isEndReached = true
+                        }
+                        self.newsArticles = newsArticles
+                    }else{
+                        self.newsArticles = res
+                    }
+                    self.currentPage += 1
+                }
+            
+            case .searchResult:
+                guard let searchText = searchText else {return}
+                guard let sourceId = sourceId else {return}
+                service.fetchSearchResults(searchText: searchText, sourceId: sourceId, page: currentPage) {res, err in
                     if let err = err {
                         print("error")
                         return
